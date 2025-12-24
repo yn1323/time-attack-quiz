@@ -3,8 +3,8 @@
 このファイルは、Claude Code (claude.ai/code) がこのリポジトリで作業する際のガイダンスを提供します。
 
 ## 参照ドキュメント
-- @doc/claude/basic.md
-- @doc/claude/self.md
+- @docs/specs/2025-12-24_タイムアタッククイズ大会アプリ仕様.md
+- @docs/specs/2025-12-24_デザイン基本方針.md
 
 ## 🚨 核心制約
 
@@ -24,3 +24,11 @@
 - IMPORTANT: TypeScriptの型は推論を利用すること
 - IMPORTANT: 定数化は2箇所以上で利用しているときのみとする
 - IMPORTANT: 開発者の指摘が誤っているときは、根拠を示して反論すること
+
+## 技術スタック
+- Next.js 16
+- React 19
+- Chakra UI v3
+- TypeScript
+- pnpm
+- Biome
