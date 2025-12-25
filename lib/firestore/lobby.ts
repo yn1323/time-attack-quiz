@@ -24,7 +24,7 @@ export async function createLobby(): Promise<string> {
     finishedAt: null,
     durationSeconds: 600,
     pointsCorrect: 5,
-    pointsIncorrect: -2,
+    pointsIncorrect: -3,
   }
 
   await setDoc(lobbyRef, lobbyData)

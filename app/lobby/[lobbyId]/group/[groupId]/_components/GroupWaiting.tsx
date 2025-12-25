@@ -228,7 +228,7 @@ export function GroupWaiting({ groupName }: Props) {
             <Flex align="center" gap={2}>
               <Text fontSize="xl">❌</Text>
               <Text fontSize={{ base: "sm", md: "md" }} color="#EF4444" fontWeight="bold">
-                不正解 -2点
+                不正解 -3点
               </Text>
             </Flex>
             <Flex align="center" gap={2}>

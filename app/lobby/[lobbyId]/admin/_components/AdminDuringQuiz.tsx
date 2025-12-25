@@ -1,7 +1,7 @@
 "use client"
 
 import { useEffect, useMemo, useState } from "react"
-import { Box, Flex, HStack, Text, VStack } from "@chakra-ui/react"
+import { Box, Flex, Grid, HStack, Text, VStack } from "@chakra-ui/react"
 import { keyframes } from "@emotion/react"
 import {
   subscribeAllGroupAnswers,
@@ -36,58 +36,10 @@ const glowPulse = keyframes`
   50% { box-shadow: 0 0 40px rgba(255, 136, 0, 0.5); }
 `
 
-const rankBounce = keyframes`
-  0% { transform: scale(1); }
-  50% { transform: scale(1.1); }
-  100% { transform: scale(1); }
-`
-
 const urgentPulse = keyframes`
   0%, 100% { transform: scale(1); color: #FF8800; }
   50% { transform: scale(1.05); color: #FF0000; }
 `
-
-const getMedalEmoji = (rank: number) => {
-  switch (rank) {
-    case 1:
-      return "🥇"
-    case 2:
-      return "🥈"
-    case 3:
-      return "🥉"
-    default:
-      return ""
-  }
-}
-
-const getRankColor = (rank: number) => {
-  switch (rank) {
-    case 1:
-      return {
-        border: "#FFD700",
-        bg: "rgba(255, 215, 0, 0.08)",
-        shadow: "rgba(255, 215, 0, 0.3)",
-      }
-    case 2:
-      return {
-        border: "#C0C0C0",
-        bg: "rgba(192, 192, 192, 0.08)",
-        shadow: "rgba(192, 192, 192, 0.3)",
-      }
-    case 3:
-      return {
-        border: "#CD7F32",
-        bg: "rgba(205, 127, 50, 0.08)",
-        shadow: "rgba(205, 127, 50, 0.3)",
-      }
-    default:
-      return {
-        border: "#E0E0E0",
-        bg: "rgba(0, 0, 0, 0.02)",
-        shadow: "rgba(0, 0, 0, 0.1)",
-      }
-  }
-}
 
 type Props = {
   lobbyId: string
@@ -95,8 +47,7 @@ type Props = {
   groups: Group[]
 }
 
-type RankingEntry = {
-  rank: number
+type ScoreEntry = {
   groupId: string
   name: string
   score: number
@@ -138,23 +89,20 @@ export function AdminDuringQuiz({ lobbyId, lobby, groups }: Props) {
     return () => clearInterval(interval)
   }, [lobby.startedAt, lobby.durationSeconds, lobbyId, hasFinished])
 
-  // Calculate ranking
-  const ranking: RankingEntry[] = useMemo(() => {
-    return groupsWithAnswers
-      .map((group) => ({
-        groupId: group.groupId,
-        name: group.groupName,
-        score: group.answers.reduce((sum, answer) => sum + answer.scoreChange, 0),
-      }))
-      .sort((a, b) => b.score - a.score)
-      .map((entry, index) => ({ ...entry, rank: index + 1 }))
+  // Calculate scores (fixed order)
+  const scores: ScoreEntry[] = useMemo(() => {
+    return groupsWithAnswers.map((group) => ({
+      groupId: group.groupId,
+      name: group.groupName,
+      score: group.answers.reduce((sum, answer) => sum + answer.scoreChange, 0),
+    }))
   }, [groupsWithAnswers])
 
   const minutes = Math.floor(remainingSeconds / 60)
   const seconds = remainingSeconds % 60
   const timeString = `${minutes}:${seconds.toString().padStart(2, "0")}`
   const isUrgent = remainingSeconds <= 60
-  const isCountdownMode = remainingSeconds <= 120
+  const isCountdownMode = remainingSeconds <= 180
 
   return (
     <Box minH="100vh" bg="#FFFDF7" position="relative" overflow="hidden">
@@ -302,45 +250,53 @@ export function AdminDuringQuiz({ lobbyId, lobby, groups }: Props) {
         <VStack gap={8} px={12} pb={12} position="relative" zIndex={1}>
           {/* Title */}
           <Box textAlign="center" animation={`${fadeInUp} 0.6s ease-out`}>
-            <Text
-              fontSize="5xl"
-              fontWeight="900"
-              bgImage="linear-gradient(135deg, #FF8800 0%, #FFE500 50%, #FF8800 100%)"
-              bgSize="200% auto"
-              bgClip="text"
-              color="transparent"
-              letterSpacing="0.05em"
-              animation={`${shimmer} 3s linear infinite`}
-              css={{
-                WebkitBackgroundClip: "text",
-                WebkitTextFillColor: "transparent",
-              }}
-            >
-              リアルタイムランキング
-            </Text>
+            <HStack justify="center" align="baseline" gap={4}>
+              <Text
+                fontSize="5xl"
+                fontWeight="900"
+                bgImage="linear-gradient(135deg, #FF8800 0%, #FFE500 50%, #FF8800 100%)"
+                bgSize="200% auto"
+                bgClip="text"
+                color="transparent"
+                letterSpacing="0.05em"
+                animation={`${shimmer} 3s linear infinite`}
+                css={{
+                  WebkitBackgroundClip: "text",
+                  WebkitTextFillColor: "transparent",
+                }}
+              >
+                スコアボード🎯
+              </Text>
+              <Text fontSize="md" color="gray.500" fontWeight="medium">
+                ※残り3分以降は非表示
+              </Text>
+            </HStack>
           </Box>
 
-          {/* Ranking cards */}
-          <VStack w="full" maxW="900px" gap={5}>
-          {ranking.length === 0 ? (
-            <Text color="gray.500" fontSize="xl">
-              回答を待っています...
-            </Text>
-          ) : (
-            ranking.map((team, index) => {
-              const colors = getRankColor(team.rank)
-
-              return (
+          {/* Ranking cards - 3 columns grid */}
+          <Grid
+            w="full"
+            maxW="1400px"
+            templateColumns="repeat(3, 1fr)"
+            gap={6}
+            justifyItems="start"
+          >
+            {scores.length === 0 ? (
+              <Text color="gray.500" fontSize="xl" gridColumn="span 3" textAlign="center" w="full">
+                回答を待っています...
+              </Text>
+            ) : (
+              scores.map((team, index) => (
                 <Box
                   key={team.groupId}
                   w="full"
                   bg="white"
                   borderRadius="2xl"
                   border="4px solid"
-                  borderColor={colors.border}
-                  p={6}
-                  boxShadow={`0 8px 30px ${colors.shadow}`}
-                  animation={`${fadeInUp} 0.5s ease-out ${index * 0.1}s both, ${team.rank <= 3 ? glowPulse : "none"} 3s ease-in-out infinite`}
+                  borderColor="#FF8800"
+                  p={5}
+                  boxShadow="0 8px 30px rgba(255, 136, 0, 0.25)"
+                  animation={`${fadeInUp} 0.5s ease-out ${index * 0.1}s both, ${glowPulse} 3s ease-in-out infinite`}
                   position="relative"
                   overflow="hidden"
                 >
@@ -348,46 +304,26 @@ export function AdminDuringQuiz({ lobbyId, lobby, groups }: Props) {
                   <Box
                     position="absolute"
                     inset={0}
-                    bg={colors.bg}
+                    bg="rgba(255, 136, 0, 0.05)"
                     pointerEvents="none"
                   />
 
-                  {/* Card content */}
-                  <Flex position="relative" zIndex={1} justify="space-between" align="center">
-                    <HStack gap={4}>
-                      {/* Rank number with medal */}
-                      <HStack gap={2}>
-                        <Text
-                          fontSize="4xl"
-                          fontWeight="900"
-                          color={team.rank <= 3 ? colors.border : "#666"}
-                          animation={
-                            team.rank === 1
-                              ? `${rankBounce} 2s ease-in-out infinite`
-                              : "none"
-                          }
-                        >
-                          {team.rank}位
-                        </Text>
-                        {team.rank <= 3 && (
-                          <Text
-                            fontSize="4xl"
-                            animation={`${rankBounce} 2s ease-in-out infinite ${team.rank * 0.2}s`}
-                          >
-                            {getMedalEmoji(team.rank)}
-                          </Text>
-                        )}
-                      </HStack>
-
-                      {/* Team name */}
-                      <Text fontSize="3xl" fontWeight="bold" color="#333" ml={4}>
-                        {team.name}
-                      </Text>
-                    </HStack>
+                  {/* Card content - vertical layout */}
+                  <VStack position="relative" zIndex={1} gap={3} align="center">
+                    {/* Team name */}
+                    <Text
+                      fontSize="2xl"
+                      fontWeight="bold"
+                      color="#333"
+                      textAlign="center"
+                      lineClamp={1}
+                    >
+                      {team.name}
+                    </Text>
 
                     {/* Score */}
                     <Text
-                      fontSize="5xl"
+                      fontSize="4xl"
                       fontWeight="900"
                       bgImage="linear-gradient(135deg, #FF8800 0%, #FFE500 100%)"
                       bgClip="text"
@@ -398,16 +334,15 @@ export function AdminDuringQuiz({ lobbyId, lobby, groups }: Props) {
                       }}
                     >
                       {team.score}
-                      <Text as="span" fontSize="2xl">
+                      <Text as="span" fontSize="xl">
                         点
                       </Text>
                     </Text>
-                  </Flex>
+                  </VStack>
                 </Box>
-              )
-            })
-          )}
-          </VStack>
+              ))
+            )}
+          </Grid>
         </VStack>
       )}
 

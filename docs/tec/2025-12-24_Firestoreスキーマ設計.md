@@ -60,7 +60,7 @@ interface Lobby {
   finishedAt: Timestamp | null;      // 終了時刻
   durationSeconds: number;           // 制限時間（秒） 初期値: 600
   pointsCorrect: number;             // 正解時の得点 初期値: 5
-  pointsIncorrect: number;           // 不正解時の減点 初期値: -2
+  pointsIncorrect: number;           // 不正解時の減点 初期値: -3
 }
 ```
 
@@ -74,7 +74,7 @@ interface Lobby {
 | `finishedAt` | `Timestamp \| null` | 大会終了日時（終了前はnull） |
 | `durationSeconds` | `number` | 制限時間（デフォルト: 600秒） |
 | `pointsCorrect` | `number` | 正解時の得点（デフォルト: 5点） |
-| `pointsIncorrect` | `number` | 不正解時の減点（デフォルト: -2点） |
+| `pointsIncorrect` | `number` | 不正解時の減点（デフォルト: -3点） |
 
 ---
 
@@ -128,7 +128,7 @@ interface Answer {
   isCorrect: boolean;                // 正解/不正解
   answeredAt: Timestamp;             // 回答時刻
   answerTimeMs: number;              // 問題表示から回答までの時間（ミリ秒）
-  scoreChange: number;               // このクイズによる得点変化（+5 or -2）
+  scoreChange: number;               // このクイズによる得点変化（+5 or -3）
 }
 ```
 
@@ -152,7 +152,7 @@ interface Answer {
 
 1. **Lobbyの作成**
    - TOPページでロビーを新規作成
-   - 初期値: `status='waiting'`, `durationSeconds=600`, `pointsCorrect=5`, `pointsIncorrect=-2`
+   - 初期値: `status='waiting'`, `durationSeconds=600`, `pointsCorrect=5`, `pointsIncorrect=-3`
 
 2. **Groupの参加**
    - ロビーページでグループ名を入力

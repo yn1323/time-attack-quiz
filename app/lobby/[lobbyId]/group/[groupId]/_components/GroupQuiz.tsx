@@ -1,40 +1,40 @@
-"use client"
+"use client";
 
-import { Box, Flex, HStack, Text, VStack } from "@chakra-ui/react"
-import { keyframes } from "@emotion/react"
-import type { Question } from "@/types/firestore"
+import { Box, Flex, HStack, Text, VStack } from "@chakra-ui/react";
+import { keyframes } from "@emotion/react";
+import type { Question } from "@/types/firestore";
 
 // Floating animation for background decorations
 const float = keyframes`
   0%, 100% { transform: translateY(0) rotate(0deg); }
   50% { transform: translateY(-15px) rotate(3deg); }
-`
+`;
 
 const floatReverse = keyframes`
   0%, 100% { transform: translateY(0) rotate(0deg); }
   50% { transform: translateY(-12px) rotate(-5deg); }
-`
+`;
 
 const pulseGlow = keyframes`
   0%, 100% { box-shadow: 0 0 20px rgba(255, 136, 0, 0.3), 0 4px 20px rgba(255, 136, 0, 0.15); }
   50% { box-shadow: 0 0 35px rgba(255, 136, 0, 0.5), 0 4px 30px rgba(255, 136, 0, 0.25); }
-`
+`;
 
 const slideIn = keyframes`
   0% { opacity: 0; transform: translateY(20px); }
   100% { opacity: 1; transform: translateY(0); }
-`
+`;
 
 type Props = {
-  groupName: string
-  score: number
-  remainingTime: string
-  question: Question | undefined
-  onAnswer: (selectedIndex: number) => void
-}
+  groupName: string;
+  score: number;
+  remainingTime: string;
+  question: Question | undefined;
+  onAnswer: (selectedIndex: number) => void;
+};
 
 export function GroupQuiz({ groupName, score, remainingTime, question, onAnswer }: Props) {
-  const choiceLabels = ["A", "B", "C"]
+  const choiceLabels = ["A", "B", "C"];
 
   return (
     <Box minH="100vh" bg="#FFFDF7" position="relative" overflow="hidden">
@@ -117,12 +117,7 @@ export function GroupQuiz({ groupName, score, remainingTime, question, onAnswer 
             borderRadius="full"
             boxShadow="0 0 10px rgba(255, 136, 0, 0.5)"
           />
-          <Text
-            fontSize={{ base: "xl", md: "2xl" }}
-            fontWeight="900"
-            color="#333"
-            letterSpacing="0.02em"
-          >
+          <Text fontSize={{ base: "xl", md: "2xl" }} fontWeight="900" color="#333" letterSpacing="0.02em">
             {groupName}
           </Text>
         </HStack>
@@ -286,41 +281,15 @@ export function GroupQuiz({ groupName, score, remainingTime, question, onAnswer 
                 flexShrink={0}
                 boxShadow="0 3px 10px rgba(255, 136, 0, 0.3)"
               >
-                <Text
-                  fontSize={{ base: "lg", md: "xl" }}
-                  fontWeight="900"
-                  color="white"
-                >
+                <Text fontSize={{ base: "lg", md: "xl" }} fontWeight="900" color="white">
                   {choiceLabels[index]}
                 </Text>
               </Flex>
 
               {/* Choice text */}
-              <Text
-                fontSize={{ base: "lg", md: "2xl" }}
-                fontWeight="bold"
-                color="#333"
-              >
+              <Text fontSize={{ base: "lg", md: "2xl" }} fontWeight="bold" color="#333">
                 {choice}
               </Text>
-
-              {/* Hover indicator */}
-              <Box
-                position="absolute"
-                right={6}
-                opacity={0}
-                transform="translateX(-10px)"
-                transition="all 0.25s ease"
-                fontSize="xl"
-                css={{
-                  "button:hover &": {
-                    opacity: 1,
-                    transform: "translateX(0)",
-                  },
-                }}
-              >
-                👆
-              </Box>
             </Box>
           ))}
         </VStack>
@@ -339,5 +308,5 @@ export function GroupQuiz({ groupName, score, remainingTime, question, onAnswer 
         pointerEvents="none"
       />
     </Box>
-  )
+  );
 }
