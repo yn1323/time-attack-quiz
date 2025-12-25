@@ -3,6 +3,11 @@
 import { Box, Flex, Heading, HStack, Input, Text, VStack } from "@chakra-ui/react"
 import { keyframes } from "@emotion/react"
 import Link from "next/link"
+import { useParams, useRouter } from "next/navigation"
+import { useEffect, useState } from "react"
+import { subscribeLobby } from "@/lib/firestore/lobby"
+import { createGroup, subscribeGroups } from "@/lib/firestore/group"
+import type { Lobby, Group } from "@/types/firestore"
 
 // Keyframe animations
 const float = keyframes`
@@ -15,14 +20,96 @@ const pulse = keyframes`
   50% { box-shadow: 0 4px 25px rgba(255, 136, 0, 0.5); }
 `
 
-// Dummy data for mockup
-const DUMMY_GROUPS = [
-  { id: "1", name: "チームA" },
-  { id: "2", name: "チームB" },
-  { id: "3", name: "チームC" },
-]
-
 export default function LobbyPage() {
+  const params = useParams()
+  const router = useRouter()
+  const lobbyId = params.lobbyId as string
+
+  const [lobby, setLobby] = useState<Lobby | null>(null)
+  const [groups, setGroups] = useState<Group[]>([])
+  const [isLoading, setIsLoading] = useState(true)
+  const [groupName, setGroupName] = useState("")
+  const [isJoining, setIsJoining] = useState(false)
+
+  // ロビー情報とグループ一覧のリアルタイムリスナー
+  useEffect(() => {
+    const unsubscribeLobby = subscribeLobby(lobbyId, (lobbyData) => {
+      setLobby(lobbyData)
+      setIsLoading(false)
+    })
+
+    const unsubscribeGroups = subscribeGroups(lobbyId, (groupsData) => {
+      setGroups(groupsData)
+    })
+
+    return () => {
+      unsubscribeLobby()
+      unsubscribeGroups()
+    }
+  }, [lobbyId])
+
+  const handleJoinGroup = async () => {
+    if (!groupName.trim()) {
+      alert("グループ名を入力してください")
+      return
+    }
+
+    setIsJoining(true)
+    try {
+      const groupId = await createGroup(lobbyId, groupName.trim())
+      router.push(`/group/${groupId}`)
+    } catch (error) {
+      console.error("Failed to create group:", error)
+      alert("グループの作成に失敗しました。もう一度お試しください。")
+      setIsJoining(false)
+    }
+  }
+
+  const handleCopyURL = () => {
+    const url = window.location.href
+    navigator.clipboard.writeText(url)
+    alert("URLをコピーしました！")
+  }
+
+  if (isLoading) {
+    return (
+      <Box
+        minH="100vh"
+        bg="#FFFDF7"
+        display="flex"
+        alignItems="center"
+        justifyContent="center"
+      >
+        <Text fontSize="2xl" color="#FF8800" fontWeight="bold">
+          読み込み中...
+        </Text>
+      </Box>
+    )
+  }
+
+  if (!lobby) {
+    return (
+      <Box
+        minH="100vh"
+        bg="#FFFDF7"
+        display="flex"
+        alignItems="center"
+        justifyContent="center"
+      >
+        <VStack gap={4}>
+          <Text fontSize="2xl" color="#FF8800" fontWeight="bold">
+            ロビーが見つかりません
+          </Text>
+          <Link href="/">
+            <Text color="#FF8800" textDecoration="underline">
+              TOPページに戻る
+            </Text>
+          </Link>
+        </VStack>
+      </Box>
+    )
+  }
+
   return (
     <Box
       minH="100vh"
@@ -86,12 +173,12 @@ export default function LobbyPage() {
             boxShadow="0 0 8px rgba(34, 197, 94, 0.5)"
           />
           <Text fontSize="lg" fontWeight="bold" color="#E67A00">
-            ロビー: sample-lobby-id
+            ロビー: {lobbyId}
           </Text>
         </HStack>
         <HStack gap={3}>
           {/* 管理画面リンク */}
-          <Link href="/admin/sample-lobby-id">
+          <Link href={`/admin/${lobbyId}`}>
             <Box
               as="span"
               display="inline-flex"
@@ -131,6 +218,7 @@ export default function LobbyPage() {
             cursor="pointer"
             bg="white"
             transition="all 0.2s"
+            onClick={handleCopyURL}
             _hover={{
               bg: "#FFF5E6",
               transform: "translateY(-1px)",
@@ -221,6 +309,9 @@ export default function LobbyPage() {
               borderColor="#FFE500"
               borderRadius="xl"
               bg="#FFFDF7"
+              value={groupName}
+              onChange={(e) => setGroupName(e.target.value)}
+              disabled={isJoining}
               _focus={{
                 borderColor: "#FF8800",
                 boxShadow: "0 0 0 3px rgba(255, 136, 0, 0.2)",
@@ -230,31 +321,40 @@ export default function LobbyPage() {
               }}
             />
 
-            <Link href="/group/sample-group-id" style={{ width: "100%" }}>
-              <Box
-                as="button"
-                w="full"
-                py={4}
-                fontSize="xl"
-                fontWeight="900"
-                color="white"
-                bg="linear-gradient(135deg, #FF8800 0%, #E67A00 100%)"
-                borderRadius="xl"
-                cursor="pointer"
-                border="none"
-                transition="all 0.2s"
-                animation={`${pulse} 2s ease-in-out infinite`}
-                _hover={{
-                  transform: "translateY(-2px)",
-                  boxShadow: "0 8px 30px rgba(255, 136, 0, 0.4)",
-                }}
-                _active={{
-                  transform: "translateY(0)",
-                }}
-              >
-                参加する!
-              </Box>
-            </Link>
+            <Box
+              as="button"
+              w="full"
+              py={4}
+              fontSize="xl"
+              fontWeight="900"
+              color="white"
+              bg="linear-gradient(135deg, #FF8800 0%, #E67A00 100%)"
+              borderRadius="xl"
+              cursor={isJoining ? "not-allowed" : "pointer"}
+              border="none"
+              transition="all 0.2s"
+              animation={isJoining ? "none" : `${pulse} 2s ease-in-out infinite`}
+              opacity={isJoining ? 0.7 : 1}
+              onClick={handleJoinGroup}
+              disabled={isJoining}
+              _hover={
+                isJoining
+                  ? {}
+                  : {
+                      transform: "translateY(-2px)",
+                      boxShadow: "0 8px 30px rgba(255, 136, 0, 0.4)",
+                    }
+              }
+              _active={
+                isJoining
+                  ? {}
+                  : {
+                      transform: "translateY(0)",
+                    }
+              }
+            >
+              {isJoining ? "参加中..." : "参加する!"}
+            </Box>
           </VStack>
         </Box>
 
@@ -266,27 +366,33 @@ export default function LobbyPage() {
             color="#E67A00"
             mb={4}
           >
-            現在の参加グループ ({DUMMY_GROUPS.length}組)
+            現在の参加グループ ({groups.length}組)
           </Text>
-          <HStack gap={3} justify="center" flexWrap="wrap">
-            {DUMMY_GROUPS.map((group) => (
-              <Box
-                key={group.id}
-                px={5}
-                py={2}
-                bg="linear-gradient(135deg, #FFE500 0%, #FFC800 100%)"
-                borderRadius="full"
-                fontWeight="bold"
-                fontSize="md"
-                color="#333"
-                boxShadow="0 2px 10px rgba(255, 229, 0, 0.3)"
-                border="2px solid"
-                borderColor="rgba(255, 136, 0, 0.2)"
-              >
-                {group.name}
-              </Box>
-            ))}
-          </HStack>
+          {groups.length > 0 ? (
+            <HStack gap={3} justify="center" flexWrap="wrap">
+              {groups.map((group) => (
+                <Box
+                  key={group.id}
+                  px={5}
+                  py={2}
+                  bg="linear-gradient(135deg, #FFE500 0%, #FFC800 100%)"
+                  borderRadius="full"
+                  fontWeight="bold"
+                  fontSize="md"
+                  color="#333"
+                  boxShadow="0 2px 10px rgba(255, 229, 0, 0.3)"
+                  border="2px solid"
+                  borderColor="rgba(255, 136, 0, 0.2)"
+                >
+                  {group.name}
+                </Box>
+              ))}
+            </HStack>
+          ) : (
+            <Text color="gray.500" fontSize="sm">
+              まだ参加者がいません
+            </Text>
+          )}
         </Box>
 
         {/* Waiting message */}
