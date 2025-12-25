@@ -1,7 +1,11 @@
 "use client"
 
+import { useEffect, useState } from "react"
 import { Box, Flex, HStack, Text, VStack } from "@chakra-ui/react"
 import { keyframes } from "@emotion/react"
+import { subscribeGroups } from "@/lib/firestore/group"
+import { startLobby } from "@/lib/firestore/lobby"
+import type { Group } from "@/types/firestore"
 
 // Animations
 const float = keyframes`
@@ -41,18 +45,33 @@ const glowLine = keyframes`
   100% { transform: translateX(100%); opacity: 0; }
 `
 
-// Mock data
-const MOCK_GROUPS = [
-  { id: "1", name: "チームA", isReady: true },
-  { id: "2", name: "チームB", isReady: true },
-  { id: "3", name: "チームC", isReady: true },
-  { id: "4", name: "チームD", isReady: false },
-]
+type Props = {
+  lobbyId: string
+}
 
-const MOCK_LOBBY_ID = "ABC123"
+export function AdminBeforeStart({ lobbyId }: Props) {
+  const [groups, setGroups] = useState<Group[]>([])
+  const [isStarting, setIsStarting] = useState(false)
 
-export function AdminBeforeStart() {
-  const readyCount = MOCK_GROUPS.filter((g) => g.isReady).length
+  useEffect(() => {
+    const unsubscribe = subscribeGroups(lobbyId, setGroups)
+    return () => unsubscribe()
+  }, [lobbyId])
+
+  const handleStart = async () => {
+    setIsStarting(true)
+    try {
+      await startLobby(lobbyId)
+    } catch (error) {
+      console.error("Failed to start lobby:", error)
+      setIsStarting(false)
+    }
+  }
+
+  const handleCopyUrl = async () => {
+    const url = `${window.location.origin}/lobby/${lobbyId}`
+    await navigator.clipboard.writeText(url)
+  }
 
   return (
     <Box
@@ -184,33 +203,33 @@ export function AdminBeforeStart() {
               fontWeight="bold"
               fontSize="lg"
             >
-              {readyCount} / {MOCK_GROUPS.length} 組
+              {groups.length} 組
             </Box>
           </Flex>
 
           {/* Group cards grid */}
           <Flex justify="center" gap={6} flexWrap="wrap">
-            {MOCK_GROUPS.map((group, index) => (
-              <Box
-                key={group.id}
-                w="200px"
-                bg="white"
-                borderRadius="2xl"
-                border="4px solid"
-                borderColor={group.isReady ? "#FF8800" : "gray.300"}
-                p={6}
-                textAlign="center"
-                boxShadow={
-                  group.isReady
-                    ? "0 8px 30px rgba(255, 136, 0, 0.2)"
-                    : "0 4px 15px rgba(0,0,0,0.08)"
-                }
-                animation={`${fadeInUp} 0.5s ease-out ${0.3 + index * 0.1}s both`}
-                position="relative"
-                overflow="hidden"
-              >
-                {/* Shine effect for ready teams */}
-                {group.isReady && (
+            {groups.length === 0 ? (
+              <Text color="gray.500" fontSize="lg">
+                参加者を待っています...
+              </Text>
+            ) : (
+              groups.map((group, index) => (
+                <Box
+                  key={group.id}
+                  w="200px"
+                  bg="white"
+                  borderRadius="2xl"
+                  border="4px solid"
+                  borderColor="#FF8800"
+                  p={6}
+                  textAlign="center"
+                  boxShadow="0 8px 30px rgba(255, 136, 0, 0.2)"
+                  animation={`${fadeInUp} 0.5s ease-out ${0.3 + index * 0.1}s both`}
+                  position="relative"
+                  overflow="hidden"
+                >
+                  {/* Shine effect */}
                   <Box
                     position="absolute"
                     top={0}
@@ -230,32 +249,27 @@ export function AdminBeforeStart() {
                       },
                     }}
                   />
-                )}
 
-                <Text
-                  fontSize="2xl"
-                  fontWeight="bold"
-                  color={group.isReady ? "#333" : "gray.400"}
-                  mb={3}
-                >
-                  {group.name}
-                </Text>
+                  <Text fontSize="2xl" fontWeight="bold" color="#333" mb={3}>
+                    {group.name}
+                  </Text>
 
-                <Box
-                  display="inline-block"
-                  px={4}
-                  py={2}
-                  borderRadius="full"
-                  bg={group.isReady ? "#DCFCE7" : "gray.100"}
-                  color={group.isReady ? "#22C55E" : "gray.400"}
-                  fontWeight="bold"
-                  fontSize="md"
-                  animation={group.isReady ? `${readyPulse} 2s ease-in-out infinite` : "none"}
-                >
-                  {group.isReady ? "READY" : "待機中..."}
+                  <Box
+                    display="inline-block"
+                    px={4}
+                    py={2}
+                    borderRadius="full"
+                    bg="#DCFCE7"
+                    color="#22C55E"
+                    fontWeight="bold"
+                    fontSize="md"
+                    animation={`${readyPulse} 2s ease-in-out infinite`}
+                  >
+                    READY
+                  </Box>
                 </Box>
-              </Box>
-            ))}
+              ))
+            )}
           </Flex>
         </Box>
 
@@ -265,46 +279,58 @@ export function AdminBeforeStart() {
             as="button"
             w="350px"
             h="100px"
-            bg="linear-gradient(135deg, #FF8800 0%, #E67A00 100%)"
+            bg={
+              groups.length === 0 || isStarting
+                ? "gray.300"
+                : "linear-gradient(135deg, #FF8800 0%, #E67A00 100%)"
+            }
             color="white"
             fontSize="3xl"
             fontWeight="900"
             borderRadius="full"
             border="none"
-            cursor="pointer"
-            animation={`${pulse} 2s ease-in-out infinite`}
+            cursor={groups.length === 0 || isStarting ? "not-allowed" : "pointer"}
+            animation={
+              groups.length === 0 || isStarting
+                ? "none"
+                : `${pulse} 2s ease-in-out infinite`
+            }
             position="relative"
             overflow="hidden"
+            aria-disabled={groups.length === 0 || isStarting}
+            onClick={groups.length === 0 || isStarting ? undefined : handleStart}
             _hover={{
-              transform: "scale(1.05)",
+              transform: groups.length === 0 || isStarting ? "none" : "scale(1.05)",
             }}
             _active={{
-              transform: "scale(0.98)",
+              transform: groups.length === 0 || isStarting ? "none" : "scale(0.98)",
             }}
             transition="transform 0.2s"
           >
             {/* Button shine effect */}
-            <Box
-              position="absolute"
-              top={0}
-              left="-100%"
-              w="60%"
-              h="100%"
-              bgGradient="to-r"
-              gradientFrom="transparent"
-              gradientVia="rgba(255,255,255,0.3)"
-              gradientTo="transparent"
-              transform="skewX(-25deg)"
-              animation="buttonShine 3s ease-in-out infinite"
-              css={{
-                "@keyframes buttonShine": {
-                  "0%": { left: "-100%" },
-                  "50%, 100%": { left: "200%" },
-                },
-              }}
-            />
+            {groups.length > 0 && !isStarting && (
+              <Box
+                position="absolute"
+                top={0}
+                left="-100%"
+                w="60%"
+                h="100%"
+                bgGradient="to-r"
+                gradientFrom="transparent"
+                gradientVia="rgba(255,255,255,0.3)"
+                gradientTo="transparent"
+                transform="skewX(-25deg)"
+                animation="buttonShine 3s ease-in-out infinite"
+                css={{
+                  "@keyframes buttonShine": {
+                    "0%": { left: "-100%" },
+                    "50%, 100%": { left: "200%" },
+                  },
+                }}
+              />
+            )}
             <Text position="relative" zIndex={1}>
-              大会をスタート
+              {isStarting ? "開始中..." : "大会をスタート"}
             </Text>
           </Box>
         </Box>
@@ -335,7 +361,7 @@ export function AdminBeforeStart() {
             gap={3}
           >
             <Text fontSize="lg" fontWeight="bold" color="#333" fontFamily="mono">
-              /lobby/{MOCK_LOBBY_ID}
+              /lobby/{lobbyId}
             </Text>
             <Box
               as="button"
@@ -348,6 +374,7 @@ export function AdminBeforeStart() {
               fontWeight="bold"
               border="none"
               cursor="pointer"
+              onClick={handleCopyUrl}
               _hover={{ opacity: 0.9 }}
             >
               コピー

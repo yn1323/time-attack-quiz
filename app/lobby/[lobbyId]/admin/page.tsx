@@ -1,17 +1,81 @@
-"use client";
+"use client"
 
-import { AdminAfterQuiz } from "./_components/AdminAfterQuiz";
-// モックアップ確認用: 表示したい状態のコンポーネントをインポート
-// 各状態を確認するには、インポートとreturn文を切り替えてください
+import { use, useEffect, useState } from "react"
+import { Box, Text, VStack } from "@chakra-ui/react"
+import { subscribeGroups } from "@/lib/firestore/group"
+import { subscribeLobby } from "@/lib/firestore/lobby"
+import type { Group, Lobby } from "@/types/firestore"
+import { AdminAfterQuiz } from "./_components/AdminAfterQuiz"
+import { AdminBeforeStart } from "./_components/AdminBeforeStart"
+import { AdminDuringQuiz } from "./_components/AdminDuringQuiz"
 
-// import { AdminBeforeStart } from "./_components/AdminBeforeStart"
-// import { AdminAfterQuiz } from "./_components/AdminAfterQuiz"
+type Props = {
+  params: Promise<{ lobbyId: string }>
+}
 
-export default function AdminPage() {
-  // モックアップなので固定で1つの状態を表示
-  // 他の状態を確認する場合は、上記のインポートとreturnを切り替え
+export default function AdminPage({ params }: Props) {
+  const { lobbyId } = use(params)
+  const [lobby, setLobby] = useState<Lobby | null>(null)
+  const [groups, setGroups] = useState<Group[]>([])
+  const [isLoading, setIsLoading] = useState(true)
 
-  // return <AdminBeforeStart />; // 開始前
-  // return <AdminDuringQuiz />; // クイズ中 ← 現在表示中
-  return <AdminAfterQuiz />; // 終了後
+  useEffect(() => {
+    const unsubscribeLobby = subscribeLobby(lobbyId, (lobbyData) => {
+      setLobby(lobbyData)
+      setIsLoading(false)
+    })
+
+    const unsubscribeGroups = subscribeGroups(lobbyId, setGroups)
+
+    return () => {
+      unsubscribeLobby()
+      unsubscribeGroups()
+    }
+  }, [lobbyId])
+
+  if (isLoading) {
+    return (
+      <Box
+        minH="100vh"
+        bg="#FFFDF7"
+        display="flex"
+        alignItems="center"
+        justifyContent="center"
+      >
+        <Text fontSize="2xl" color="#E67A00" fontWeight="bold">
+          読み込み中...
+        </Text>
+      </Box>
+    )
+  }
+
+  if (!lobby) {
+    return (
+      <Box
+        minH="100vh"
+        bg="#FFFDF7"
+        display="flex"
+        alignItems="center"
+        justifyContent="center"
+      >
+        <VStack gap={4}>
+          <Text fontSize="2xl" color="#E67A00" fontWeight="bold">
+            ロビーが見つかりません
+          </Text>
+          <Text color="gray.500">URLを確認してください</Text>
+        </VStack>
+      </Box>
+    )
+  }
+
+  switch (lobby.status) {
+    case "waiting":
+      return <AdminBeforeStart lobbyId={lobbyId} />
+    case "playing":
+      return <AdminDuringQuiz lobbyId={lobbyId} lobby={lobby} groups={groups} />
+    case "finished":
+      return <AdminAfterQuiz lobbyId={lobbyId} groups={groups} />
+    default:
+      return null
+  }
 }

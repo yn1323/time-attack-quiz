@@ -335,8 +335,8 @@ export default function LobbyPage() {
               transition="all 0.2s"
               animation={isJoining ? "none" : `${pulse} 2s ease-in-out infinite`}
               opacity={isJoining ? 0.7 : 1}
-              onClick={handleJoinGroup}
-              disabled={isJoining}
+              onClick={isJoining ? undefined : handleJoinGroup}
+              aria-disabled={isJoining}
               _hover={
                 isJoining
                   ? {}

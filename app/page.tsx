@@ -230,8 +230,8 @@ export default function HomePage() {
           border="none"
           outline="none"
           opacity={isCreating ? 0.7 : 1}
-          onClick={handleCreateLobby}
-          disabled={isCreating}
+          onClick={isCreating ? undefined : handleCreateLobby}
+          aria-disabled={isCreating}
           _hover={
             isCreating
               ? {}

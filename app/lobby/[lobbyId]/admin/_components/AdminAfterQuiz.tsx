@@ -1,8 +1,14 @@
 "use client"
 
+import { useEffect, useMemo, useState } from "react"
+import Link from "next/link"
 import { Box, Flex, HStack, Text, VStack } from "@chakra-ui/react"
 import { keyframes } from "@emotion/react"
-import Link from "next/link"
+import {
+  subscribeAllGroupAnswers,
+  type GroupWithAnswers,
+} from "@/lib/firestore/answer"
+import type { Group } from "@/types/firestore"
 
 // Animations
 const zoomIn = keyframes`
@@ -45,23 +51,10 @@ const bannerPulse = keyframes`
   50% { box-shadow: 0 12px 60px rgba(255, 136, 0, 0.6); }
 `
 
-const shimmer = keyframes`
-  0% { background-position: -200% center; }
-  100% { background-position: 200% center; }
-`
-
 const rankReveal = keyframes`
   0% { opacity: 0; transform: translateX(-30px); }
   100% { opacity: 1; transform: translateX(0); }
 `
-
-// Mock data
-const MOCK_FINAL_RANKING = [
-  { rank: 1, name: "チームA", score: 125 },
-  { rank: 2, name: "チームC", score: 108 },
-  { rank: 3, name: "チームB", score: 95 },
-  { rank: 4, name: "チームD", score: 72 },
-]
 
 const getMedalEmoji = (rank: number) => {
   switch (rank) {
@@ -79,17 +72,63 @@ const getMedalEmoji = (rank: number) => {
 const getRankStyle = (rank: number) => {
   switch (rank) {
     case 1:
-      return { border: "#FFD700", text: "#B8860B", bg: "rgba(255, 215, 0, 0.1)" }
+      return {
+        border: "#FFD700",
+        text: "#B8860B",
+        bg: "rgba(255, 215, 0, 0.1)",
+      }
     case 2:
-      return { border: "#C0C0C0", text: "#808080", bg: "rgba(192, 192, 192, 0.08)" }
+      return {
+        border: "#C0C0C0",
+        text: "#808080",
+        bg: "rgba(192, 192, 192, 0.08)",
+      }
     case 3:
-      return { border: "#CD7F32", text: "#8B4513", bg: "rgba(205, 127, 50, 0.08)" }
+      return {
+        border: "#CD7F32",
+        text: "#8B4513",
+        bg: "rgba(205, 127, 50, 0.08)",
+      }
     default:
       return { border: "#E0E0E0", text: "#666", bg: "transparent" }
   }
 }
 
-export function AdminAfterQuiz() {
+type Props = {
+  lobbyId: string
+  groups: Group[]
+}
+
+type RankingEntry = {
+  rank: number
+  groupId: string
+  name: string
+  score: number
+}
+
+export function AdminAfterQuiz({ lobbyId, groups }: Props) {
+  const [groupsWithAnswers, setGroupsWithAnswers] = useState<GroupWithAnswers[]>([])
+
+  // Subscribe to all group answers
+  useEffect(() => {
+    if (groups.length === 0) return
+
+    const unsubscribe = subscribeAllGroupAnswers(lobbyId, groups, setGroupsWithAnswers)
+    return () => unsubscribe()
+  }, [lobbyId, groups])
+
+  // Calculate final ranking
+  const ranking: RankingEntry[] = useMemo(() => {
+    return groupsWithAnswers
+      .map((group) => ({
+        groupId: group.groupId,
+        name: group.groupName,
+        score: group.answers.reduce((sum, answer) => sum + answer.scoreChange, 0),
+      }))
+      .sort((a, b) => b.score - a.score)
+      .map((entry, index) => ({ ...entry, rank: index + 1 }))
+  }, [groupsWithAnswers])
+
   return (
     <Box
       minH="100vh"
@@ -243,92 +282,91 @@ export function AdminAfterQuiz() {
 
         {/* Final ranking list */}
         <VStack w="full" maxW="700px" gap={4}>
-          {MOCK_FINAL_RANKING.map((team, index) => {
-            const style = getRankStyle(team.rank)
+          {ranking.length === 0 ? (
+            <Text color="gray.500" fontSize="xl">
+              結果を読み込んでいます...
+            </Text>
+          ) : (
+            ranking.map((team, index) => {
+              const style = getRankStyle(team.rank)
 
-            return (
-              <Box
-                key={team.rank}
-                w="full"
-                bg="white"
-                borderRadius="xl"
-                border="3px solid"
-                borderColor={style.border}
-                p={5}
-                boxShadow="0 4px 20px rgba(0,0,0,0.08)"
-                animation={`${rankReveal} 0.5s ease-out ${0.4 + index * 0.15}s both`}
-                position="relative"
-                overflow="hidden"
-              >
-                {/* Background tint */}
+              return (
                 <Box
-                  position="absolute"
-                  inset={0}
-                  bg={style.bg}
-                  pointerEvents="none"
-                />
-
-                <Flex
-                  justify="space-between"
-                  align="center"
+                  key={team.groupId}
+                  w="full"
+                  bg="white"
+                  borderRadius="xl"
+                  border="3px solid"
+                  borderColor={style.border}
+                  p={5}
+                  boxShadow="0 4px 20px rgba(0,0,0,0.08)"
+                  animation={`${rankReveal} 0.5s ease-out ${0.4 + index * 0.15}s both`}
                   position="relative"
-                  zIndex={1}
+                  overflow="hidden"
                 >
-                  <HStack gap={4}>
-                    {/* Rank with medal */}
-                    <HStack gap={2}>
-                      <Text
-                        fontSize="2xl"
-                        fontWeight="900"
-                        color={style.text}
-                        minW="60px"
-                      >
-                        {team.rank}位
-                      </Text>
-                      {team.rank <= 3 && (
-                        <Text fontSize="2xl">
-                          {getMedalEmoji(team.rank)}
+                  {/* Background tint */}
+                  <Box
+                    position="absolute"
+                    inset={0}
+                    bg={style.bg}
+                    pointerEvents="none"
+                  />
+
+                  <Flex
+                    justify="space-between"
+                    align="center"
+                    position="relative"
+                    zIndex={1}
+                  >
+                    <HStack gap={4}>
+                      {/* Rank with medal */}
+                      <HStack gap={2}>
+                        <Text
+                          fontSize="2xl"
+                          fontWeight="900"
+                          color={style.text}
+                          minW="60px"
+                        >
+                          {team.rank}位
                         </Text>
-                      )}
+                        {team.rank <= 3 && (
+                          <Text fontSize="2xl">{getMedalEmoji(team.rank)}</Text>
+                        )}
+                      </HStack>
+
+                      {/* Team name */}
+                      <Text fontSize="2xl" fontWeight="bold" color="#333">
+                        {team.name}
+                      </Text>
                     </HStack>
 
-                    {/* Team name */}
+                    {/* Score */}
                     <Text
-                      fontSize="2xl"
-                      fontWeight="bold"
-                      color="#333"
+                      fontSize="3xl"
+                      fontWeight="900"
+                      bgImage="linear-gradient(135deg, #FF8800 0%, #FFE500 100%)"
+                      bgClip="text"
+                      color="transparent"
+                      css={{
+                        WebkitBackgroundClip: "text",
+                        WebkitTextFillColor: "transparent",
+                      }}
                     >
-                      {team.name}
+                      {team.score}
+                      <Text as="span" fontSize="xl">
+                        点
+                      </Text>
                     </Text>
-                  </HStack>
-
-                  {/* Score */}
-                  <Text
-                    fontSize="3xl"
-                    fontWeight="900"
-                    bgImage="linear-gradient(135deg, #FF8800 0%, #FFE500 100%)"
-                    bgClip="text"
-                    color="transparent"
-                    css={{
-                      WebkitBackgroundClip: "text",
-                      WebkitTextFillColor: "transparent",
-                    }}
-                  >
-                    {team.score}
-                    <Text as="span" fontSize="xl">点</Text>
-                  </Text>
-                </Flex>
-              </Box>
-            )
-          })}
+                  </Flex>
+                </Box>
+              )
+            })
+          )}
         </VStack>
 
         {/* Results button */}
-        <Box
-          mt={4}
-          animation={`${fadeInUp} 0.6s ease-out 1s both`}
-        >
-          <Link href="/result/test">
+        <Box mt={4} animation={`${fadeInUp} 0.6s ease-out 1s both`}>
+          <Link href={`/lobby/${lobbyId}/result`}>
             <Box
               as="button"
               w="320px"

@@ -2,6 +2,7 @@ import {
   collection,
   doc,
   setDoc,
+  updateDoc,
   serverTimestamp,
   onSnapshot,
   type Unsubscribe,
@@ -47,5 +48,23 @@ export function subscribeLobby(
     } else {
       callback(null)
     }
+  })
+}
+
+export async function startLobby(lobbyId: string): Promise<void> {
+  const lobbyRef = doc(db, "quiz-time-attack-lobbies", lobbyId)
+
+  await updateDoc(lobbyRef, {
+    status: "playing",
+    startedAt: serverTimestamp(),
+  })
+}
+
+export async function finishLobby(lobbyId: string): Promise<void> {
+  const lobbyRef = doc(db, "quiz-time-attack-lobbies", lobbyId)
+
+  await updateDoc(lobbyRef, {
+    status: "finished",
+    finishedAt: serverTimestamp(),
   })
 }

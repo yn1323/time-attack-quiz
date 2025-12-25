@@ -1,7 +1,14 @@
 "use client"
 
+import { useEffect, useMemo, useState } from "react"
 import { Box, Flex, HStack, Text, VStack } from "@chakra-ui/react"
 import { keyframes } from "@emotion/react"
+import {
+  subscribeAllGroupAnswers,
+  type GroupWithAnswers,
+} from "@/lib/firestore/answer"
+import { finishLobby } from "@/lib/firestore/lobby"
+import type { Group, Lobby } from "@/types/firestore"
 
 // Animations
 const float = keyframes`
@@ -40,16 +47,10 @@ const rankBounce = keyframes`
   100% { transform: scale(1); }
 `
 
-// Mock data
-const MOCK_RANKING = [
-  { rank: 1, name: "チームA", score: 125 },
-  { rank: 2, name: "チームC", score: 108 },
-  { rank: 3, name: "チームB", score: 95 },
-  { rank: 4, name: "チームD", score: 72 },
-]
-
-const MOCK_TIME = { minutes: 7, seconds: 32 }
-const MAX_SCORE = 150 // For progress bar calculation
+const urgentPulse = keyframes`
+  0%, 100% { transform: scale(1); color: #FF8800; }
+  50% { transform: scale(1.05); color: #FF0000; }
+`
 
 const getMedalEmoji = (rank: number) => {
   switch (rank) {
@@ -67,26 +68,101 @@ const getMedalEmoji = (rank: number) => {
 const getRankColor = (rank: number) => {
   switch (rank) {
     case 1:
-      return { border: "#FFD700", bg: "rgba(255, 215, 0, 0.08)", shadow: "rgba(255, 215, 0, 0.3)" }
+      return {
+        border: "#FFD700",
+        bg: "rgba(255, 215, 0, 0.08)",
+        shadow: "rgba(255, 215, 0, 0.3)",
+      }
     case 2:
-      return { border: "#C0C0C0", bg: "rgba(192, 192, 192, 0.08)", shadow: "rgba(192, 192, 192, 0.3)" }
+      return {
+        border: "#C0C0C0",
+        bg: "rgba(192, 192, 192, 0.08)",
+        shadow: "rgba(192, 192, 192, 0.3)",
+      }
     case 3:
-      return { border: "#CD7F32", bg: "rgba(205, 127, 50, 0.08)", shadow: "rgba(205, 127, 50, 0.3)" }
+      return {
+        border: "#CD7F32",
+        bg: "rgba(205, 127, 50, 0.08)",
+        shadow: "rgba(205, 127, 50, 0.3)",
+      }
     default:
-      return { border: "#E0E0E0", bg: "rgba(0, 0, 0, 0.02)", shadow: "rgba(0, 0, 0, 0.1)" }
+      return {
+        border: "#E0E0E0",
+        bg: "rgba(0, 0, 0, 0.02)",
+        shadow: "rgba(0, 0, 0, 0.1)",
+      }
   }
 }
 
-export function AdminDuringQuiz() {
-  const timeString = `${MOCK_TIME.minutes}:${MOCK_TIME.seconds.toString().padStart(2, "0")}`
+type Props = {
+  lobbyId: string
+  lobby: Lobby
+  groups: Group[]
+}
+
+type RankingEntry = {
+  rank: number
+  groupId: string
+  name: string
+  score: number
+}
+
+export function AdminDuringQuiz({ lobbyId, lobby, groups }: Props) {
+  const [groupsWithAnswers, setGroupsWithAnswers] = useState<GroupWithAnswers[]>([])
+  const [remainingSeconds, setRemainingSeconds] = useState<number>(lobby.durationSeconds)
+  const [hasFinished, setHasFinished] = useState(false)
+
+  // Subscribe to all group answers
+  useEffect(() => {
+    if (groups.length === 0) return
+
+    const unsubscribe = subscribeAllGroupAnswers(lobbyId, groups, setGroupsWithAnswers)
+    return () => unsubscribe()
+  }, [lobbyId, groups])
+
+  // Timer countdown
+  useEffect(() => {
+    const startedAt = lobby.startedAt
+    if (!startedAt) return
+
+    const updateTimer = () => {
+      const startTime = startedAt.toMillis()
+      const now = Date.now()
+      const elapsedSeconds = Math.floor((now - startTime) / 1000)
+      const remaining = Math.max(0, lobby.durationSeconds - elapsedSeconds)
+      setRemainingSeconds(remaining)
+
+      if (remaining === 0 && !hasFinished) {
+        setHasFinished(true)
+        finishLobby(lobbyId).catch(console.error)
+      }
+    }
+
+    updateTimer()
+    const interval = setInterval(updateTimer, 1000)
+    return () => clearInterval(interval)
+  }, [lobby.startedAt, lobby.durationSeconds, lobbyId, hasFinished])
+
+  // Calculate ranking
+  const ranking: RankingEntry[] = useMemo(() => {
+    return groupsWithAnswers
+      .map((group) => ({
+        groupId: group.groupId,
+        name: group.groupName,
+        score: group.answers.reduce((sum, answer) => sum + answer.scoreChange, 0),
+      }))
+      .sort((a, b) => b.score - a.score)
+      .map((entry, index) => ({ ...entry, rank: index + 1 }))
+  }, [groupsWithAnswers])
+
+  const maxScore = Math.max(100, ...ranking.map((r) => r.score))
+  const minutes = Math.floor(remainingSeconds / 60)
+  const seconds = remainingSeconds % 60
+  const timeString = `${minutes}:${seconds.toString().padStart(2, "0")}`
+  const isUrgent = remainingSeconds <= 60
 
   return (
-    <Box
-      minH="100vh"
-      bg="#FFFDF7"
-      position="relative"
-      overflow="hidden"
-    >
+    <Box minH="100vh" bg="#FFFDF7" position="relative" overflow="hidden">
       {/* Dynamic gradient background */}
       <Box
         position="absolute"
@@ -132,32 +208,35 @@ export function AdminDuringQuiz() {
       />
 
       {/* Header with timer */}
-      <Flex
-        justify="flex-end"
-        align="center"
-        p={8}
-        position="relative"
-        zIndex={1}
-      >
+      <Flex justify="flex-end" align="center" p={8} position="relative" zIndex={1}>
         <HStack
           bg="white"
           px={8}
           py={4}
           borderRadius="2xl"
           border="4px solid"
-          borderColor="#FF8800"
-          boxShadow="0 8px 30px rgba(255, 136, 0, 0.25)"
+          borderColor={isUrgent ? "#FF0000" : "#FF8800"}
+          boxShadow={
+            isUrgent
+              ? "0 8px 30px rgba(255, 0, 0, 0.35)"
+              : "0 8px 30px rgba(255, 136, 0, 0.25)"
+          }
           animation={`${timerPulse} 1s ease-in-out infinite`}
         >
           <Text fontSize="5xl">⏱️</Text>
           <Text
             fontSize="7xl"
             fontWeight="900"
-            bgImage="linear-gradient(135deg, #FF8800 0%, #E67A00 100%)"
+            bgImage={
+              isUrgent
+                ? "linear-gradient(135deg, #FF0000 0%, #FF8800 100%)"
+                : "linear-gradient(135deg, #FF8800 0%, #E67A00 100%)"
+            }
             bgClip="text"
             color="transparent"
             fontFamily="mono"
             letterSpacing="0.05em"
+            animation={isUrgent ? `${urgentPulse} 0.5s ease-in-out infinite` : "none"}
             css={{
               WebkitBackgroundClip: "text",
               WebkitTextFillColor: "transparent",
@@ -186,125 +265,135 @@ export function AdminDuringQuiz() {
               WebkitTextFillColor: "transparent",
             }}
           >
-            🏆 リアルタイムランキング 🏆
+            リアルタイムランキング
           </Text>
         </Box>
 
         {/* Ranking cards */}
         <VStack w="full" maxW="900px" gap={5}>
-          {MOCK_RANKING.map((team, index) => {
-            const colors = getRankColor(team.rank)
-            const progressPercent = (team.score / MAX_SCORE) * 100
+          {ranking.length === 0 ? (
+            <Text color="gray.500" fontSize="xl">
+              回答を待っています...
+            </Text>
+          ) : (
+            ranking.map((team, index) => {
+              const colors = getRankColor(team.rank)
+              const progressPercent = Math.max(0, (team.score / maxScore) * 100)
 
-            return (
-              <Box
-                key={team.rank}
-                w="full"
-                bg="white"
-                borderRadius="2xl"
-                border="4px solid"
-                borderColor={colors.border}
-                p={6}
-                boxShadow={`0 8px 30px ${colors.shadow}`}
-                animation={`${fadeInUp} 0.5s ease-out ${index * 0.1}s both, ${team.rank <= 3 ? glowPulse : "none"} 3s ease-in-out infinite`}
-                position="relative"
-                overflow="hidden"
-              >
-                {/* Background tint */}
+              return (
                 <Box
-                  position="absolute"
-                  inset={0}
-                  bg={colors.bg}
-                  pointerEvents="none"
-                />
+                  key={team.groupId}
+                  w="full"
+                  bg="white"
+                  borderRadius="2xl"
+                  border="4px solid"
+                  borderColor={colors.border}
+                  p={6}
+                  boxShadow={`0 8px 30px ${colors.shadow}`}
+                  animation={`${fadeInUp} 0.5s ease-out ${index * 0.1}s both, ${team.rank <= 3 ? glowPulse : "none"} 3s ease-in-out infinite`}
+                  position="relative"
+                  overflow="hidden"
+                >
+                  {/* Background tint */}
+                  <Box
+                    position="absolute"
+                    inset={0}
+                    bg={colors.bg}
+                    pointerEvents="none"
+                  />
 
-                {/* Card content */}
-                <Box position="relative" zIndex={1}>
-                  <Flex justify="space-between" align="center" mb={4}>
-                    <HStack gap={4}>
-                      {/* Rank number with medal */}
-                      <HStack gap={2}>
-                        <Text
-                          fontSize="4xl"
-                          fontWeight="900"
-                          color={team.rank <= 3 ? colors.border : "#666"}
-                          animation={team.rank === 1 ? `${rankBounce} 2s ease-in-out infinite` : "none"}
-                        >
-                          {team.rank}位
-                        </Text>
-                        {team.rank <= 3 && (
-                          <Text fontSize="4xl" animation={`${rankBounce} 2s ease-in-out infinite ${team.rank * 0.2}s`}>
-                            {getMedalEmoji(team.rank)}
+                  {/* Card content */}
+                  <Box position="relative" zIndex={1}>
+                    <Flex justify="space-between" align="center" mb={4}>
+                      <HStack gap={4}>
+                        {/* Rank number with medal */}
+                        <HStack gap={2}>
+                          <Text
+                            fontSize="4xl"
+                            fontWeight="900"
+                            color={team.rank <= 3 ? colors.border : "#666"}
+                            animation={
+                              team.rank === 1
+                                ? `${rankBounce} 2s ease-in-out infinite`
+                                : "none"
+                            }
+                          >
+                            {team.rank}位
                           </Text>
-                        )}
+                          {team.rank <= 3 && (
+                            <Text
+                              fontSize="4xl"
+                              animation={`${rankBounce} 2s ease-in-out infinite ${team.rank * 0.2}s`}
+                            >
+                              {getMedalEmoji(team.rank)}
+                            </Text>
+                          )}
+                        </HStack>
+
+                        {/* Team name */}
+                        <Text fontSize="3xl" fontWeight="bold" color="#333" ml={4}>
+                          {team.name}
+                        </Text>
                       </HStack>
 
-                      {/* Team name */}
+                      {/* Score */}
                       <Text
-                        fontSize="3xl"
-                        fontWeight="bold"
-                        color="#333"
-                        ml={4}
+                        fontSize="5xl"
+                        fontWeight="900"
+                        bgImage="linear-gradient(135deg, #FF8800 0%, #FFE500 100%)"
+                        bgClip="text"
+                        color="transparent"
+                        css={{
+                          WebkitBackgroundClip: "text",
+                          WebkitTextFillColor: "transparent",
+                        }}
                       >
-                        {team.name}
+                        {team.score}
+                        <Text as="span" fontSize="2xl">
+                          点
+                        </Text>
                       </Text>
-                    </HStack>
+                    </Flex>
 
-                    {/* Score */}
-                    <Text
-                      fontSize="5xl"
-                      fontWeight="900"
-                      bgImage="linear-gradient(135deg, #FF8800 0%, #FFE500 100%)"
-                      bgClip="text"
-                      color="transparent"
-                      css={{
-                        WebkitBackgroundClip: "text",
-                        WebkitTextFillColor: "transparent",
-                      }}
-                    >
-                      {team.score}
-                      <Text as="span" fontSize="2xl">点</Text>
-                    </Text>
-                  </Flex>
-
-                  {/* Progress bar */}
-                  <Box
-                    w="full"
-                    h="24px"
-                    bg="gray.100"
-                    borderRadius="full"
-                    overflow="hidden"
-                    position="relative"
-                  >
+                    {/* Progress bar */}
                     <Box
-                      h="full"
-                      w={`${progressPercent}%`}
-                      bgImage="linear-gradient(90deg, #FF8800 0%, #FFE500 50%, #FF8800 100%)"
-                      bgSize="200% auto"
+                      w="full"
+                      h="24px"
+                      bg="gray.100"
                       borderRadius="full"
-                      position="relative"
                       overflow="hidden"
-                      transition="width 0.5s ease-out"
+                      position="relative"
                     >
-                      {/* Shimmer effect on progress bar */}
                       <Box
-                        position="absolute"
-                        top={0}
-                        left="-50%"
-                        w="30%"
-                        h="100%"
-                        bgGradient="to-r"
-                        gradientFrom="transparent"
-                        gradientVia="rgba(255,255,255,0.5)"
-                        gradientTo="transparent"
-                        animation={`${progressShimmer} 2s ease-in-out infinite`}
-                      />
+                        h="full"
+                        w={`${progressPercent}%`}
+                        bgImage="linear-gradient(90deg, #FF8800 0%, #FFE500 50%, #FF8800 100%)"
+                        bgSize="200% auto"
+                        borderRadius="full"
+                        position="relative"
+                        overflow="hidden"
+                        transition="width 0.5s ease-out"
+                      >
+                        {/* Shimmer effect on progress bar */}
+                        <Box
+                          position="absolute"
+                          top={0}
+                          left="-50%"
+                          w="30%"
+                          h="100%"
+                          bgGradient="to-r"
+                          gradientFrom="transparent"
+                          gradientVia="rgba(255,255,255,0.5)"
+                          gradientTo="transparent"
+                          animation={`${progressShimmer} 2s ease-in-out infinite`}
+                        />
+                      </Box>
                     </Box>
                   </Box>
                 </Box>
-              </Box>
-            )
-          })}
+              )
+            })
+          )}
         </VStack>
       </VStack>
 
