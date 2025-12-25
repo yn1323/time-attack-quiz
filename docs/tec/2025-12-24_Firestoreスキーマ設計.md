@@ -24,6 +24,15 @@
    - URL形式: `/lobby/{lobbyId}/admin`
    - 理由: 身内での利用のためゆるい制御でOK
 
+4. **スコアと統計情報の管理**
+   - 決定: Groupには保存せず、answersから計算
+   - 計算場所: クライアント側
+   - 理由:
+     - リアルタイムで必要なのはスコアのみ
+     - 詳細な統計は結果発表時のみ必要
+     - トランザクション処理不要でシンプル
+     - 規模が小さい（4-5グループ × 最大100回答）ため計算コストは問題なし
+
 ---
 
 ## コレクション構造
@@ -71,28 +80,14 @@ interface Lobby {
 
 ### 2. `lobbies/{lobbyId}/groups` サブコレクション
 
-各グループの情報と統計データ。リアルタイムランキング表示に使用。
+各グループの基本情報。スコアや統計情報は`answers`サブコレクションから計算する。
 
 ```typescript
 interface Group {
   id: string;                        // ドキュメントID
   lobbyId: string;                   // 親ロビーのID
   name: string;                      // グループ名
-  score: number;                     // 現在のスコア
   createdAt: Timestamp;
-
-  stats: {
-    totalAnswers: number;            // 総回答数
-    correctCount: number;            // 正解数
-    incorrectCount: number;          // 不正解数
-    correctRate: number;             // 正解率 (correctCount / totalAnswers)
-    maxStreak: number;               // 最大連続正解数
-    currentStreak: number;           // 現在の連続正解数
-    totalAnswerTimeMs: number;       // 総回答時間（ミリ秒）
-    averageAnswerTimeMs: number;     // 平均回答時間（ミリ秒）
-    fastestAnswerMs: number | null;  // 最速回答時間（最速正解賞用）
-    lastTwoMinutesScore: number;     // 残り2分のスコア（ラストスパート賞用）
-  };
 }
 ```
 
@@ -100,15 +95,22 @@ interface Group {
 
 | フィールド | 型 | 説明 |
 |-----------|-----|------|
+| `lobbyId` | `string` | 親ロビーのID |
 | `name` | `string` | グループ名（参加時に入力） |
-| `score` | `number` | 現在のスコア（回答ごとに更新） |
-| `stats.totalAnswers` | `number` | 総回答数 |
-| `stats.correctRate` | `number` | 正解率（0.0〜1.0） |
-| `stats.maxStreak` | `number` | 最大連続正解数 |
-| `stats.currentStreak` | `number` | 現在の連続正解数（不正解でリセット） |
-| `stats.averageAnswerTimeMs` | `number` | 1問あたりの平均回答時間 |
-| `stats.fastestAnswerMs` | `number \| null` | 最速正解時の回答時間（最速正解賞） |
-| `stats.lastTwoMinutesScore` | `number` | 残り2分間で獲得したスコア（ラストスパート賞） |
+| `createdAt` | `Timestamp` | グループ作成日時 |
+
+#### 計算される情報（answersから導出）
+
+以下の情報は`answers`サブコレクションから計算されます：
+
+- **スコア**: `scoreChange`の合計
+- **総回答数**: answersドキュメント数
+- **正解数/不正解数**: `isCorrect`でフィルタ
+- **正解率**: 正解数 / 総回答数
+- **最大連続正解数**: answersを時系列で走査
+- **平均回答時間**: `answerTimeMs`の平均
+- **最速回答時間**: `isCorrect=true`の中で最小の`answerTimeMs`
+- **残り2分のスコア**: `answeredAt`が終了2分前以降の`scoreChange`合計
 
 ---
 
@@ -155,38 +157,40 @@ interface Answer {
 2. **Groupの参加**
    - ロビーページでグループ名を入力
    - `groups`サブコレクションに新規ドキュメント作成
-   - 初期値: `score=0`, `stats`は全てゼロ
 
 3. **Answerの記録**
    - グループページで回答
-   - `answers`サブコレクションに新規ドキュメント作成
-   - 同時に`Group`の`score`と`stats`を更新
+   - `answers`サブコレクションに新規ドキュメント作成（追記のみ）
 
-### フェーズ2: リアルタイム同期
+### フェーズ2: リアルタイム同期とクライアント側計算
 
 1. **管理ページでのランキング表示**
-   - `groups`コレクションにリアルタイムリスナーを設定
-   - `score`フィールドでソートして上位5チームを表示
+   - 各グループの`answers`サブコレクションにリアルタイムリスナーを設定
+   - クライアント側で各グループのスコアを計算（`scoreChange`の合計）
+   - 計算したスコアでソートして上位5チームを表示
 
 2. **グループページでのスコア・残り時間表示**
-   - 自グループの`Group`ドキュメントをリアルタイム監視
+   - 自グループの`answers`サブコレクションをリアルタイム監視
+   - クライアント側でスコアを計算
    - `Lobby`の`startedAt`と`durationSeconds`から残り時間を計算
 
-### フェーズ3: 統計情報の計算
+### フェーズ3: 統計情報の計算（結果発表時）
 
-1. **回答時の統計更新ロジック**
-   - `stats.totalAnswers` をインクリメント
-   - 正解/不正解に応じて `correctCount` / `incorrectCount` を更新
-   - `correctRate` を再計算
-   - 連続正解数 `currentStreak` を更新、`maxStreak` と比較
-   - `totalAnswerTimeMs` に加算し、`averageAnswerTimeMs` を再計算
-   - 正解時、`fastestAnswerMs` と比較して更新
-   - 残り2分以内なら `lastTwoMinutesScore` に加算
+1. **answersからの統計計算ロジック**
+   - 全グループの`answers`を取得
+   - クライアント側で以下を計算:
+     - 総回答数: answersドキュメント数
+     - 正解数/不正解数: `isCorrect`でフィルタ
+     - 正解率: 正解数 / 総回答数
+     - 最大連続正解数: answersを時系列で走査
+     - 平均回答時間: `answerTimeMs`の平均
+     - 最速回答時間: 正解の中で最小の`answerTimeMs`
+     - 残り2分のスコア: 終了2分前以降の`scoreChange`合計
 
 2. **アワードの判定**
-   - 結果発表時に全グループの`stats`を比較
-   - 最速正解賞: `fastestAnswerMs`が最小
-   - ラストスパート賞: `lastTwoMinutesScore`が最大
+   - 各グループの統計情報を比較
+   - 最速正解賞: 最速回答時間が最小のグループ
+   - ラストスパート賞: 残り2分のスコアが最大のグループ
 
 ### フェーズ4: スコア変遷グラフ
 
@@ -227,28 +231,23 @@ service cloud.firestore {
 
 **注意**: 身内用途のため認証なし。本番環境では適切なルールを設定すること。
 
-### トランザクション処理
+### 回答の記録
 
-回答時の更新は複数フィールドにまたがるため、トランザクションまたはバッチ処理を使用:
+回答時はanswerドキュメントの追加のみ。トランザクション不要でシンプル:
 
 ```typescript
 // 回答時の処理例
 const answerRef = doc(collection(db, `lobbies/${lobbyId}/groups/${groupId}/answers`));
-const groupRef = doc(db, `lobbies/${lobbyId}/groups/${groupId}`);
 
-await runTransaction(db, async (transaction) => {
-  const groupSnap = await transaction.get(groupRef);
-  const currentGroup = groupSnap.data();
-
-  // Answer作成
-  transaction.set(answerRef, answerData);
-
-  // Group更新（スコア、統計）
-  transaction.update(groupRef, {
-    score: currentGroup.score + scoreChange,
-    'stats.totalAnswers': increment(1),
-    // ...その他の統計フィールド
-  });
+await setDoc(answerRef, {
+  groupId,
+  questionIndex,
+  selectedAnswer,
+  correctAnswer,
+  isCorrect,
+  answeredAt: serverTimestamp(),
+  answerTimeMs,
+  scoreChange: isCorrect ? pointsCorrect : pointsIncorrect
 });
 ```
 
@@ -256,14 +255,15 @@ await runTransaction(db, async (transaction) => {
 
 必要に応じて以下のインデックスを作成:
 
-1. `groups`コレクション: `score`（降順） - ランキング表示用
-2. `answers`サブコレクション: `answeredAt`（昇順） - グラフ用
+- `answers`サブコレクション: `answeredAt`（昇順） - グラフ・統計計算用
 
 ### パフォーマンス考慮事項
 
 - グループ数は4-5程度のため、スケーラビリティの懸念は少ない
 - 10分間で最大500回答程度（5グループ × 100問）のため、書き込み負荷も問題なし
-- リアルタイムリスナーは各クライアントで最大2-3個程度
+- リアルタイムリスナーは管理ページで最大5個（各グループのanswers）
+- クライアント側の計算負荷は軽微（最大500ドキュメントの集計程度）
+- answersは追記のみのため、データ整合性が保証される
 
 ---
 
