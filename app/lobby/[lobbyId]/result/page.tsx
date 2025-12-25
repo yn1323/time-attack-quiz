@@ -1,6 +1,8 @@
 "use client"
 
-import { Box, Flex, HStack, Text, VStack } from "@chakra-ui/react"
+import { useEffect, useMemo, useState } from "react"
+import { useParams } from "next/navigation"
+import { Box, Flex, HStack, Spinner, Text, VStack } from "@chakra-ui/react"
 import { keyframes } from "@emotion/react"
 import {
   LineChart,
@@ -12,6 +14,13 @@ import {
   ResponsiveContainer,
   Legend,
 } from "recharts"
+import { subscribeLobby } from "@/lib/firestore/lobby"
+import { subscribeGroups } from "@/lib/firestore/group"
+import {
+  subscribeAllGroupAnswers,
+  type GroupWithAnswers,
+} from "@/lib/firestore/answer"
+import type { Group, Lobby } from "@/types/firestore"
 
 // ============================================
 // Animations
@@ -77,42 +86,19 @@ const slideInLeft = keyframes`
 `
 
 // ============================================
-// Mock Data
+// Constants
 // ============================================
 
-const MOCK_RANKING = [
-  { rank: 1, name: "チームA", score: 125 },
-  { rank: 2, name: "チームC", score: 108 },
-  { rank: 3, name: "チームB", score: 95 },
-  { rank: 4, name: "チームD", score: 72 },
+const TEAM_COLORS = [
+  "#FF8800",
+  "#22C55E",
+  "#3B82F6",
+  "#A855F7",
+  "#EC4899",
+  "#14B8A6",
+  "#F59E0B",
+  "#6366F1",
 ]
-
-const MOCK_AWARDS = [
-  { icon: "🏃", title: "最速正解賞", winner: "チームA", detail: "平均3.2秒" },
-  { icon: "🔥", title: "ラストスパート賞", winner: "チームC", detail: "+28点" },
-  { icon: "✨", title: "連続正解記録", winner: "チームB", detail: "8問連続" },
-]
-
-const MOCK_SCORE_HISTORY = [
-  { time: "0:00", チームA: 0, チームB: 0, チームC: 0, チームD: 0 },
-  { time: "1:00", チームA: 15, チームB: 10, チームC: 8, チームD: 5 },
-  { time: "2:00", チームA: 28, チームB: 23, チームC: 18, チームD: 15 },
-  { time: "3:00", チームA: 45, チームB: 38, チームC: 30, チームD: 25 },
-  { time: "4:00", チームA: 58, チームB: 52, チームC: 45, チームD: 35 },
-  { time: "5:00", チームA: 72, チームB: 65, チームC: 58, チームD: 42 },
-  { time: "6:00", チームA: 85, チームB: 75, チームC: 70, チームD: 50 },
-  { time: "7:00", チームA: 98, チームB: 82, チームC: 82, チームD: 58 },
-  { time: "8:00", チームA: 110, チームB: 88, チームC: 95, チームD: 65 },
-  { time: "9:00", チームA: 118, チームB: 92, チームC: 102, チームD: 70 },
-  { time: "10:00", チームA: 125, チームB: 95, チームC: 108, チームD: 72 },
-]
-
-const TEAM_COLORS = {
-  チームA: "#FF8800",
-  チームB: "#22C55E",
-  チームC: "#3B82F6",
-  チームD: "#A855F7",
-}
 
 // ============================================
 // Helper Functions
@@ -181,10 +167,197 @@ const getPodiumConfig = (rank: number) => {
 // ============================================
 
 export default function ResultPage() {
-  const top3 = MOCK_RANKING.filter((t) => t.rank <= 3)
-  const first = top3.find((t) => t.rank === 1)!
-  const second = top3.find((t) => t.rank === 2)!
-  const third = top3.find((t) => t.rank === 3)!
+  const params = useParams()
+  const lobbyId = params.lobbyId as string
+
+  const [lobby, setLobby] = useState<Lobby | null>(null)
+  const [groups, setGroups] = useState<Group[]>([])
+  const [groupsWithAnswers, setGroupsWithAnswers] = useState<GroupWithAnswers[]>([])
+  const [isLoading, setIsLoading] = useState(true)
+
+  // Subscribe to lobby
+  useEffect(() => {
+    const unsubscribe = subscribeLobby(lobbyId, setLobby)
+    return unsubscribe
+  }, [lobbyId])
+
+  // Subscribe to groups
+  useEffect(() => {
+    const unsubscribe = subscribeGroups(lobbyId, (newGroups) => {
+      setGroups(newGroups)
+    })
+    return unsubscribe
+  }, [lobbyId])
+
+  // Subscribe to all group answers
+  useEffect(() => {
+    if (groups.length === 0) {
+      setGroupsWithAnswers([])
+      return
+    }
+
+    const unsubscribe = subscribeAllGroupAnswers(lobbyId, groups, (data) => {
+      setGroupsWithAnswers(data)
+      setIsLoading(false)
+    })
+    return unsubscribe
+  }, [lobbyId, groups])
+
+  // Calculate ranking
+  const ranking = useMemo(() => {
+    return groupsWithAnswers
+      .map((group) => ({
+        name: group.groupName,
+        score: group.answers.reduce((sum, a) => sum + a.scoreChange, 0),
+      }))
+      .sort((a, b) => b.score - a.score)
+      .map((item, index) => ({ ...item, rank: index + 1 }))
+  }, [groupsWithAnswers])
+
+  // Calculate score history (1 minute intervals)
+  const scoreHistory = useMemo(() => {
+    if (!lobby?.startedAt || groupsWithAnswers.length === 0) return []
+
+    const startTime = lobby.startedAt.toMillis()
+    const durationMinutes = Math.ceil(lobby.durationSeconds / 60)
+    const history: Record<string, number | string>[] = []
+
+    for (let minute = 0; minute <= durationMinutes; minute++) {
+      const timePoint = startTime + minute * 60 * 1000
+      const entry: Record<string, number | string> = {
+        time: `${minute}:00`,
+      }
+
+      for (const group of groupsWithAnswers) {
+        const scoreAtTime = group.answers
+          .filter((a) => a.answeredAt.toMillis() <= timePoint)
+          .reduce((sum, a) => sum + a.scoreChange, 0)
+        entry[group.groupName] = scoreAtTime
+      }
+
+      history.push(entry)
+    }
+
+    return history
+  }, [lobby, groupsWithAnswers])
+
+  // Calculate awards
+  const awards = useMemo(() => {
+    if (!lobby?.startedAt || groupsWithAnswers.length === 0) return []
+
+    const result: { icon: string; title: string; winner: string; detail: string }[] = []
+    const startTime = lobby.startedAt.toMillis()
+    const durationMs = lobby.durationSeconds * 1000
+
+    // 1. 最速正解賞 - 単一最速回答
+    let fastestAnswer: { groupName: string; timeMs: number } | null = null
+    for (const group of groupsWithAnswers) {
+      for (const answer of group.answers) {
+        if (answer.isCorrect) {
+          if (!fastestAnswer || answer.answerTimeMs < fastestAnswer.timeMs) {
+            fastestAnswer = { groupName: group.groupName, timeMs: answer.answerTimeMs }
+          }
+        }
+      }
+    }
+    if (fastestAnswer) {
+      result.push({
+        icon: "🏃",
+        title: "最速正解賞",
+        winner: fastestAnswer.groupName,
+        detail: `${(fastestAnswer.timeMs / 1000).toFixed(1)}秒`,
+      })
+    }
+
+    // 2. ラストスパート賞 - 後半20%での得点増加
+    const lastSpurtStart = startTime + durationMs * 0.8
+    let bestLastSpurt: { groupName: string; score: number } | null = null
+    for (const group of groupsWithAnswers) {
+      const lastSpurtScore = group.answers
+        .filter((a) => a.answeredAt.toMillis() >= lastSpurtStart)
+        .reduce((sum, a) => sum + a.scoreChange, 0)
+      if (!bestLastSpurt || lastSpurtScore > bestLastSpurt.score) {
+        bestLastSpurt = { groupName: group.groupName, score: lastSpurtScore }
+      }
+    }
+    if (bestLastSpurt && bestLastSpurt.score > 0) {
+      result.push({
+        icon: "🔥",
+        title: "ラストスパート賞",
+        winner: bestLastSpurt.groupName,
+        detail: `+${bestLastSpurt.score}点`,
+      })
+    }
+
+    // 3. 連続正解記録
+    let bestStreak: { groupName: string; streak: number } | null = null
+    for (const group of groupsWithAnswers) {
+      let currentStreak = 0
+      let maxStreak = 0
+      for (const answer of group.answers) {
+        if (answer.isCorrect) {
+          currentStreak++
+          maxStreak = Math.max(maxStreak, currentStreak)
+        } else {
+          currentStreak = 0
+        }
+      }
+      if (!bestStreak || maxStreak > bestStreak.streak) {
+        bestStreak = { groupName: group.groupName, streak: maxStreak }
+      }
+    }
+    if (bestStreak && bestStreak.streak > 1) {
+      result.push({
+        icon: "✨",
+        title: "連続正解記録",
+        winner: bestStreak.groupName,
+        detail: `${bestStreak.streak}問連続`,
+      })
+    }
+
+    return result
+  }, [lobby, groupsWithAnswers])
+
+  // Create color map for groups
+  const groupColorMap = useMemo(() => {
+    const map: Record<string, string> = {}
+    groupsWithAnswers.forEach((group, index) => {
+      map[group.groupName] = TEAM_COLORS[index % TEAM_COLORS.length]
+    })
+    return map
+  }, [groupsWithAnswers])
+
+  // Max score for Y-axis
+  const maxScore = useMemo(() => {
+    if (ranking.length === 0) return 100
+    const max = Math.max(...ranking.map((r) => r.score))
+    return Math.ceil((max + 20) / 10) * 10
+  }, [ranking])
+
+  // Loading state
+  if (isLoading || !lobby) {
+    return (
+      <Box minH="100vh" bg="#FFFDF7" display="flex" alignItems="center" justifyContent="center">
+        <VStack gap={4}>
+          <Spinner size="xl" color="orange.500" />
+          <Text fontSize="xl" color="gray.600">結果を読み込み中...</Text>
+        </VStack>
+      </Box>
+    )
+  }
+
+  // No groups
+  if (ranking.length === 0) {
+    return (
+      <Box minH="100vh" bg="#FFFDF7" display="flex" alignItems="center" justifyContent="center">
+        <Text fontSize="2xl" color="gray.600">参加グループがありません</Text>
+      </Box>
+    )
+  }
+
+  const first = ranking.find((t) => t.rank === 1)
+  const second = ranking.find((t) => t.rank === 2)
+  const third = ranking.find((t) => t.rank === 3)
 
   return (
     <Box
@@ -382,356 +555,345 @@ export default function ResultPage() {
           />
 
           {/* 2nd Place - Left */}
-          <Box
-            position="absolute"
-            bottom="50px"
-            left="50%"
-            transform="translateX(-310px)"
-            w="200px"
-            display="flex"
-            flexDirection="column"
-            alignItems="center"
-          >
-            {/* Team Card */}
+          {second && (
             <Box
-              bg="white"
-              borderRadius="xl"
-              border="4px solid"
-              borderColor={getPodiumConfig(2).borderColor}
-              p={4}
-              textAlign="center"
-              boxShadow={`0 8px 30px rgba(0,0,0,0.15), ${getPodiumConfig(2).glow}`}
-              animation={`${revealTeam} 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) ${getPodiumConfig(2).teamDelay} both`}
-              mb={3}
-            >
-              <Text fontSize="4xl" mb={1}>{getMedalEmoji(2)}</Text>
-              <Text fontSize="xl" fontWeight="bold" color="#333">{second.name}</Text>
-              <Text
-                fontSize="2xl"
-                fontWeight="900"
-                bgImage="linear-gradient(135deg, #C0C0C0 0%, #808080 100%)"
-                bgClip="text"
-                css={{ WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}
-              >
-                {second.score}点
-              </Text>
-            </Box>
-            {/* Platform */}
-            <Box
-              w="180px"
-              h={getPodiumConfig(2).height}
-              bg={getPodiumConfig(2).color}
-              borderRadius="12px 12px 0 0"
-              boxShadow="inset 0 2px 10px rgba(255,255,255,0.3), 0 -4px 20px rgba(0,0,0,0.2)"
-              animation={`${podiumRise} 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) ${getPodiumConfig(2).delay} both`}
+              position="absolute"
+              bottom="50px"
+              left="50%"
+              transform="translateX(-310px)"
+              w="200px"
               display="flex"
+              flexDirection="column"
               alignItems="center"
-              justifyContent="center"
-              position="relative"
             >
-              <Text
-                fontSize="6xl"
-                fontWeight="900"
-                color="rgba(255,255,255,0.4)"
-                textShadow="2px 2px 4px rgba(0,0,0,0.2)"
+              {/* Team Card */}
+              <Box
+                bg="white"
+                borderRadius="xl"
+                border="4px solid"
+                borderColor={getPodiumConfig(2).borderColor}
+                p={4}
+                textAlign="center"
+                boxShadow={`0 8px 30px rgba(0,0,0,0.15), ${getPodiumConfig(2).glow}`}
+                animation={`${revealTeam} 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) ${getPodiumConfig(2).teamDelay} both`}
+                mb={3}
               >
-                2
-              </Text>
+                <Text fontSize="4xl" mb={1}>{getMedalEmoji(2)}</Text>
+                <Text fontSize="xl" fontWeight="bold" color="#333">{second.name}</Text>
+                <Text
+                  fontSize="2xl"
+                  fontWeight="900"
+                  bgImage="linear-gradient(135deg, #C0C0C0 0%, #808080 100%)"
+                  bgClip="text"
+                  css={{ WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}
+                >
+                  {second.score}点
+                </Text>
+              </Box>
+              {/* Platform */}
+              <Box
+                w="180px"
+                h={getPodiumConfig(2).height}
+                bg={getPodiumConfig(2).color}
+                borderRadius="12px 12px 0 0"
+                boxShadow="inset 0 2px 10px rgba(255,255,255,0.3), 0 -4px 20px rgba(0,0,0,0.2)"
+                animation={`${podiumRise} 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) ${getPodiumConfig(2).delay} both`}
+                display="flex"
+                alignItems="center"
+                justifyContent="center"
+                position="relative"
+              >
+                <Text
+                  fontSize="6xl"
+                  fontWeight="900"
+                  color="rgba(255,255,255,0.4)"
+                  textShadow="2px 2px 4px rgba(0,0,0,0.2)"
+                >
+                  2
+                </Text>
+              </Box>
             </Box>
-          </Box>
+          )}
 
           {/* 1st Place - Center */}
-          <Box
-            position="absolute"
-            bottom="50px"
-            left="50%"
-            transform="translateX(-50%)"
-            w="220px"
-            display="flex"
-            flexDirection="column"
-            alignItems="center"
-            zIndex={3}
-          >
-            {/* Crown animation */}
-            <Text
-              fontSize="5xl"
-              animation={`${crownBounce} 2s ease-in-out infinite, ${fadeInUp} 0.5s ease-out 4.5s both`}
-              mb={-2}
-            >
-              👑
-            </Text>
-            {/* Team Card */}
+          {first && (
             <Box
-              bg="white"
-              borderRadius="xl"
-              border="5px solid"
-              borderColor="#FFD700"
-              p={5}
-              textAlign="center"
-              boxShadow={`0 12px 40px rgba(0,0,0,0.2), ${getPodiumConfig(1).glow}`}
-              animation={`${revealTeam} 1s cubic-bezier(0.34, 1.56, 0.64, 1) ${getPodiumConfig(1).teamDelay} both, ${pulseGlow} 3s ease-in-out infinite 5s`}
-              mb={3}
-              position="relative"
-              overflow="hidden"
-            >
-              {/* Gold shimmer overlay */}
-              <Box
-                position="absolute"
-                inset={0}
-                bgImage="linear-gradient(90deg, transparent 0%, rgba(255,215,0,0.1) 50%, transparent 100%)"
-                backgroundSize="200% 100%"
-                animation={`${goldShimmer} 2s linear infinite`}
-                pointerEvents="none"
-              />
-              <Text fontSize="5xl" mb={1} position="relative" zIndex={1}>{getMedalEmoji(1)}</Text>
-              <Text fontSize="2xl" fontWeight="bold" color="#333" position="relative" zIndex={1}>{first.name}</Text>
-              <Text
-                fontSize="3xl"
-                fontWeight="900"
-                bgImage="linear-gradient(135deg, #FFD700 0%, #FF8800 50%, #FFD700 100%)"
-                backgroundSize="200% 100%"
-                bgClip="text"
-                css={{ WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}
-                animation={`${goldShimmer} 2s linear infinite`}
-                position="relative"
-                zIndex={1}
-              >
-                {first.score}点
-              </Text>
-            </Box>
-            {/* Platform */}
-            <Box
-              w="200px"
-              h={getPodiumConfig(1).height}
-              bg={getPodiumConfig(1).color}
-              borderRadius="16px 16px 0 0"
-              boxShadow="inset 0 4px 15px rgba(255,255,255,0.4), 0 -6px 30px rgba(255,215,0,0.4)"
-              animation={`${podiumRise} 1s cubic-bezier(0.34, 1.56, 0.64, 1) ${getPodiumConfig(1).delay} both`}
+              position="absolute"
+              bottom="50px"
+              left="50%"
+              transform="translateX(-50%)"
+              w="220px"
               display="flex"
+              flexDirection="column"
               alignItems="center"
-              justifyContent="center"
-              position="relative"
+              zIndex={3}
             >
-              <Text
-                fontSize="7xl"
-                fontWeight="900"
-                color="rgba(255,255,255,0.5)"
-                textShadow="3px 3px 6px rgba(0,0,0,0.3)"
-              >
-                1
-              </Text>
-            </Box>
-          </Box>
-
-          {/* 3rd Place - Right */}
-          <Box
-            position="absolute"
-            bottom="50px"
-            left="50%"
-            transform="translateX(110px)"
-            w="200px"
-            display="flex"
-            flexDirection="column"
-            alignItems="center"
-          >
-            {/* Team Card */}
-            <Box
-              bg="white"
-              borderRadius="xl"
-              border="4px solid"
-              borderColor={getPodiumConfig(3).borderColor}
-              p={4}
-              textAlign="center"
-              boxShadow={`0 8px 30px rgba(0,0,0,0.15), ${getPodiumConfig(3).glow}`}
-              animation={`${revealTeam} 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) ${getPodiumConfig(3).teamDelay} both`}
-              mb={3}
-            >
-              <Text fontSize="4xl" mb={1}>{getMedalEmoji(3)}</Text>
-              <Text fontSize="xl" fontWeight="bold" color="#333">{third.name}</Text>
-              <Text
-                fontSize="2xl"
-                fontWeight="900"
-                bgImage="linear-gradient(135deg, #CD7F32 0%, #8B4513 100%)"
-                bgClip="text"
-                css={{ WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}
-              >
-                {third.score}点
-              </Text>
-            </Box>
-            {/* Platform */}
-            <Box
-              w="180px"
-              h={getPodiumConfig(3).height}
-              bg={getPodiumConfig(3).color}
-              borderRadius="12px 12px 0 0"
-              boxShadow="inset 0 2px 10px rgba(255,255,255,0.3), 0 -4px 20px rgba(0,0,0,0.2)"
-              animation={`${podiumRise} 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) ${getPodiumConfig(3).delay} both`}
-              display="flex"
-              alignItems="center"
-              justifyContent="center"
-            >
+              {/* Crown animation */}
               <Text
                 fontSize="5xl"
-                fontWeight="900"
-                color="rgba(255,255,255,0.35)"
-                textShadow="2px 2px 4px rgba(0,0,0,0.2)"
+                animation={`${crownBounce} 2s ease-in-out infinite, ${fadeInUp} 0.5s ease-out 4.5s both`}
+                mb={-2}
               >
-                3
+                👑
               </Text>
+              {/* Team Card */}
+              <Box
+                bg="white"
+                borderRadius="xl"
+                border="5px solid"
+                borderColor="#FFD700"
+                p={5}
+                textAlign="center"
+                boxShadow={`0 12px 40px rgba(0,0,0,0.2), ${getPodiumConfig(1).glow}`}
+                animation={`${revealTeam} 1s cubic-bezier(0.34, 1.56, 0.64, 1) ${getPodiumConfig(1).teamDelay} both, ${pulseGlow} 3s ease-in-out infinite 5s`}
+                mb={3}
+                position="relative"
+                overflow="hidden"
+              >
+                {/* Gold shimmer overlay */}
+                <Box
+                  position="absolute"
+                  inset={0}
+                  bgImage="linear-gradient(90deg, transparent 0%, rgba(255,215,0,0.1) 50%, transparent 100%)"
+                  backgroundSize="200% 100%"
+                  animation={`${goldShimmer} 2s linear infinite`}
+                  pointerEvents="none"
+                />
+                <Text fontSize="5xl" mb={1} position="relative" zIndex={1}>{getMedalEmoji(1)}</Text>
+                <Text fontSize="2xl" fontWeight="bold" color="#333" position="relative" zIndex={1}>{first.name}</Text>
+                <Text
+                  fontSize="3xl"
+                  fontWeight="900"
+                  bgImage="linear-gradient(135deg, #FFD700 0%, #FF8800 50%, #FFD700 100%)"
+                  backgroundSize="200% 100%"
+                  bgClip="text"
+                  css={{ WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}
+                  animation={`${goldShimmer} 2s linear infinite`}
+                  position="relative"
+                  zIndex={1}
+                >
+                  {first.score}点
+                </Text>
+              </Box>
+              {/* Platform */}
+              <Box
+                w="200px"
+                h={getPodiumConfig(1).height}
+                bg={getPodiumConfig(1).color}
+                borderRadius="16px 16px 0 0"
+                boxShadow="inset 0 4px 15px rgba(255,255,255,0.4), 0 -6px 30px rgba(255,215,0,0.4)"
+                animation={`${podiumRise} 1s cubic-bezier(0.34, 1.56, 0.64, 1) ${getPodiumConfig(1).delay} both`}
+                display="flex"
+                alignItems="center"
+                justifyContent="center"
+                position="relative"
+              >
+                <Text
+                  fontSize="7xl"
+                  fontWeight="900"
+                  color="rgba(255,255,255,0.5)"
+                  textShadow="3px 3px 6px rgba(0,0,0,0.3)"
+                >
+                  1
+                </Text>
+              </Box>
             </Box>
-          </Box>
+          )}
+
+          {/* 3rd Place - Right */}
+          {third && (
+            <Box
+              position="absolute"
+              bottom="50px"
+              left="50%"
+              transform="translateX(110px)"
+              w="200px"
+              display="flex"
+              flexDirection="column"
+              alignItems="center"
+            >
+              {/* Team Card */}
+              <Box
+                bg="white"
+                borderRadius="xl"
+                border="4px solid"
+                borderColor={getPodiumConfig(3).borderColor}
+                p={4}
+                textAlign="center"
+                boxShadow={`0 8px 30px rgba(0,0,0,0.15), ${getPodiumConfig(3).glow}`}
+                animation={`${revealTeam} 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) ${getPodiumConfig(3).teamDelay} both`}
+                mb={3}
+              >
+                <Text fontSize="4xl" mb={1}>{getMedalEmoji(3)}</Text>
+                <Text fontSize="xl" fontWeight="bold" color="#333">{third.name}</Text>
+                <Text
+                  fontSize="2xl"
+                  fontWeight="900"
+                  bgImage="linear-gradient(135deg, #CD7F32 0%, #8B4513 100%)"
+                  bgClip="text"
+                  css={{ WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}
+                >
+                  {third.score}点
+                </Text>
+              </Box>
+              {/* Platform */}
+              <Box
+                w="180px"
+                h={getPodiumConfig(3).height}
+                bg={getPodiumConfig(3).color}
+                borderRadius="12px 12px 0 0"
+                boxShadow="inset 0 2px 10px rgba(255,255,255,0.3), 0 -4px 20px rgba(0,0,0,0.2)"
+                animation={`${podiumRise} 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) ${getPodiumConfig(3).delay} both`}
+                display="flex"
+                alignItems="center"
+                justifyContent="center"
+              >
+                <Text
+                  fontSize="5xl"
+                  fontWeight="900"
+                  color="rgba(255,255,255,0.35)"
+                  textShadow="2px 2px 4px rgba(0,0,0,0.2)"
+                >
+                  3
+                </Text>
+              </Box>
+            </Box>
+          )}
         </Box>
 
         {/* ========== Score History Chart ========== */}
-        <Box
-          w="full"
-          maxW="900px"
-          mx="auto"
-          bg="white"
-          borderRadius="2xl"
-          border="3px solid #FF8800"
-          p={8}
-          boxShadow="0 8px 40px rgba(255, 136, 0, 0.15)"
-          animation={`${fadeInUp} 0.6s ease-out 5s both`}
-        >
-          <Text
-            fontSize="2xl"
-            fontWeight="bold"
-            color="#E67A00"
-            mb={6}
-            textAlign="center"
+        {scoreHistory.length > 0 && (
+          <Box
+            w="full"
+            maxW="900px"
+            mx="auto"
+            bg="white"
+            borderRadius="2xl"
+            border="3px solid #FF8800"
+            p={8}
+            boxShadow="0 8px 40px rgba(255, 136, 0, 0.15)"
+            animation={`${fadeInUp} 0.6s ease-out 5s both`}
           >
-            📈 スコア変遷グラフ
-          </Text>
-          <Box h="300px">
-            <ResponsiveContainer width="100%" height="100%">
-              <LineChart data={MOCK_SCORE_HISTORY}>
-                <CartesianGrid strokeDasharray="3 3" stroke="#E0E0E0" />
-                <XAxis
-                  dataKey="time"
-                  tick={{ fill: "#666", fontSize: 12 }}
-                  axisLine={{ stroke: "#CCC" }}
-                />
-                <YAxis
-                  tick={{ fill: "#666", fontSize: 12 }}
-                  axisLine={{ stroke: "#CCC" }}
-                  domain={[0, 140]}
-                />
-                <Tooltip
-                  contentStyle={{
-                    backgroundColor: "white",
-                    border: "2px solid #FF8800",
-                    borderRadius: "12px",
-                    boxShadow: "0 4px 20px rgba(0,0,0,0.1)",
-                  }}
-                />
-                <Legend />
-                <Line
-                  type="monotone"
-                  dataKey="チームA"
-                  stroke={TEAM_COLORS.チームA}
-                  strokeWidth={3}
-                  dot={{ fill: TEAM_COLORS.チームA, strokeWidth: 2, r: 4 }}
-                  activeDot={{ r: 6 }}
-                />
-                <Line
-                  type="monotone"
-                  dataKey="チームB"
-                  stroke={TEAM_COLORS.チームB}
-                  strokeWidth={3}
-                  dot={{ fill: TEAM_COLORS.チームB, strokeWidth: 2, r: 4 }}
-                  activeDot={{ r: 6 }}
-                />
-                <Line
-                  type="monotone"
-                  dataKey="チームC"
-                  stroke={TEAM_COLORS.チームC}
-                  strokeWidth={3}
-                  dot={{ fill: TEAM_COLORS.チームC, strokeWidth: 2, r: 4 }}
-                  activeDot={{ r: 6 }}
-                />
-                <Line
-                  type="monotone"
-                  dataKey="チームD"
-                  stroke={TEAM_COLORS.チームD}
-                  strokeWidth={3}
-                  dot={{ fill: TEAM_COLORS.チームD, strokeWidth: 2, r: 4 }}
-                  activeDot={{ r: 6 }}
-                />
-              </LineChart>
-            </ResponsiveContainer>
+            <Text
+              fontSize="2xl"
+              fontWeight="bold"
+              color="#E67A00"
+              mb={6}
+              textAlign="center"
+            >
+              📈 スコア変遷グラフ
+            </Text>
+            <Box h="300px">
+              <ResponsiveContainer width="100%" height="100%">
+                <LineChart data={scoreHistory}>
+                  <CartesianGrid strokeDasharray="3 3" stroke="#E0E0E0" />
+                  <XAxis
+                    dataKey="time"
+                    tick={{ fill: "#666", fontSize: 12 }}
+                    axisLine={{ stroke: "#CCC" }}
+                  />
+                  <YAxis
+                    tick={{ fill: "#666", fontSize: 12 }}
+                    axisLine={{ stroke: "#CCC" }}
+                    domain={[0, maxScore]}
+                  />
+                  <Tooltip
+                    contentStyle={{
+                      backgroundColor: "white",
+                      border: "2px solid #FF8800",
+                      borderRadius: "12px",
+                      boxShadow: "0 4px 20px rgba(0,0,0,0.1)",
+                    }}
+                  />
+                  <Legend />
+                  {groupsWithAnswers.map((group) => (
+                    <Line
+                      key={group.groupId}
+                      type="monotone"
+                      dataKey={group.groupName}
+                      stroke={groupColorMap[group.groupName]}
+                      strokeWidth={3}
+                      dot={{ fill: groupColorMap[group.groupName], strokeWidth: 2, r: 4 }}
+                      activeDot={{ r: 6 }}
+                    />
+                  ))}
+                </LineChart>
+              </ResponsiveContainer>
+            </Box>
           </Box>
-        </Box>
+        )}
 
         {/* ========== Awards Section ========== */}
-        <Box
-          w="full"
-          maxW="900px"
-          mx="auto"
-          bg="white"
-          borderRadius="2xl"
-          border="3px solid #FF8800"
-          p={8}
-          boxShadow="0 8px 40px rgba(255, 136, 0, 0.15)"
-          animation={`${fadeInUp} 0.6s ease-out 5.5s both`}
-        >
-          <Text
-            fontSize="2xl"
-            fontWeight="bold"
-            color="#E67A00"
-            mb={6}
-            textAlign="center"
+        {awards.length > 0 && (
+          <Box
+            w="full"
+            maxW="900px"
+            mx="auto"
+            bg="white"
+            borderRadius="2xl"
+            border="3px solid #FF8800"
+            p={8}
+            boxShadow="0 8px 40px rgba(255, 136, 0, 0.15)"
+            animation={`${fadeInUp} 0.6s ease-out 5.5s both`}
           >
-            🏆 大会アワード
-          </Text>
-          <VStack gap={4} align="stretch">
-            {MOCK_AWARDS.map((award, index) => (
-              <Box
-                key={award.title}
-                bg="linear-gradient(135deg, rgba(255, 136, 0, 0.05) 0%, rgba(255, 229, 0, 0.05) 100%)"
-                borderRadius="xl"
-                border="2px solid"
-                borderColor="rgba(255, 136, 0, 0.2)"
-                p={5}
-                animation={`${slideInLeft} 0.5s ease-out ${5.8 + index * 0.2}s both`}
-                _hover={{
-                  borderColor: "rgba(255, 136, 0, 0.4)",
-                  transform: "translateX(8px)",
-                  transition: "all 0.3s",
-                }}
-              >
-                <Flex align="center" gap={5}>
-                  <Text fontSize="4xl">{award.icon}</Text>
-                  <Box flex={1}>
-                    <Text
-                      fontSize="lg"
-                      fontWeight="bold"
-                      color="#E67A00"
-                      mb={1}
-                    >
-                      {award.title}
-                    </Text>
-                    <HStack gap={3}>
-                      <Text fontSize="xl" fontWeight="bold" color="#333">
-                        {award.winner}
-                      </Text>
+            <Text
+              fontSize="2xl"
+              fontWeight="bold"
+              color="#E67A00"
+              mb={6}
+              textAlign="center"
+            >
+              🏆 大会アワード
+            </Text>
+            <VStack gap={4} align="stretch">
+              {awards.map((award, index) => (
+                <Box
+                  key={award.title}
+                  bg="linear-gradient(135deg, rgba(255, 136, 0, 0.05) 0%, rgba(255, 229, 0, 0.05) 100%)"
+                  borderRadius="xl"
+                  border="2px solid"
+                  borderColor="rgba(255, 136, 0, 0.2)"
+                  p={5}
+                  animation={`${slideInLeft} 0.5s ease-out ${5.8 + index * 0.2}s both`}
+                  _hover={{
+                    borderColor: "rgba(255, 136, 0, 0.4)",
+                    transform: "translateX(8px)",
+                    transition: "all 0.3s",
+                  }}
+                >
+                  <Flex align="center" gap={5}>
+                    <Text fontSize="4xl">{award.icon}</Text>
+                    <Box flex={1}>
                       <Text
-                        fontSize="md"
-                        color="#666"
-                        bg="rgba(255, 136, 0, 0.1)"
-                        px={3}
-                        py={1}
-                        borderRadius="full"
+                        fontSize="lg"
+                        fontWeight="bold"
+                        color="#E67A00"
+                        mb={1}
                       >
-                        {award.detail}
+                        {award.title}
                       </Text>
-                    </HStack>
-                  </Box>
-                </Flex>
-              </Box>
-            ))}
-          </VStack>
-        </Box>
+                      <HStack gap={3}>
+                        <Text fontSize="xl" fontWeight="bold" color="#333">
+                          {award.winner}
+                        </Text>
+                        <Text
+                          fontSize="md"
+                          color="#666"
+                          bg="rgba(255, 136, 0, 0.1)"
+                          px={3}
+                          py={1}
+                          borderRadius="full"
+                        >
+                          {award.detail}
+                        </Text>
+                      </HStack>
+                    </Box>
+                  </Flex>
+                </Box>
+              ))}
+            </VStack>
+          </Box>
+        )}
 
         {/* Footer space */}
         <Box h={8} />
