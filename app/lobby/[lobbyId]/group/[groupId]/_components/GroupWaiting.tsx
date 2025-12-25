@@ -1,47 +1,47 @@
-"use client"
+"use client";
 
-import { Box, Flex, Text, VStack } from "@chakra-ui/react"
-import { keyframes } from "@emotion/react"
+import { Box, Flex, Text, VStack } from "@chakra-ui/react";
+import { keyframes } from "@emotion/react";
 
 // Animations
 const float = keyframes`
   0%, 100% { transform: translateY(0) rotate(0deg); }
   50% { transform: translateY(-20px) rotate(5deg); }
-`
+`;
 
 const floatReverse = keyframes`
   0%, 100% { transform: translateY(0) rotate(0deg); }
   50% { transform: translateY(-15px) rotate(-3deg); }
-`
+`;
 
 const pulse = keyframes`
   0%, 100% { transform: scale(1); opacity: 1; }
   50% { transform: scale(1.15); opacity: 0.8; }
-`
+`;
 
 const bounce = keyframes`
   0%, 80%, 100% { transform: scale(0); }
   40% { transform: scale(1); }
-`
+`;
 
 const rotate = keyframes`
   from { transform: rotate(0deg); }
   to { transform: rotate(360deg); }
-`
+`;
 
 const fadeInUp = keyframes`
   0% { opacity: 0; transform: translateY(30px); }
   100% { opacity: 1; transform: translateY(0); }
-`
+`;
 
 const shimmer = keyframes`
   0% { background-position: -200% center; }
   100% { background-position: 200% center; }
-`
+`;
 
 type Props = {
-  groupName: string
-}
+  groupName: string;
+};
 
 export function GroupWaiting({ groupName }: Props) {
   return (
@@ -151,12 +151,7 @@ export function GroupWaiting({ groupName }: Props) {
         </Box>
 
         {/* Animated waiting icon */}
-        <Box
-          position="relative"
-          w="120px"
-          h="120px"
-          animation={`${fadeInUp} 0.6s ease-out 0.1s both`}
-        >
+        <Box position="relative" w="120px" h="120px" animation={`${fadeInUp} 0.6s ease-out 0.1s both`}>
           {/* Rotating ring */}
           <Box
             position="absolute"
@@ -198,14 +193,52 @@ export function GroupWaiting({ groupName }: Props) {
           >
             まもなく開始します
           </Text>
-          <Text
-            fontSize={{ base: "lg", md: "xl" }}
-            color="#E67A00"
-            fontWeight="medium"
-          >
+          <Text fontSize={{ base: "lg", md: "xl" }} color="#E67A00" fontWeight="medium">
             準備はよろしいですか?
           </Text>
         </VStack>
+
+        {/* Rules card */}
+        <Box
+          bg="white"
+          px={{ base: 6, md: 10 }}
+          py={5}
+          borderRadius="2xl"
+          border="3px solid"
+          borderColor="rgba(255, 136, 0, 0.3)"
+          boxShadow="0 4px 20px rgba(255, 136, 0, 0.15)"
+          animation={`${fadeInUp} 0.6s ease-out 0.25s both`}
+        >
+          <Text fontSize={{ base: "md", md: "lg" }} fontWeight="bold" color="#FF8800" textAlign="center" mb={2}>
+            みんなで楽しくクイズ大会！！時間内に回答しまくろう！
+          </Text>
+          <Flex gap={{ base: 4, md: 6 }} wrap="wrap" justify="center" mb={3}>
+            <Flex align="center" gap={2}>
+              <Text fontSize="xl">⏱️</Text>
+              <Text fontSize={{ base: "sm", md: "md" }} color="#555" fontWeight="medium">
+                制限時間 10分
+              </Text>
+            </Flex>
+            <Flex align="center" gap={2}>
+              <Text fontSize="xl">⭕</Text>
+              <Text fontSize={{ base: "sm", md: "md" }} color="#22C55E" fontWeight="bold">
+                正解 +5点
+              </Text>
+            </Flex>
+            <Flex align="center" gap={2}>
+              <Text fontSize="xl">❌</Text>
+              <Text fontSize={{ base: "sm", md: "md" }} color="#EF4444" fontWeight="bold">
+                不正解 -2点
+              </Text>
+            </Flex>
+            <Flex align="center" gap={2}>
+              <Text fontSize="xl">🔢</Text>
+              <Text fontSize={{ base: "sm", md: "md" }} color="#555" fontWeight="medium">
+                3択形式
+              </Text>
+            </Flex>
+          </Flex>
+        </Box>
 
         {/* Info card */}
         <Box
@@ -218,12 +251,7 @@ export function GroupWaiting({ groupName }: Props) {
           boxShadow="0 4px 20px rgba(255, 136, 0, 0.1)"
           animation={`${fadeInUp} 0.6s ease-out 0.3s both`}
         >
-          <Text
-            fontSize={{ base: "md", md: "lg" }}
-            color="#666"
-            fontWeight="medium"
-            textAlign="center"
-          >
+          <Text fontSize={{ base: "md", md: "lg" }} color="#666" fontWeight="medium" textAlign="center">
             管理者の合図を待っています
           </Text>
         </Box>
@@ -257,5 +285,5 @@ export function GroupWaiting({ groupName }: Props) {
         pointerEvents="none"
       />
     </Box>
-  )
+  );
 }
