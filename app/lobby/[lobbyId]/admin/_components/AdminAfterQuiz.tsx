@@ -1,13 +1,14 @@
 "use client"
 
 import { useEffect, useMemo, useState } from "react"
-import Link from "next/link"
+import { useRouter } from "next/navigation"
 import { Box, Flex, HStack, Text, VStack } from "@chakra-ui/react"
 import { keyframes } from "@emotion/react"
 import {
   subscribeAllGroupAnswers,
   type GroupWithAnswers,
 } from "@/lib/firestore/answer"
+import { showResultLobby } from "@/lib/firestore/lobby"
 import type { Group } from "@/types/firestore"
 
 // Animations
@@ -107,7 +108,13 @@ type RankingEntry = {
 }
 
 export function AdminAfterQuiz({ lobbyId, groups }: Props) {
+  const router = useRouter()
   const [groupsWithAnswers, setGroupsWithAnswers] = useState<GroupWithAnswers[]>([])
+
+  const handleShowResult = async () => {
+    await showResultLobby(lobbyId)
+    router.push(`/lobby/${lobbyId}/result`)
+  }
 
   // Subscribe to all group answers
   useEffect(() => {
@@ -366,54 +373,53 @@ export function AdminAfterQuiz({ lobbyId, groups }: Props) {
 
         {/* Results button */}
         <Box mt={4} animation={`${fadeInUp} 0.6s ease-out 1s both`}>
-          <Link href={`/lobby/${lobbyId}/result`}>
+          <Box
+            as="button"
+            onClick={handleShowResult}
+            w="320px"
+            h="90px"
+            bg="linear-gradient(135deg, #22C55E 0%, #16A34A 100%)"
+            color="white"
+            fontSize="2xl"
+            fontWeight="900"
+            borderRadius="full"
+            border="none"
+            cursor="pointer"
+            animation={`${buttonGlow} 2s ease-in-out infinite`}
+            position="relative"
+            overflow="hidden"
+            _hover={{
+              transform: "scale(1.05)",
+            }}
+            _active={{
+              transform: "scale(0.98)",
+            }}
+            transition="transform 0.2s"
+          >
+            {/* Button shine effect */}
             <Box
-              as="button"
-              w="320px"
-              h="90px"
-              bg="linear-gradient(135deg, #22C55E 0%, #16A34A 100%)"
-              color="white"
-              fontSize="2xl"
-              fontWeight="900"
-              borderRadius="full"
-              border="none"
-              cursor="pointer"
-              animation={`${buttonGlow} 2s ease-in-out infinite`}
-              position="relative"
-              overflow="hidden"
-              _hover={{
-                transform: "scale(1.05)",
+              position="absolute"
+              top={0}
+              left="-100%"
+              w="60%"
+              h="100%"
+              bgGradient="to-r"
+              gradientFrom="transparent"
+              gradientVia="rgba(255,255,255,0.3)"
+              gradientTo="transparent"
+              transform="skewX(-25deg)"
+              animation="resultButtonShine 3s ease-in-out infinite"
+              css={{
+                "@keyframes resultButtonShine": {
+                  "0%": { left: "-100%" },
+                  "50%, 100%": { left: "200%" },
+                },
               }}
-              _active={{
-                transform: "scale(0.98)",
-              }}
-              transition="transform 0.2s"
-            >
-              {/* Button shine effect */}
-              <Box
-                position="absolute"
-                top={0}
-                left="-100%"
-                w="60%"
-                h="100%"
-                bgGradient="to-r"
-                gradientFrom="transparent"
-                gradientVia="rgba(255,255,255,0.3)"
-                gradientTo="transparent"
-                transform="skewX(-25deg)"
-                animation="resultButtonShine 3s ease-in-out infinite"
-                css={{
-                  "@keyframes resultButtonShine": {
-                    "0%": { left: "-100%" },
-                    "50%, 100%": { left: "200%" },
-                  },
-                }}
-              />
-              <Text position="relative" zIndex={1}>
-                結果発表へ進む
-              </Text>
-            </Box>
-          </Link>
+            />
+            <Text position="relative" zIndex={1}>
+              結果発表へ進む
+            </Text>
+          </Box>
         </Box>
       </VStack>
 

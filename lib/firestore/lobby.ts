@@ -68,3 +68,11 @@ export async function finishLobby(lobbyId: string): Promise<void> {
     finishedAt: serverTimestamp(),
   })
 }
+
+export async function showResultLobby(lobbyId: string): Promise<void> {
+  const lobbyRef = doc(db, "quiz-time-attack-lobbies", lobbyId)
+
+  await updateDoc(lobbyRef, {
+    status: "result",
+  })
+}

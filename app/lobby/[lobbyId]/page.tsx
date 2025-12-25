@@ -48,6 +48,16 @@ export default function LobbyPage() {
     }
   }, [lobbyId])
 
+  // クイズ中の場合、参加済みグループがあれば自動でグループページへリダイレクト
+  useEffect(() => {
+    if (lobby?.status === "playing") {
+      const savedGroupId = localStorage.getItem(`group_${lobbyId}`)
+      if (savedGroupId) {
+        router.push(`/lobby/${lobbyId}/group/${savedGroupId}`)
+      }
+    }
+  }, [lobby?.status, lobbyId, router])
+
   const handleJoinGroup = async () => {
     if (!groupName.trim()) {
       alert("グループ名を入力してください")
@@ -57,6 +67,8 @@ export default function LobbyPage() {
     setIsJoining(true)
     try {
       const groupId = await createGroup(lobbyId, groupName.trim())
+      // 参加したグループIDをlocalStorageに保存（クイズ中にロビーに戻っても自動遷移するため）
+      localStorage.setItem(`group_${lobbyId}`, groupId)
       router.push(`/lobby/${lobbyId}/group/${groupId}`)
     } catch (error) {
       console.error("Failed to create group:", error)

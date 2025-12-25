@@ -2,6 +2,7 @@
 
 import { Box, Flex, HStack, Text, VStack } from "@chakra-ui/react"
 import { keyframes } from "@emotion/react"
+import type { Question } from "@/types/firestore"
 
 // Floating animation for background decorations
 const float = keyframes`
@@ -24,14 +25,15 @@ const slideIn = keyframes`
   100% { opacity: 1; transform: translateY(0); }
 `
 
-// Mock data
-const MOCK_TEAM = { name: "チームA", score: 45, remainingTime: "7:32" }
-const MOCK_QUESTION = {
-  text: "日本で一番高い山は?",
-  choices: ["富士山", "北岳", "奥穂高岳"],
+type Props = {
+  groupName: string
+  score: number
+  remainingTime: string
+  question: Question | undefined
+  onAnswer: (selectedIndex: number) => void
 }
 
-export function GroupQuiz() {
+export function GroupQuiz({ groupName, score, remainingTime, question, onAnswer }: Props) {
   const choiceLabels = ["A", "B", "C"]
 
   return (
@@ -121,7 +123,7 @@ export function GroupQuiz() {
             color="#333"
             letterSpacing="0.02em"
           >
-            {MOCK_TEAM.name}
+            {groupName}
           </Text>
         </HStack>
 
@@ -137,7 +139,7 @@ export function GroupQuiz() {
               letterSpacing="-0.02em"
               fontVariantNumeric="tabular-nums"
             >
-              {MOCK_TEAM.remainingTime}
+              {remainingTime}
             </Text>
           </HStack>
 
@@ -158,7 +160,7 @@ export function GroupQuiz() {
                   WebkitTextFillColor: "transparent",
                 }}
               >
-                {MOCK_TEAM.score}点
+                {score}点
               </Text>
             </Box>
           </HStack>
@@ -237,13 +239,13 @@ export function GroupQuiz() {
             lineHeight="1.4"
             mt={2}
           >
-            Q. {MOCK_QUESTION.text}
+            Q. {question?.question}
           </Text>
         </Box>
 
         {/* Choices */}
         <VStack w="full" gap={4}>
-          {MOCK_QUESTION.choices.map((choice, index) => (
+          {question?.choices.map((choice, index) => (
             <Box
               key={index}
               as="button"
@@ -261,6 +263,7 @@ export function GroupQuiz() {
               overflow="hidden"
               transition="all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1)"
               animation={`${slideIn} 0.5s ease-out ${0.1 * (index + 1)}s both`}
+              onClick={() => onAnswer(index)}
               _hover={{
                 bg: "#FFF8F0",
                 borderColor: "#FF8800",

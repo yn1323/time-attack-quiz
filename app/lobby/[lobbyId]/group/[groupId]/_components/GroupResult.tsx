@@ -42,19 +42,23 @@ const shake = keyframes`
   20%, 40%, 60%, 80% { transform: translateX(5px); }
 `
 
-// Mock data - 正解パターン
-const MOCK_TEAM = { name: "チームA", score: 50, remainingTime: "7:28" }
-const MOCK_RESULT = {
-  isCorrect: true, // false に変更すると不正解表示
-  question: "日本で一番高い山は?",
-  choices: ["富士山", "北岳", "奥穂高岳"],
-  correctIndex: 0,
-  selectedIndex: 0, // 不正解時は 1 など
-  pointChange: 5, // 不正解時は -2
+type Props = {
+  groupName: string
+  score: number
+  remainingTime: string
+  result: {
+    isCorrect: boolean
+    question: string
+    choices: string[]
+    correctIndex: number
+    selectedIndex: number
+    pointChange: number
+  }
+  onNext: () => void
 }
 
-export function GroupResult() {
-  const { isCorrect, question, choices, correctIndex, selectedIndex, pointChange } = MOCK_RESULT
+export function GroupResult({ groupName, score, remainingTime, result, onNext }: Props) {
+  const { isCorrect, question, choices, correctIndex, selectedIndex, pointChange } = result
   const choiceLabels = ["A", "B", "C"]
 
   return (
@@ -115,7 +119,7 @@ export function GroupResult() {
             boxShadow={`0 0 10px ${isCorrect ? "rgba(34, 197, 94, 0.5)" : "rgba(239, 68, 68, 0.5)"}`}
           />
           <Text fontSize={{ base: "xl", md: "2xl" }} fontWeight="900" color="#333">
-            {MOCK_TEAM.name}
+            {groupName}
           </Text>
         </HStack>
 
@@ -128,7 +132,7 @@ export function GroupResult() {
               color="#E67A00"
               fontVariantNumeric="tabular-nums"
             >
-              {MOCK_TEAM.remainingTime}
+              {remainingTime}
             </Text>
           </HStack>
 
@@ -139,7 +143,7 @@ export function GroupResult() {
               fontWeight="900"
               color={isCorrect ? "#22C55E" : "#EF4444"}
             >
-              {MOCK_TEAM.score}点
+              {score}点
             </Text>
           </HStack>
         </HStack>
@@ -312,6 +316,7 @@ export function GroupResult() {
           border="none"
           animation={`${slideInUp} 0.5s ease-out 0.5s both, ${pulse} 2s ease-in-out infinite 1s`}
           transition="all 0.2s"
+          onClick={onNext}
           _hover={{
             transform: "translateY(-3px)",
             boxShadow: "0 8px 30px rgba(255, 136, 0, 0.4)",

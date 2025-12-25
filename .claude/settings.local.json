@@ -5,7 +5,9 @@
       "Skill(frontend-design:frontend-design)",
       "Skill(frontend-design:frontend-design:*)",
       "Bash(ls:*)",
-      "Bash(pnpm build:*)"
+      "Bash(pnpm build:*)",
+      "Bash(grep:*)",
+      "Bash(xargs ls:*)"
     ]
   }
 }

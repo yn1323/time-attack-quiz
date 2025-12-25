@@ -39,10 +39,11 @@ const shimmer = keyframes`
   100% { background-position: 200% center; }
 `
 
-// Mock data
-const MOCK_TEAM = { name: "チームA" }
+type Props = {
+  groupName: string
+}
 
-export function GroupWaiting() {
+export function GroupWaiting({ groupName }: Props) {
   return (
     <Box
       minH="100vh"
@@ -146,7 +147,7 @@ export function GroupWaiting() {
           boxShadow="0 4px 20px rgba(255, 136, 0, 0.4)"
           animation={`${fadeInUp} 0.6s ease-out`}
         >
-          {MOCK_TEAM.name}
+          {groupName}
         </Box>
 
         {/* Animated waiting icon */}

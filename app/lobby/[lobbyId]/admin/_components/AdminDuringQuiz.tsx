@@ -31,11 +31,6 @@ const shimmer = keyframes`
   100% { background-position: 200% center; }
 `
 
-const progressShimmer = keyframes`
-  0% { left: -50%; }
-  100% { left: 150%; }
-`
-
 const glowPulse = keyframes`
   0%, 100% { box-shadow: 0 0 20px rgba(255, 136, 0, 0.3); }
   50% { box-shadow: 0 0 40px rgba(255, 136, 0, 0.5); }
@@ -155,11 +150,11 @@ export function AdminDuringQuiz({ lobbyId, lobby, groups }: Props) {
       .map((entry, index) => ({ ...entry, rank: index + 1 }))
   }, [groupsWithAnswers])
 
-  const maxScore = Math.max(100, ...ranking.map((r) => r.score))
   const minutes = Math.floor(remainingSeconds / 60)
   const seconds = remainingSeconds % 60
   const timeString = `${minutes}:${seconds.toString().padStart(2, "0")}`
   const isUrgent = remainingSeconds <= 60
+  const isCountdownMode = remainingSeconds <= 120
 
   return (
     <Box minH="100vh" bg="#FFFDF7" position="relative" overflow="hidden">
@@ -248,29 +243,85 @@ export function AdminDuringQuiz({ lobbyId, lobby, groups }: Props) {
       </Flex>
 
       {/* Main content */}
-      <VStack gap={8} px={12} pb={12} position="relative" zIndex={1}>
-        {/* Title */}
-        <Box textAlign="center" animation={`${fadeInUp} 0.6s ease-out`}>
+      {isCountdownMode ? (
+        /* Countdown mode - Large timer display */
+        <Flex
+          direction="column"
+          align="center"
+          justify="center"
+          flex={1}
+          minH="70vh"
+          position="relative"
+          zIndex={1}
+        >
           <Text
-            fontSize="5xl"
-            fontWeight="900"
-            bgImage="linear-gradient(135deg, #FF8800 0%, #FFE500 50%, #FF8800 100%)"
-            bgSize="200% auto"
-            bgClip="text"
-            color="transparent"
-            letterSpacing="0.05em"
-            animation={`${shimmer} 3s linear infinite`}
-            css={{
-              WebkitBackgroundClip: "text",
-              WebkitTextFillColor: "transparent",
-            }}
+            fontSize="3xl"
+            fontWeight="bold"
+            color="#FF8800"
+            mb={4}
+            animation={`${fadeInUp} 0.5s ease-out`}
           >
-            リアルタイムランキング
+            まもなく終了！
           </Text>
-        </Box>
+          <Box
+            bg="white"
+            px={16}
+            py={12}
+            borderRadius="3xl"
+            border="6px solid #FF8800"
+            boxShadow="0 12px 50px rgba(255, 136, 0, 0.4)"
+            animation={`${timerPulse} 1s ease-in-out infinite`}
+          >
+            <Text
+              fontSize="12rem"
+              fontWeight="900"
+              bgImage="linear-gradient(135deg, #FF8800 0%, #FFE500 100%)"
+              bgClip="text"
+              color="transparent"
+              fontFamily="mono"
+              lineHeight={1}
+              css={{
+                WebkitBackgroundClip: "text",
+                WebkitTextFillColor: "transparent",
+              }}
+            >
+              {timeString}
+            </Text>
+          </Box>
+          <Text
+            fontSize="2xl"
+            color="#666"
+            mt={6}
+            animation={`${fadeInUp} 0.5s ease-out 0.2s both`}
+          >
+            結果発表をお楽しみに！
+          </Text>
+        </Flex>
+      ) : (
+        /* Normal mode - Ranking display */
+        <VStack gap={8} px={12} pb={12} position="relative" zIndex={1}>
+          {/* Title */}
+          <Box textAlign="center" animation={`${fadeInUp} 0.6s ease-out`}>
+            <Text
+              fontSize="5xl"
+              fontWeight="900"
+              bgImage="linear-gradient(135deg, #FF8800 0%, #FFE500 50%, #FF8800 100%)"
+              bgSize="200% auto"
+              bgClip="text"
+              color="transparent"
+              letterSpacing="0.05em"
+              animation={`${shimmer} 3s linear infinite`}
+              css={{
+                WebkitBackgroundClip: "text",
+                WebkitTextFillColor: "transparent",
+              }}
+            >
+              リアルタイムランキング
+            </Text>
+          </Box>
 
-        {/* Ranking cards */}
-        <VStack w="full" maxW="900px" gap={5}>
+          {/* Ranking cards */}
+          <VStack w="full" maxW="900px" gap={5}>
           {ranking.length === 0 ? (
             <Text color="gray.500" fontSize="xl">
               回答を待っています...
@@ -278,7 +329,6 @@ export function AdminDuringQuiz({ lobbyId, lobby, groups }: Props) {
           ) : (
             ranking.map((team, index) => {
               const colors = getRankColor(team.rank)
-              const progressPercent = Math.max(0, (team.score / maxScore) * 100)
 
               return (
                 <Box
@@ -303,99 +353,63 @@ export function AdminDuringQuiz({ lobbyId, lobby, groups }: Props) {
                   />
 
                   {/* Card content */}
-                  <Box position="relative" zIndex={1}>
-                    <Flex justify="space-between" align="center" mb={4}>
-                      <HStack gap={4}>
-                        {/* Rank number with medal */}
-                        <HStack gap={2}>
+                  <Flex position="relative" zIndex={1} justify="space-between" align="center">
+                    <HStack gap={4}>
+                      {/* Rank number with medal */}
+                      <HStack gap={2}>
+                        <Text
+                          fontSize="4xl"
+                          fontWeight="900"
+                          color={team.rank <= 3 ? colors.border : "#666"}
+                          animation={
+                            team.rank === 1
+                              ? `${rankBounce} 2s ease-in-out infinite`
+                              : "none"
+                          }
+                        >
+                          {team.rank}位
+                        </Text>
+                        {team.rank <= 3 && (
                           <Text
                             fontSize="4xl"
-                            fontWeight="900"
-                            color={team.rank <= 3 ? colors.border : "#666"}
-                            animation={
-                              team.rank === 1
-                                ? `${rankBounce} 2s ease-in-out infinite`
-                                : "none"
-                            }
+                            animation={`${rankBounce} 2s ease-in-out infinite ${team.rank * 0.2}s`}
                           >
-                            {team.rank}位
+                            {getMedalEmoji(team.rank)}
                           </Text>
-                          {team.rank <= 3 && (
-                            <Text
-                              fontSize="4xl"
-                              animation={`${rankBounce} 2s ease-in-out infinite ${team.rank * 0.2}s`}
-                            >
-                              {getMedalEmoji(team.rank)}
-                            </Text>
-                          )}
-                        </HStack>
-
-                        {/* Team name */}
-                        <Text fontSize="3xl" fontWeight="bold" color="#333" ml={4}>
-                          {team.name}
-                        </Text>
+                        )}
                       </HStack>
 
-                      {/* Score */}
-                      <Text
-                        fontSize="5xl"
-                        fontWeight="900"
-                        bgImage="linear-gradient(135deg, #FF8800 0%, #FFE500 100%)"
-                        bgClip="text"
-                        color="transparent"
-                        css={{
-                          WebkitBackgroundClip: "text",
-                          WebkitTextFillColor: "transparent",
-                        }}
-                      >
-                        {team.score}
-                        <Text as="span" fontSize="2xl">
-                          点
-                        </Text>
+                      {/* Team name */}
+                      <Text fontSize="3xl" fontWeight="bold" color="#333" ml={4}>
+                        {team.name}
                       </Text>
-                    </Flex>
+                    </HStack>
 
-                    {/* Progress bar */}
-                    <Box
-                      w="full"
-                      h="24px"
-                      bg="gray.100"
-                      borderRadius="full"
-                      overflow="hidden"
-                      position="relative"
+                    {/* Score */}
+                    <Text
+                      fontSize="5xl"
+                      fontWeight="900"
+                      bgImage="linear-gradient(135deg, #FF8800 0%, #FFE500 100%)"
+                      bgClip="text"
+                      color="transparent"
+                      css={{
+                        WebkitBackgroundClip: "text",
+                        WebkitTextFillColor: "transparent",
+                      }}
                     >
-                      <Box
-                        h="full"
-                        w={`${progressPercent}%`}
-                        bgImage="linear-gradient(90deg, #FF8800 0%, #FFE500 50%, #FF8800 100%)"
-                        bgSize="200% auto"
-                        borderRadius="full"
-                        position="relative"
-                        overflow="hidden"
-                        transition="width 0.5s ease-out"
-                      >
-                        {/* Shimmer effect on progress bar */}
-                        <Box
-                          position="absolute"
-                          top={0}
-                          left="-50%"
-                          w="30%"
-                          h="100%"
-                          bgGradient="to-r"
-                          gradientFrom="transparent"
-                          gradientVia="rgba(255,255,255,0.5)"
-                          gradientTo="transparent"
-                          animation={`${progressShimmer} 2s ease-in-out infinite`}
-                        />
-                      </Box>
-                    </Box>
-                  </Box>
+                      {team.score}
+                      <Text as="span" fontSize="2xl">
+                        点
+                      </Text>
+                    </Text>
+                  </Flex>
                 </Box>
               )
             })
           )}
+          </VStack>
         </VStack>
-      </VStack>
+      )}
 
       {/* Bottom gradient fade */}
       <Box

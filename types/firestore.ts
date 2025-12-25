@@ -1,6 +1,12 @@
 import type { Timestamp } from "firebase/firestore"
 
-export type LobbyStatus = "waiting" | "playing" | "finished"
+export type LobbyStatus = "waiting" | "playing" | "finished" | "result"
+
+export interface Question {
+  question: string
+  choices: string[]
+  answer: number
+}
 
 export interface Lobby {
   id: string

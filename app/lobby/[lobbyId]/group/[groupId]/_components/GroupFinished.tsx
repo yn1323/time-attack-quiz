@@ -40,17 +40,16 @@ const sparkle = keyframes`
   50% { opacity: 0.5; transform: scale(0.8); }
 `
 
-// Mock data
-const MOCK_TEAM = { name: "チームA" }
-const MOCK_FINAL = {
-  score: 125,
-  correctCount: 28,
-  totalCount: 35,
-  maxStreak: 8,
+type Props = {
+  groupName: string
+  finalScore: number
+  correctCount: number
+  totalCount: number
+  maxStreak: number
 }
 
-export function GroupFinished() {
-  const accuracyRate = Math.round((MOCK_FINAL.correctCount / MOCK_FINAL.totalCount) * 100)
+export function GroupFinished({ groupName, finalScore, correctCount, totalCount, maxStreak }: Props) {
+  const accuracyRate = totalCount > 0 ? Math.round((correctCount / totalCount) * 100) : 0
 
   return (
     <Box
@@ -183,7 +182,7 @@ export function GroupFinished() {
           color="#E67A00"
           animation={`${fadeInUp} 0.6s ease-out 0.2s both`}
         >
-          {MOCK_TEAM.name}
+          {groupName}
         </Text>
 
         {/* Score card */}
@@ -243,7 +242,7 @@ export function GroupFinished() {
                 WebkitTextFillColor: "transparent",
               }}
             >
-              {MOCK_FINAL.score}
+              {finalScore}
               <Text as="span" fontSize={{ base: "2xl", md: "3xl" }}>点</Text>
             </Text>
           </VStack>
@@ -264,8 +263,8 @@ export function GroupFinished() {
             <VStack gap={1}>
               <Text fontSize="sm" color="#888" fontWeight="medium">正解数</Text>
               <Text fontSize={{ base: "xl", md: "2xl" }} fontWeight="900" color="#333">
-                {MOCK_FINAL.correctCount}
-                <Text as="span" fontSize="md" color="#666" fontWeight="medium"> / {MOCK_FINAL.totalCount}問</Text>
+                {correctCount}
+                <Text as="span" fontSize="md" color="#666" fontWeight="medium"> / {totalCount}問</Text>
               </Text>
             </VStack>
 
@@ -283,7 +282,7 @@ export function GroupFinished() {
             <VStack gap={1}>
               <Text fontSize="sm" color="#888" fontWeight="medium">連続正解</Text>
               <Text fontSize={{ base: "xl", md: "2xl" }} fontWeight="900" color="#E67A00">
-                {MOCK_FINAL.maxStreak}問
+                {maxStreak}問
               </Text>
             </VStack>
           </HStack>
