@@ -1,4 +1,11 @@
-import { collection, doc, setDoc, serverTimestamp } from "firebase/firestore"
+import {
+  collection,
+  doc,
+  setDoc,
+  serverTimestamp,
+  onSnapshot,
+  type Unsubscribe,
+} from "firebase/firestore"
 import { db } from "@/lib/firebase"
 import type { Lobby } from "@/types/firestore"
 
@@ -22,4 +29,23 @@ export async function createLobby(): Promise<string> {
   await setDoc(lobbyRef, lobbyData)
 
   return lobbyRef.id
+}
+
+export function subscribeLobby(
+  lobbyId: string,
+  callback: (lobby: Lobby | null) => void,
+): Unsubscribe {
+  const lobbyRef = doc(db, "lobbies", lobbyId)
+
+  return onSnapshot(lobbyRef, (snapshot) => {
+    if (snapshot.exists()) {
+      const lobby: Lobby = {
+        id: snapshot.id,
+        ...snapshot.data(),
+      } as Lobby
+      callback(lobby)
+    } else {
+      callback(null)
+    }
+  })
 }
