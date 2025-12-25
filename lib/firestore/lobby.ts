@@ -10,7 +10,7 @@ import { db } from "@/lib/firebase"
 import type { Lobby } from "@/types/firestore"
 
 export async function createLobby(): Promise<string> {
-  const lobbyRef = doc(collection(db, "lobbies"))
+  const lobbyRef = doc(collection(db, "quiz-time-attack-lobbies"))
 
   const lobbyData: Omit<Lobby, "id" | "createdAt" | "startedAt" | "finishedAt"> & {
     createdAt: ReturnType<typeof serverTimestamp>
@@ -35,7 +35,7 @@ export function subscribeLobby(
   lobbyId: string,
   callback: (lobby: Lobby | null) => void,
 ): Unsubscribe {
-  const lobbyRef = doc(db, "lobbies", lobbyId)
+  const lobbyRef = doc(db, "quiz-time-attack-lobbies", lobbyId)
 
   return onSnapshot(lobbyRef, (snapshot) => {
     if (snapshot.exists()) {

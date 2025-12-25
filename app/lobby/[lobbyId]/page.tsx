@@ -57,7 +57,7 @@ export default function LobbyPage() {
     setIsJoining(true)
     try {
       const groupId = await createGroup(lobbyId, groupName.trim())
-      router.push(`/group/${groupId}`)
+      router.push(`/lobby/${lobbyId}/group/${groupId}`)
     } catch (error) {
       console.error("Failed to create group:", error)
       alert("グループの作成に失敗しました。もう一度お試しください。")
@@ -178,7 +178,7 @@ export default function LobbyPage() {
         </HStack>
         <HStack gap={3}>
           {/* 管理画面リンク */}
-          <Link href={`/admin/${lobbyId}`}>
+          <Link href={`/lobby/${lobbyId}/admin`}>
             <Box
               as="span"
               display="inline-flex"

@@ -1,6 +1,6 @@
 "use client";
 
-import { AdminAfterQuiz } from "@/app/admin/[lobbyId]/_components/AdminAfterQuiz";
+import { AdminAfterQuiz } from "./_components/AdminAfterQuiz";
 // モックアップ確認用: 表示したい状態のコンポーネントをインポート
 // 各状態を確認するには、インポートとreturn文を切り替えてください
 

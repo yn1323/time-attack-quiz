@@ -3,7 +3,8 @@
     "allow": [
       "Bash(pnpm add:*)",
       "Skill(frontend-design:frontend-design)",
-      "Skill(frontend-design:frontend-design:*)"
+      "Skill(frontend-design:frontend-design:*)",
+      "Bash(ls:*)"
     ]
   }
 }

@@ -38,7 +38,7 @@
 ## コレクション構造
 
 ```
-lobbies/{lobbyId}
+quiz-time-attack-lobbies/{lobbyId}
 └─ groups/{groupId}
    └─ answers/{answerId}
 ```
@@ -47,7 +47,7 @@ lobbies/{lobbyId}
 
 ## データモデル
 
-### 1. `lobbies` コレクション
+### 1. `quiz-time-attack-lobbies` コレクション
 
 ロビー（大会）の情報を管理。
 
@@ -78,7 +78,7 @@ interface Lobby {
 
 ---
 
-### 2. `lobbies/{lobbyId}/groups` サブコレクション
+### 2. `quiz-time-attack-lobbies/{lobbyId}/groups` サブコレクション
 
 各グループの基本情報。スコアや統計情報は`answers`サブコレクションから計算する。
 
@@ -114,7 +114,7 @@ interface Group {
 
 ---
 
-### 3. `lobbies/{lobbyId}/groups/{groupId}/answers` サブコレクション
+### 3. `quiz-time-attack-lobbies/{lobbyId}/groups/{groupId}/answers` サブコレクション
 
 各グループの回答履歴。スコア変遷グラフの元データとしても使用。
 
@@ -213,8 +213,8 @@ interface Answer {
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
-    // lobbiesは誰でも読み書き可能（身内用途）
-    match /lobbies/{lobbyId} {
+    // quiz-time-attack-lobbiesは誰でも読み書き可能（身内用途）
+    match /quiz-time-attack-lobbies/{lobbyId} {
       allow read, write: if true;
 
       match /groups/{groupId} {
@@ -237,7 +237,7 @@ service cloud.firestore {
 
 ```typescript
 // 回答時の処理例
-const answerRef = doc(collection(db, `lobbies/${lobbyId}/groups/${groupId}/answers`));
+const answerRef = doc(collection(db, `quiz-time-attack-lobbies/${lobbyId}/groups/${groupId}/answers`));
 
 await setDoc(answerRef, {
   groupId,

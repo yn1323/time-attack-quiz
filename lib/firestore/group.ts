@@ -15,7 +15,7 @@ export async function createGroup(
   lobbyId: string,
   groupName: string,
 ): Promise<string> {
-  const groupRef = doc(collection(db, `lobbies/${lobbyId}/groups`))
+  const groupRef = doc(collection(db, `quiz-time-attack-lobbies/${lobbyId}/groups`))
 
   const groupData: Omit<Group, "id" | "createdAt"> & {
     createdAt: ReturnType<typeof serverTimestamp>
@@ -35,7 +35,7 @@ export function subscribeGroups(
   callback: (groups: Group[]) => void,
 ): Unsubscribe {
   const groupsQuery = query(
-    collection(db, `lobbies/${lobbyId}/groups`),
+    collection(db, `quiz-time-attack-lobbies/${lobbyId}/groups`),
     orderBy("createdAt", "asc"),
   )
 
