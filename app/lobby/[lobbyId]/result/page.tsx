@@ -536,7 +536,7 @@ export default function ResultPage() {
           position="relative"
           w="full"
           maxW="900px"
-          h="380px"
+          h="480px"
           mx="auto"
           animation={`${fadeInUp} 0.8s ease-out 0.5s both`}
         >
@@ -545,7 +545,7 @@ export default function ResultPage() {
             position="absolute"
             bottom={0}
             left="50%"
-            transform="translateX(-50%)"
+            marginLeft="-310px"
             w="620px"
             h="50px"
             bg="linear-gradient(180deg, #4A4A4A 0%, #2D2D2D 50%, #1A1A1A 100%)"
