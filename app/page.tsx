@@ -2,7 +2,9 @@
 
 import { Box, Heading, Text, VStack } from "@chakra-ui/react"
 import { keyframes } from "@emotion/react"
-import Link from "next/link"
+import { useRouter } from "next/navigation"
+import { useState } from "react"
+import { createLobby } from "@/lib/firestore/lobby"
 
 // Keyframe animations
 const gradientShift = keyframes`
@@ -34,6 +36,21 @@ const rotateFloat = keyframes`
 `
 
 export default function HomePage() {
+  const router = useRouter()
+  const [isCreating, setIsCreating] = useState(false)
+
+  const handleCreateLobby = async () => {
+    setIsCreating(true)
+    try {
+      const lobbyId = await createLobby()
+      router.push(`/lobby/${lobbyId}`)
+    } catch (error) {
+      console.error("Failed to create lobby:", error)
+      alert("ロビーの作成に失敗しました。もう一度お試しください。")
+      setIsCreating(false)
+    }
+  }
+
   return (
     <Box
       minH="100vh"
@@ -196,43 +213,52 @@ export default function HomePage() {
         </Box>
 
         {/* CTA Button */}
-        <Link href="/lobby/sample-lobby-id">
+        <Box
+          as="button"
+          position="relative"
+          px={{ base: 12, md: 16 }}
+          py={{ base: 5, md: 6 }}
+          mt={4}
+          fontSize={{ base: "xl", md: "2xl" }}
+          fontWeight="900"
+          color="white"
+          bg="linear-gradient(135deg, #FF8800 0%, #FF6B00 50%, #E67A00 100%)"
+          borderRadius="full"
+          cursor={isCreating ? "not-allowed" : "pointer"}
+          transition="all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1)"
+          animation={isCreating ? "none" : `${pulse} 2s ease-in-out infinite`}
+          border="none"
+          outline="none"
+          opacity={isCreating ? 0.7 : 1}
+          onClick={handleCreateLobby}
+          disabled={isCreating}
+          _hover={
+            isCreating
+              ? {}
+              : {
+                  transform: "translateY(-4px) scale(1.02)",
+                  boxShadow: "0 0 50px rgba(255, 136, 0, 0.6), 0 12px 40px rgba(255, 136, 0, 0.4)",
+                }
+          }
+          _active={
+            isCreating
+              ? {}
+              : {
+                  transform: "translateY(-2px) scale(0.98)",
+                }
+          }
+        >
           <Box
-            as="button"
-            position="relative"
-            px={{ base: 12, md: 16 }}
-            py={{ base: 5, md: 6 }}
-            mt={4}
-            fontSize={{ base: "xl", md: "2xl" }}
-            fontWeight="900"
-            color="white"
-            bg="linear-gradient(135deg, #FF8800 0%, #FF6B00 50%, #E67A00 100%)"
+            position="absolute"
+            inset="-3px"
             borderRadius="full"
-            cursor="pointer"
-            transition="all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1)"
-            animation={`${pulse} 2s ease-in-out infinite`}
-            border="none"
-            outline="none"
-            _hover={{
-              transform: "translateY(-4px) scale(1.02)",
-              boxShadow: "0 0 50px rgba(255, 136, 0, 0.6), 0 12px 40px rgba(255, 136, 0, 0.4)",
-            }}
-            _active={{
-              transform: "translateY(-2px) scale(0.98)",
-            }}
-          >
-            <Box
-              position="absolute"
-              inset="-3px"
-              borderRadius="full"
-              bg="linear-gradient(135deg, #FFE500, #FF8800, #FFE500)"
-              opacity={0.5}
-              filter="blur(10px)"
-              zIndex={-1}
-            />
-            大会をはじめる
-          </Box>
-        </Link>
+            bg="linear-gradient(135deg, #FFE500, #FF8800, #FFE500)"
+            opacity={0.5}
+            filter="blur(10px)"
+            zIndex={-1}
+          />
+          {isCreating ? "作成中..." : "大会をはじめる"}
+        </Box>
 
         {/* Footer hint */}
         <Text
