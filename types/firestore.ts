@@ -6,6 +6,7 @@ export interface Question {
   question: string
   choices: string[]
   answer: number
+  relatedLinks?: string[]
 }
 
 export interface Lobby {

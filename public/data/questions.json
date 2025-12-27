@@ -2,12 +2,19 @@
   {
     "question": "日本で一番高い山は?",
     "choices": ["富士山", "北岳", "奥穂高岳"],
-    "answer": 0
+    "answer": 0,
+    "relatedLinks": [
+      "https://ja.wikipedia.org/wiki/%E5%AF%8C%E5%A3%AB%E5%B1%B1",
+      "https://www.env.go.jp/park/fujihakone/"
+    ]
   },
   {
     "question": "地球から最も近い恒星は?",
     "choices": ["シリウス", "太陽", "プロキシマ・ケンタウリ"],
-    "answer": 1
+    "answer": 1,
+    "relatedLinks": [
+      "https://ja.wikipedia.org/wiki/%E5%A4%AA%E9%99%BD"
+    ]
   },
   {
     "question": "水の化学式は?",
@@ -32,7 +39,12 @@
   {
     "question": "太陽系で最も大きい惑星は?",
     "choices": ["土星", "木星", "天王星"],
-    "answer": 1
+    "answer": 1,
+    "relatedLinks": [
+      "https://ja.wikipedia.org/wiki/%E6%9C%A8%E6%98%9F",
+      "https://ja.wikipedia.org/wiki/%E5%A4%AA%E9%99%BD%E7%B3%BB",
+      "https://www.nasa.gov/jupiter"
+    ]
   },
   {
     "question": "「吾輩は猫である」の作者は?",
