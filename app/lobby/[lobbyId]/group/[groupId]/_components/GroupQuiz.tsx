@@ -3,6 +3,7 @@
 import { Box, Flex, HStack, Text, VStack } from "@chakra-ui/react";
 import { keyframes } from "@emotion/react";
 import type { Question } from "@/types/firestore";
+import { RelatedLinks } from "./RelatedLinks";
 
 // Floating animation for background decorations
 const float = keyframes`
@@ -293,6 +294,9 @@ export function GroupQuiz({ groupName, score, remainingTime, question, onAnswer 
             </Box>
           ))}
         </VStack>
+
+        {/* Related Links */}
+        <RelatedLinks links={question?.relatedLinks || []} />
       </VStack>
 
       {/* Bottom decorative gradient */}
