@@ -1,113 +1,101 @@
-"use client"
+"use client";
 
-import { Box, Flex, Heading, HStack, Input, Text, VStack } from "@chakra-ui/react"
-import { keyframes } from "@emotion/react"
-import Link from "next/link"
-import { useParams, useRouter } from "next/navigation"
-import { useEffect, useState } from "react"
-import { subscribeLobby } from "@/lib/firestore/lobby"
-import { createGroup, subscribeGroups } from "@/lib/firestore/group"
-import type { Lobby, Group } from "@/types/firestore"
+import { Box, Flex, Heading, HStack, Input, Text, VStack } from "@chakra-ui/react";
+import { keyframes } from "@emotion/react";
+import Link from "next/link";
+import { useParams, useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
+import { createGroup, subscribeGroups } from "@/lib/firestore/group";
+import { subscribeLobby } from "@/lib/firestore/lobby";
+import type { Group, Lobby } from "@/types/firestore";
 
 // Keyframe animations
 const float = keyframes`
   0%, 100% { transform: translateY(0); }
   50% { transform: translateY(-10px); }
-`
+`;
 
 const pulse = keyframes`
   0%, 100% { box-shadow: 0 4px 15px rgba(255, 136, 0, 0.3); }
   50% { box-shadow: 0 4px 25px rgba(255, 136, 0, 0.5); }
-`
+`;
 
 export default function LobbyPage() {
-  const params = useParams()
-  const router = useRouter()
-  const lobbyId = params.lobbyId as string
+  const params = useParams();
+  const router = useRouter();
+  const lobbyId = params.lobbyId as string;
 
-  const [lobby, setLobby] = useState<Lobby | null>(null)
-  const [groups, setGroups] = useState<Group[]>([])
-  const [isLoading, setIsLoading] = useState(true)
-  const [groupName, setGroupName] = useState("")
-  const [isJoining, setIsJoining] = useState(false)
+  const [lobby, setLobby] = useState<Lobby | null>(null);
+  const [groups, setGroups] = useState<Group[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [groupName, setGroupName] = useState("");
+  const [isJoining, setIsJoining] = useState(false);
 
   // ロビー情報とグループ一覧のリアルタイムリスナー
   useEffect(() => {
     const unsubscribeLobby = subscribeLobby(lobbyId, (lobbyData) => {
-      setLobby(lobbyData)
-      setIsLoading(false)
-    })
+      setLobby(lobbyData);
+      setIsLoading(false);
+    });
 
     const unsubscribeGroups = subscribeGroups(lobbyId, (groupsData) => {
-      setGroups(groupsData)
-    })
+      setGroups(groupsData);
+    });
 
     return () => {
-      unsubscribeLobby()
-      unsubscribeGroups()
-    }
-  }, [lobbyId])
+      unsubscribeLobby();
+      unsubscribeGroups();
+    };
+  }, [lobbyId]);
 
   // クイズ中の場合、参加済みグループがあれば自動でグループページへリダイレクト
   useEffect(() => {
     if (lobby?.status === "playing") {
-      const savedGroupId = localStorage.getItem(`group_${lobbyId}`)
+      const savedGroupId = localStorage.getItem(`group_${lobbyId}`);
       if (savedGroupId) {
-        router.push(`/lobby/${lobbyId}/group/${savedGroupId}`)
+        router.push(`/lobby/${lobbyId}/group/${savedGroupId}`);
       }
     }
-  }, [lobby?.status, lobbyId, router])
+  }, [lobby?.status, lobbyId, router]);
 
   const handleJoinGroup = async () => {
     if (!groupName.trim()) {
-      alert("グループ名を入力してください")
-      return
+      alert("グループ名を入力してください");
+      return;
     }
 
-    setIsJoining(true)
+    setIsJoining(true);
     try {
-      const groupId = await createGroup(lobbyId, groupName.trim())
+      const groupId = await createGroup(lobbyId, groupName.trim());
       // 参加したグループIDをlocalStorageに保存（クイズ中にロビーに戻っても自動遷移するため）
-      localStorage.setItem(`group_${lobbyId}`, groupId)
-      router.push(`/lobby/${lobbyId}/group/${groupId}`)
+      localStorage.setItem(`group_${lobbyId}`, groupId);
+      router.push(`/lobby/${lobbyId}/group/${groupId}`);
     } catch (error) {
-      console.error("Failed to create group:", error)
-      alert("グループの作成に失敗しました。もう一度お試しください。")
-      setIsJoining(false)
+      console.error("Failed to create group:", error);
+      alert("グループの作成に失敗しました。もう一度お試しください。");
+      setIsJoining(false);
     }
-  }
+  };
 
   const handleCopyURL = () => {
-    const url = window.location.href
-    navigator.clipboard.writeText(url)
-    alert("URLをコピーしました！")
-  }
+    const url = window.location.href;
+    navigator.clipboard.writeText(url);
+    alert("URLをコピーしました！");
+  };
 
   if (isLoading) {
     return (
-      <Box
-        minH="100vh"
-        bg="#FFFDF7"
-        display="flex"
-        alignItems="center"
-        justifyContent="center"
-      >
+      <Box minH="100vh" bg="#FFFDF7" display="flex" alignItems="center" justifyContent="center">
         <Text fontSize="2xl" color="#FF8800" fontWeight="bold">
           読み込み中...
         </Text>
       </Box>
-    )
+    );
   }
 
   if (!lobby) {
     return (
-      <Box
-        minH="100vh"
-        bg="#FFFDF7"
-        display="flex"
-        alignItems="center"
-        justifyContent="center"
-      >
+      <Box minH="100vh" bg="#FFFDF7" display="flex" alignItems="center" justifyContent="center">
         <VStack gap={4}>
           <Text fontSize="2xl" color="#FF8800" fontWeight="bold">
             ロビーが見つかりません
@@ -119,16 +107,11 @@ export default function LobbyPage() {
           </Link>
         </VStack>
       </Box>
-    )
+    );
   }
 
   return (
-    <Box
-      minH="100vh"
-      bg="#FFFDF7"
-      position="relative"
-      overflow="hidden"
-    >
+    <Box minH="100vh" bg="#FFFDF7" position="relative" overflow="hidden">
       {/* Background decorations */}
       <Box
         position="absolute"
@@ -177,13 +160,7 @@ export default function LobbyPage() {
         boxShadow="0 2px 10px rgba(255, 136, 0, 0.1)"
       >
         <HStack gap={4}>
-          <Box
-            w="12px"
-            h="12px"
-            bg="#22C55E"
-            borderRadius="full"
-            boxShadow="0 0 8px rgba(34, 197, 94, 0.5)"
-          />
+          <Box w="12px" h="12px" bg="#22C55E" borderRadius="full" boxShadow="0 0 8px rgba(34, 197, 94, 0.5)" />
           <Text fontSize="lg" fontWeight="bold" color="#E67A00">
             ロビー: {lobbyId}
           </Text>
@@ -245,31 +222,13 @@ export default function LobbyPage() {
       <VStack py={16} gap={10} position="relative" zIndex={1}>
         {/* Title with decorative elements */}
         <Box textAlign="center" position="relative">
-          <Text
-            position="absolute"
-            top="-20px"
-            left="50%"
-            transform="translateX(-50%)"
-            fontSize="2xl"
-          >
+          <Text position="absolute" top="-20px" left="50%" transform="translateX(-50%)" fontSize="2xl">
             ✨
           </Text>
-          <Heading
-            fontSize={{ base: "2xl", md: "4xl" }}
-            fontWeight="900"
-            color="#FF8800"
-            letterSpacing="0.05em"
-          >
+          <Heading fontSize={{ base: "2xl", md: "4xl" }} fontWeight="900" color="#FF8800" letterSpacing="0.05em">
             参加者募集中!
           </Heading>
-          <Box
-            mt={2}
-            mx="auto"
-            w="80px"
-            h="4px"
-            bg="linear-gradient(90deg, #FF8800, #FFE500)"
-            borderRadius="full"
-          />
+          <Box mt={2} mx="auto" w="80px" h="4px" bg="linear-gradient(90deg, #FF8800, #FFE500)" borderRadius="full" />
         </Box>
 
         {/* Group name input card */}
@@ -298,12 +257,7 @@ export default function LobbyPage() {
 
           <VStack gap={6} position="relative">
             <Box textAlign="center">
-              <Text
-                fontSize="lg"
-                fontWeight="bold"
-                color="#333"
-                mb={1}
-              >
+              <Text fontSize="lg" fontWeight="bold" color="#333" mb={1}>
                 グループ名を入力してください
               </Text>
               <Text fontSize="sm" color="gray.500">
@@ -372,12 +326,7 @@ export default function LobbyPage() {
 
         {/* Participating groups */}
         <Box textAlign="center" mt={4}>
-          <Text
-            fontSize="lg"
-            fontWeight="bold"
-            color="#E67A00"
-            mb={4}
-          >
+          <Text fontSize="lg" fontWeight="bold" color="#E67A00" mb={4}>
             現在の参加グループ ({groups.length}組)
           </Text>
           {groups.length > 0 ? (
@@ -417,12 +366,7 @@ export default function LobbyPage() {
           border="2px dashed"
           borderColor="rgba(255, 136, 0, 0.3)"
         >
-          <Text
-            fontSize="md"
-            color="#E67A00"
-            fontWeight="medium"
-            textAlign="center"
-          >
+          <Text fontSize="md" color="#E67A00" fontWeight="medium" textAlign="center">
             管理者が開始するまでお待ちください
           </Text>
         </Box>
@@ -441,5 +385,5 @@ export default function LobbyPage() {
         pointerEvents="none"
       />
     </Box>
-  )
+  );
 }

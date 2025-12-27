@@ -12,9 +12,7 @@
     "question": "地球から最も近い恒星は?",
     "choices": ["シリウス", "太陽", "プロキシマ・ケンタウリ"],
     "answer": 1,
-    "relatedLinks": [
-      "https://ja.wikipedia.org/wiki/%E5%A4%AA%E9%99%BD"
-    ]
+    "relatedLinks": ["https://ja.wikipedia.org/wiki/%E5%A4%AA%E9%99%BD"]
   },
   {
     "question": "水の化学式は?",

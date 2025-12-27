@@ -1,26 +1,26 @@
 import {
   collection,
   doc,
-  setDoc,
   onSnapshot,
-  query,
   orderBy,
+  query,
   serverTimestamp,
+  setDoc,
   type Unsubscribe,
-} from "firebase/firestore"
-import { db } from "@/lib/firebase"
-import type { Answer, Group } from "@/types/firestore"
+} from "firebase/firestore";
+import { db } from "@/lib/firebase";
+import type { Answer, Group } from "@/types/firestore";
 
 type CreateAnswerParams = {
-  lobbyId: string
-  groupId: string
-  questionIndex: number
-  selectedAnswer: number
-  correctAnswer: number
-  answerTimeMs: number
-  pointsCorrect: number
-  pointsIncorrect: number
-}
+  lobbyId: string;
+  groupId: string;
+  questionIndex: number;
+  selectedAnswer: number;
+  correctAnswer: number;
+  answerTimeMs: number;
+  pointsCorrect: number;
+  pointsIncorrect: number;
+};
 
 export async function createAnswer({
   lobbyId,
@@ -32,12 +32,10 @@ export async function createAnswer({
   pointsCorrect,
   pointsIncorrect,
 }: CreateAnswerParams): Promise<void> {
-  const isCorrect = selectedAnswer === correctAnswer
-  const scoreChange = isCorrect ? pointsCorrect : pointsIncorrect
+  const isCorrect = selectedAnswer === correctAnswer;
+  const scoreChange = isCorrect ? pointsCorrect : pointsIncorrect;
 
-  const answerRef = doc(
-    collection(db, `quiz-time-attack-lobbies/${lobbyId}/groups/${groupId}/answers`)
-  )
+  const answerRef = doc(collection(db, `quiz-time-attack-lobbies/${lobbyId}/groups/${groupId}/answers`));
 
   await setDoc(answerRef, {
     groupId,
@@ -48,7 +46,7 @@ export async function createAnswer({
     answeredAt: serverTimestamp(),
     answerTimeMs,
     scoreChange,
-  })
+  });
 }
 
 export function subscribeGroupAnswers(
@@ -59,72 +57,69 @@ export function subscribeGroupAnswers(
   const answersQuery = query(
     collection(db, `quiz-time-attack-lobbies/${lobbyId}/groups/${groupId}/answers`),
     orderBy("answeredAt", "asc"),
-  )
+  );
 
   return onSnapshot(answersQuery, (snapshot) => {
     const answers: Answer[] = snapshot.docs.map((doc) => ({
       id: doc.id,
       ...doc.data(),
-    })) as Answer[]
+    })) as Answer[];
 
-    callback(answers)
-  })
+    callback(answers);
+  });
 }
 
 export type GroupWithAnswers = {
-  groupId: string
-  groupName: string
-  answers: Answer[]
-}
+  groupId: string;
+  groupName: string;
+  answers: Answer[];
+};
 
 export function subscribeAllGroupAnswers(
   lobbyId: string,
   groups: Group[],
   callback: (groupsWithAnswers: GroupWithAnswers[]) => void,
 ): Unsubscribe {
-  const answersMap = new Map<string, Answer[]>()
-  const unsubscribes: Unsubscribe[] = []
+  const answersMap = new Map<string, Answer[]>();
+  const unsubscribes: Unsubscribe[] = [];
 
   groups.forEach((group) => {
-    answersMap.set(group.id, [])
-  })
+    answersMap.set(group.id, []);
+  });
 
   const emitUpdate = () => {
     const result: GroupWithAnswers[] = groups.map((group) => ({
       groupId: group.id,
       groupName: group.name,
       answers: answersMap.get(group.id) ?? [],
-    }))
-    callback(result)
-  }
+    }));
+    callback(result);
+  };
 
   groups.forEach((group) => {
     const answersQuery = query(
-      collection(
-        db,
-        `quiz-time-attack-lobbies/${lobbyId}/groups/${group.id}/answers`,
-      ),
+      collection(db, `quiz-time-attack-lobbies/${lobbyId}/groups/${group.id}/answers`),
       orderBy("answeredAt", "asc"),
-    )
+    );
 
     const unsubscribe = onSnapshot(answersQuery, (snapshot) => {
       const answers: Answer[] = snapshot.docs.map((doc) => ({
         id: doc.id,
         ...doc.data(),
-      })) as Answer[]
+      })) as Answer[];
 
-      answersMap.set(group.id, answers)
-      emitUpdate()
-    })
+      answersMap.set(group.id, answers);
+      emitUpdate();
+    });
 
-    unsubscribes.push(unsubscribe)
-  })
+    unsubscribes.push(unsubscribe);
+  });
 
   if (groups.length === 0) {
-    emitUpdate()
+    emitUpdate();
   }
 
   return () => {
-    unsubscribes.forEach((unsubscribe) => unsubscribe())
-  }
+    unsubscribes.forEach((unsubscribe) => unsubscribe());
+  };
 }
