@@ -1,7 +1,7 @@
-"use client"
+"use client";
 
-import { Box, Flex, HStack, Text, VStack } from "@chakra-ui/react"
-import { keyframes } from "@emotion/react"
+import { Box, Flex, HStack, Text, VStack } from "@chakra-ui/react";
+import { keyframes } from "@emotion/react";
 
 // Animations
 const bounceIn = keyframes`
@@ -9,57 +9,57 @@ const bounceIn = keyframes`
   50% { transform: scale(1.08); }
   70% { transform: scale(0.95); }
   100% { opacity: 1; transform: scale(1); }
-`
+`;
 
 const slideInUp = keyframes`
   0% { opacity: 0; transform: translateY(30px); }
   100% { opacity: 1; transform: translateY(0); }
-`
+`;
 
 const pulseCorrect = keyframes`
   0%, 100% { box-shadow: 0 0 20px rgba(34, 197, 94, 0.4); }
   50% { box-shadow: 0 0 40px rgba(34, 197, 94, 0.7); }
-`
+`;
 
 const pulseIncorrect = keyframes`
   0%, 100% { box-shadow: 0 0 20px rgba(239, 68, 68, 0.4); }
   50% { box-shadow: 0 0 40px rgba(239, 68, 68, 0.7); }
-`
+`;
 
 const pulse = keyframes`
   0%, 100% { box-shadow: 0 4px 15px rgba(255, 136, 0, 0.3); }
   50% { box-shadow: 0 4px 25px rgba(255, 136, 0, 0.5); }
-`
+`;
 
 const confetti = keyframes`
   0% { transform: translateY(0) rotate(0deg); opacity: 1; }
   100% { transform: translateY(-100px) rotate(720deg); opacity: 0; }
-`
+`;
 
 const shake = keyframes`
   0%, 100% { transform: translateX(0); }
   10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
   20%, 40%, 60%, 80% { transform: translateX(5px); }
-`
+`;
 
 type Props = {
-  groupName: string
-  score: number
-  remainingTime: string
+  groupName: string;
+  score: number;
+  remainingTime: string;
   result: {
-    isCorrect: boolean
-    question: string
-    choices: string[]
-    correctIndex: number
-    selectedIndex: number
-    pointChange: number
-  }
-  onNext: () => void
-}
+    isCorrect: boolean;
+    question: string;
+    choices: string[];
+    correctIndex: number;
+    selectedIndex: number;
+    pointChange: number;
+  };
+  onNext: () => void;
+};
 
 export function GroupResult({ groupName, score, remainingTime, result, onNext }: Props) {
-  const { isCorrect, question, choices, correctIndex, selectedIndex, pointChange } = result
-  const choiceLabels = ["A", "B", "C"]
+  const { isCorrect, question, choices, correctIndex, selectedIndex, pointChange } = result;
+  const choiceLabels = ["A", "B", "C"];
 
   return (
     <Box minH="100vh" bg="#FFFDF7" position="relative" overflow="hidden">
@@ -67,9 +67,10 @@ export function GroupResult({ groupName, score, remainingTime, result, onNext }:
       <Box
         position="absolute"
         inset={0}
-        bgImage={isCorrect
-          ? "radial-gradient(ellipse at 50% 30%, rgba(34, 197, 94, 0.1) 0%, transparent 60%), radial-gradient(ellipse at 20% 80%, rgba(255, 229, 0, 0.1) 0%, transparent 50%)"
-          : "radial-gradient(ellipse at 50% 30%, rgba(239, 68, 68, 0.08) 0%, transparent 60%), radial-gradient(ellipse at 80% 80%, rgba(255, 136, 0, 0.08) 0%, transparent 50%)"
+        bgImage={
+          isCorrect
+            ? "radial-gradient(ellipse at 50% 30%, rgba(34, 197, 94, 0.1) 0%, transparent 60%), radial-gradient(ellipse at 20% 80%, rgba(255, 229, 0, 0.1) 0%, transparent 50%)"
+            : "radial-gradient(ellipse at 50% 30%, rgba(239, 68, 68, 0.08) 0%, transparent 60%), radial-gradient(ellipse at 80% 80%, rgba(255, 136, 0, 0.08) 0%, transparent 50%)"
         }
         pointerEvents="none"
       />
@@ -111,10 +112,7 @@ export function GroupResult({ groupName, score, remainingTime, result, onNext }:
           <Box
             w="14px"
             h="14px"
-            bg={isCorrect
-              ? "linear-gradient(135deg, #22C55E, #4ADE80)"
-              : "linear-gradient(135deg, #EF4444, #F87171)"
-            }
+            bg={isCorrect ? "linear-gradient(135deg, #22C55E, #4ADE80)" : "linear-gradient(135deg, #EF4444, #F87171)"}
             borderRadius="full"
             boxShadow={`0 0 10px ${isCorrect ? "rgba(34, 197, 94, 0.5)" : "rgba(239, 68, 68, 0.5)"}`}
           />
@@ -138,11 +136,7 @@ export function GroupResult({ groupName, score, remainingTime, result, onNext }:
 
           <HStack gap={2}>
             <Text fontSize={{ base: "xl", md: "2xl" }}>💰</Text>
-            <Text
-              fontSize={{ base: "2xl", md: "3xl" }}
-              fontWeight="900"
-              color={isCorrect ? "#22C55E" : "#EF4444"}
-            >
+            <Text fontSize={{ base: "2xl", md: "3xl" }} fontWeight="900" color={isCorrect ? "#22C55E" : "#EF4444"}>
               {score}点
             </Text>
           </HStack>
@@ -197,10 +191,7 @@ export function GroupResult({ groupName, score, remainingTime, result, onNext }:
             fontWeight="900"
             color={isCorrect ? "#15803D" : "#DC2626"}
             textAlign="center"
-            textShadow={isCorrect
-              ? "2px 2px 0 rgba(34, 197, 94, 0.2)"
-              : "2px 2px 0 rgba(239, 68, 68, 0.2)"
-            }
+            textShadow={isCorrect ? "2px 2px 0 rgba(34, 197, 94, 0.2)" : "2px 2px 0 rgba(239, 68, 68, 0.2)"}
           >
             {isCorrect ? "⭕ 正解！" : "❌ 不正解"}
             <Text as="span" fontSize={{ base: "2xl", md: "3xl" }} ml={3}>
@@ -223,22 +214,22 @@ export function GroupResult({ groupName, score, remainingTime, result, onNext }:
         {/* Choices with results */}
         <VStack w="full" gap={3} animation={`${slideInUp} 0.5s ease-out 0.3s both`}>
           {choices.map((choice, index) => {
-            const isCorrectChoice = index === correctIndex
-            const isSelectedChoice = index === selectedIndex
-            const isWrongSelection = isSelectedChoice && !isCorrect
+            const isCorrectChoice = index === correctIndex;
+            const isSelectedChoice = index === selectedIndex;
+            const isWrongSelection = isSelectedChoice && !isCorrect;
 
-            let bgColor = "#F9FAFB"
-            let borderColor = "transparent"
-            let opacity = 0.6
+            let bgColor = "#F9FAFB";
+            let borderColor = "transparent";
+            let opacity = 0.6;
 
             if (isCorrectChoice) {
-              bgColor = "#DCFCE7"
-              borderColor = "#22C55E"
-              opacity = 1
+              bgColor = "#DCFCE7";
+              borderColor = "#22C55E";
+              opacity = 1;
             } else if (isWrongSelection) {
-              bgColor = "#FEE2E2"
-              borderColor = "#EF4444"
-              opacity = 1
+              bgColor = "#FEE2E2";
+              borderColor = "#EF4444";
+              opacity = 1;
             }
 
             return (
@@ -260,17 +251,22 @@ export function GroupResult({ groupName, score, remainingTime, result, onNext }:
                     <Flex
                       w="40px"
                       h="40px"
-                      bg={isCorrectChoice
-                        ? "linear-gradient(135deg, #22C55E, #4ADE80)"
-                        : isWrongSelection
-                          ? "linear-gradient(135deg, #EF4444, #F87171)"
-                          : "#E5E7EB"
+                      bg={
+                        isCorrectChoice
+                          ? "linear-gradient(135deg, #22C55E, #4ADE80)"
+                          : isWrongSelection
+                            ? "linear-gradient(135deg, #EF4444, #F87171)"
+                            : "#E5E7EB"
                       }
                       borderRadius="full"
                       align="center"
                       justify="center"
                     >
-                      <Text fontSize="lg" fontWeight="900" color={isCorrectChoice || isWrongSelection ? "white" : "#9CA3AF"}>
+                      <Text
+                        fontSize="lg"
+                        fontWeight="900"
+                        color={isCorrectChoice || isWrongSelection ? "white" : "#9CA3AF"}
+                      >
                         {choiceLabels[index]}
                       </Text>
                     </Flex>
@@ -297,7 +293,7 @@ export function GroupResult({ groupName, score, remainingTime, result, onNext }:
                   )}
                 </Flex>
               </Box>
-            )
+            );
           })}
         </VStack>
 
@@ -342,5 +338,5 @@ export function GroupResult({ groupName, score, remainingTime, result, onNext }:
         pointerEvents="none"
       />
     </Box>
-  )
+  );
 }

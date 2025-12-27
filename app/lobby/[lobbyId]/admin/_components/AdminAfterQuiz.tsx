@@ -1,42 +1,39 @@
-"use client"
+"use client";
 
-import { useEffect, useMemo, useState } from "react"
-import { useRouter } from "next/navigation"
-import { Box, Flex, HStack, Text, VStack } from "@chakra-ui/react"
-import { keyframes } from "@emotion/react"
-import {
-  subscribeAllGroupAnswers,
-  type GroupWithAnswers,
-} from "@/lib/firestore/answer"
-import { showResultLobby } from "@/lib/firestore/lobby"
-import type { Group } from "@/types/firestore"
+import { Box, Flex, HStack, Text, VStack } from "@chakra-ui/react";
+import { keyframes } from "@emotion/react";
+import { useRouter } from "next/navigation";
+import { useEffect, useMemo, useState } from "react";
+import { type GroupWithAnswers, subscribeAllGroupAnswers } from "@/lib/firestore/answer";
+import { showResultLobby } from "@/lib/firestore/lobby";
+import type { Group } from "@/types/firestore";
 
 // Animations
 const zoomIn = keyframes`
   0% { opacity: 0; transform: scale(0.3); }
   60% { transform: scale(1.1); }
   100% { opacity: 1; transform: scale(1); }
-`
+`;
 
 const fadeInUp = keyframes`
   0% { opacity: 0; transform: translateY(40px); }
   100% { opacity: 1; transform: translateY(0); }
-`
+`;
 
 const float = keyframes`
   0%, 100% { transform: translateY(0) rotate(0deg); }
   50% { transform: translateY(-15px) rotate(5deg); }
-`
+`;
 
 const confettiFall = keyframes`
   0% { transform: translateY(-100vh) rotate(0deg); opacity: 1; }
   100% { transform: translateY(100vh) rotate(720deg); opacity: 0.3; }
-`
+`;
 
 const sparkle = keyframes`
   0%, 100% { opacity: 1; transform: scale(1); }
   50% { opacity: 0.5; transform: scale(0.8); }
-`
+`;
 
 const buttonGlow = keyframes`
   0%, 100% {
@@ -45,30 +42,30 @@ const buttonGlow = keyframes`
   50% {
     box-shadow: 0 0 50px rgba(34, 197, 94, 0.6), 0 0 100px rgba(34, 197, 94, 0.3);
   }
-`
+`;
 
 const bannerPulse = keyframes`
   0%, 100% { box-shadow: 0 8px 40px rgba(255, 136, 0, 0.4); }
   50% { box-shadow: 0 12px 60px rgba(255, 136, 0, 0.6); }
-`
+`;
 
 const rankReveal = keyframes`
   0% { opacity: 0; transform: translateX(-30px); }
   100% { opacity: 1; transform: translateX(0); }
-`
+`;
 
 const getMedalEmoji = (rank: number) => {
   switch (rank) {
     case 1:
-      return "🥇"
+      return "🥇";
     case 2:
-      return "🥈"
+      return "🥈";
     case 3:
-      return "🥉"
+      return "🥉";
     default:
-      return ""
+      return "";
   }
-}
+};
 
 const getRankStyle = (rank: number) => {
   switch (rank) {
@@ -77,52 +74,52 @@ const getRankStyle = (rank: number) => {
         border: "#FFD700",
         text: "#B8860B",
         bg: "rgba(255, 215, 0, 0.1)",
-      }
+      };
     case 2:
       return {
         border: "#C0C0C0",
         text: "#808080",
         bg: "rgba(192, 192, 192, 0.08)",
-      }
+      };
     case 3:
       return {
         border: "#CD7F32",
         text: "#8B4513",
         bg: "rgba(205, 127, 50, 0.08)",
-      }
+      };
     default:
-      return { border: "#E0E0E0", text: "#666", bg: "transparent" }
+      return { border: "#E0E0E0", text: "#666", bg: "transparent" };
   }
-}
+};
 
 type Props = {
-  lobbyId: string
-  groups: Group[]
-}
+  lobbyId: string;
+  groups: Group[];
+};
 
 type RankingEntry = {
-  rank: number
-  groupId: string
-  name: string
-  score: number
-}
+  rank: number;
+  groupId: string;
+  name: string;
+  score: number;
+};
 
 export function AdminAfterQuiz({ lobbyId, groups }: Props) {
-  const router = useRouter()
-  const [groupsWithAnswers, setGroupsWithAnswers] = useState<GroupWithAnswers[]>([])
+  const router = useRouter();
+  const [groupsWithAnswers, setGroupsWithAnswers] = useState<GroupWithAnswers[]>([]);
 
   const handleShowResult = async () => {
-    await showResultLobby(lobbyId)
-    router.push(`/lobby/${lobbyId}/result`)
-  }
+    await showResultLobby(lobbyId);
+    router.push(`/lobby/${lobbyId}/result`);
+  };
 
   // Subscribe to all group answers
   useEffect(() => {
-    if (groups.length === 0) return
+    if (groups.length === 0) return;
 
-    const unsubscribe = subscribeAllGroupAnswers(lobbyId, groups, setGroupsWithAnswers)
-    return () => unsubscribe()
-  }, [lobbyId, groups])
+    const unsubscribe = subscribeAllGroupAnswers(lobbyId, groups, setGroupsWithAnswers);
+    return () => unsubscribe();
+  }, [lobbyId, groups]);
 
   // Calculate final ranking
   const ranking: RankingEntry[] = useMemo(() => {
@@ -133,18 +130,11 @@ export function AdminAfterQuiz({ lobbyId, groups }: Props) {
         score: group.answers.reduce((sum, answer) => sum + answer.scoreChange, 0),
       }))
       .sort((a, b) => b.score - a.score)
-      .map((entry, index) => ({ ...entry, rank: index + 1 }))
-  }, [groupsWithAnswers])
+      .map((entry, index) => ({ ...entry, rank: index + 1 }));
+  }, [groupsWithAnswers]);
 
   return (
-    <Box
-      minH="100vh"
-      bg="#FFFDF7"
-      position="relative"
-      overflow="hidden"
-      display="flex"
-      flexDirection="column"
-    >
+    <Box minH="100vh" bg="#FFFDF7" position="relative" overflow="hidden" display="flex" flexDirection="column">
       {/* Celebratory gradient background */}
       <Box
         position="absolute"
@@ -164,15 +154,7 @@ export function AdminAfterQuiz({ lobbyId, groups }: Props) {
           left={`${3 + i * 6.5}%`}
           w={`${10 + (i % 4) * 3}px`}
           h={`${10 + (i % 4) * 3}px`}
-          bg={
-            i % 4 === 0
-              ? "#FFE500"
-              : i % 4 === 1
-                ? "#FF8800"
-                : i % 4 === 2
-                  ? "#22C55E"
-                  : "#FF6B6B"
-          }
+          bg={i % 4 === 0 ? "#FFE500" : i % 4 === 1 ? "#FF8800" : i % 4 === 2 ? "#22C55E" : "#FF6B6B"}
           borderRadius={i % 2 === 0 ? "full" : "4px"}
           animation={`${confettiFall} ${4 + (i % 3)}s linear ${i * 0.2}s infinite`}
           opacity={0.8}
@@ -225,15 +207,7 @@ export function AdminAfterQuiz({ lobbyId, groups }: Props) {
       />
 
       {/* Main content */}
-      <VStack
-        flex={1}
-        justify="center"
-        gap={8}
-        position="relative"
-        zIndex={1}
-        px={8}
-        py={12}
-      >
+      <VStack flex={1} justify="center" gap={8} position="relative" zIndex={1} px={8} py={12}>
         {/* TIME UP banner */}
         <Box
           bg="linear-gradient(135deg, #FF8800 0%, #E67A00 100%)"
@@ -278,12 +252,7 @@ export function AdminAfterQuiz({ lobbyId, groups }: Props) {
         </Box>
 
         {/* Section title */}
-        <Text
-          fontSize="3xl"
-          fontWeight="bold"
-          color="#E67A00"
-          animation={`${fadeInUp} 0.6s ease-out 0.3s both`}
-        >
+        <Text fontSize="3xl" fontWeight="bold" color="#E67A00" animation={`${fadeInUp} 0.6s ease-out 0.3s both`}>
           最終ランキング
         </Text>
 
@@ -295,7 +264,7 @@ export function AdminAfterQuiz({ lobbyId, groups }: Props) {
             </Text>
           ) : (
             ranking.map((team, index) => {
-              const style = getRankStyle(team.rank)
+              const style = getRankStyle(team.rank);
 
               return (
                 <Box
@@ -312,33 +281,16 @@ export function AdminAfterQuiz({ lobbyId, groups }: Props) {
                   overflow="hidden"
                 >
                   {/* Background tint */}
-                  <Box
-                    position="absolute"
-                    inset={0}
-                    bg={style.bg}
-                    pointerEvents="none"
-                  />
+                  <Box position="absolute" inset={0} bg={style.bg} pointerEvents="none" />
 
-                  <Flex
-                    justify="space-between"
-                    align="center"
-                    position="relative"
-                    zIndex={1}
-                  >
+                  <Flex justify="space-between" align="center" position="relative" zIndex={1}>
                     <HStack gap={4}>
                       {/* Rank with medal */}
                       <HStack gap={2}>
-                        <Text
-                          fontSize="2xl"
-                          fontWeight="900"
-                          color={style.text}
-                          minW="60px"
-                        >
+                        <Text fontSize="2xl" fontWeight="900" color={style.text} minW="60px">
                           {team.rank}位
                         </Text>
-                        {team.rank <= 3 && (
-                          <Text fontSize="2xl">{getMedalEmoji(team.rank)}</Text>
-                        )}
+                        {team.rank <= 3 && <Text fontSize="2xl">{getMedalEmoji(team.rank)}</Text>}
                       </HStack>
 
                       {/* Team name */}
@@ -366,7 +318,7 @@ export function AdminAfterQuiz({ lobbyId, groups }: Props) {
                     </Text>
                   </Flex>
                 </Box>
-              )
+              );
             })
           )}
         </VStack>
@@ -436,5 +388,5 @@ export function AdminAfterQuiz({ lobbyId, groups }: Props) {
         pointerEvents="none"
       />
     </Box>
-  )
+  );
 }
