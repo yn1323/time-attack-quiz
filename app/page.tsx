@@ -1,31 +1,31 @@
-"use client"
+"use client";
 
-import { Box, Heading, Text, VStack } from "@chakra-ui/react"
-import { keyframes } from "@emotion/react"
-import { useRouter } from "next/navigation"
-import { useState } from "react"
-import { createLobby } from "@/lib/firestore/lobby"
+import { Box, Heading, Text, VStack } from "@chakra-ui/react";
+import { keyframes } from "@emotion/react";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
+import { createLobby } from "@/lib/firestore/lobby";
 
 // Keyframe animations
 const gradientShift = keyframes`
   0%, 100% { background-position: 0% 50%; }
   50% { background-position: 100% 50%; }
-`
+`;
 
 const float = keyframes`
   0%, 100% { transform: translateY(0) rotate(0deg); }
   50% { transform: translateY(-20px) rotate(5deg); }
-`
+`;
 
 const pulse = keyframes`
   0%, 100% { box-shadow: 0 0 20px rgba(255, 136, 0, 0.4), 0 8px 30px rgba(255, 136, 0, 0.3); }
   50% { box-shadow: 0 0 40px rgba(255, 136, 0, 0.6), 0 8px 40px rgba(255, 136, 0, 0.5); }
-`
+`;
 
 const sparkle = keyframes`
   0%, 100% { opacity: 1; transform: scale(1); }
   50% { opacity: 0.5; transform: scale(0.8); }
-`
+`;
 
 const rotateFloat = keyframes`
   0% { transform: rotate(0deg) translateY(0); }
@@ -33,23 +33,26 @@ const rotateFloat = keyframes`
   50% { transform: rotate(180deg) translateY(0); }
   75% { transform: rotate(270deg) translateY(-10px); }
   100% { transform: rotate(360deg) translateY(0); }
-`
+`;
 
 export default function HomePage() {
-  const router = useRouter()
-  const [isCreating, setIsCreating] = useState(false)
+  const router = useRouter();
+  const [isCreating, setIsCreating] = useState(false);
 
   const handleCreateLobby = async () => {
-    setIsCreating(true)
+    setIsCreating(true);
     try {
-      const lobbyId = await createLobby()
-      router.push(`/lobby/${lobbyId}`)
+      const res = await fetch("/api/quizzes");
+      const { quizzes } = await res.json();
+      const defaultQuiz = quizzes[0] || "";
+      const lobbyId = await createLobby(defaultQuiz);
+      router.push(`/lobby/${lobbyId}`);
     } catch (error) {
-      console.error("Failed to create lobby:", error)
-      alert("ロビーの作成に失敗しました。もう一度お試しください。")
-      setIsCreating(false)
+      console.error("Failed to create lobby:", error);
+      alert("ロビーの作成に失敗しました。もう一度お試しください。");
+      setIsCreating(false);
     }
-  }
+  };
 
   return (
     <Box
@@ -194,20 +197,10 @@ export default function HomePage() {
             borderColor="rgba(255, 136, 0, 0.2)"
             borderRadius="full"
           />
-          <Text
-            fontSize={{ base: "xl", md: "2xl" }}
-            color="#E67A00"
-            fontWeight="bold"
-            letterSpacing="0.15em"
-          >
+          <Text fontSize={{ base: "xl", md: "2xl" }} color="#E67A00" fontWeight="bold" letterSpacing="0.15em">
             〜タイムアタック〜
           </Text>
-          <Text
-            fontSize={{ base: "2xl", md: "3xl" }}
-            color="#FF8800"
-            fontWeight="900"
-            mt={1}
-          >
+          <Text fontSize={{ base: "2xl", md: "3xl" }} color="#FF8800" fontWeight="900" mt={1}>
             クイズ大会
           </Text>
         </Box>
@@ -261,12 +254,7 @@ export default function HomePage() {
         </Box>
 
         {/* Footer hint */}
-        <Text
-          fontSize="sm"
-          color="rgba(230, 122, 0, 0.6)"
-          mt={4}
-          fontWeight="medium"
-        >
+        <Text fontSize="sm" color="rgba(230, 122, 0, 0.6)" mt={4} fontWeight="medium">
           グループ対抗で競い合おう
         </Text>
       </VStack>
@@ -284,5 +272,5 @@ export default function HomePage() {
         pointerEvents="none"
       />
     </Box>
-  )
+  );
 }

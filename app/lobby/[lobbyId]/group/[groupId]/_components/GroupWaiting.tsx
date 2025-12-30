@@ -216,7 +216,7 @@ export function GroupWaiting({ groupName }: Props) {
             <Flex align="center" gap={2}>
               <Text fontSize="xl">⏱️</Text>
               <Text fontSize={{ base: "sm", md: "md" }} color="#555" fontWeight="medium">
-                制限時間 10分
+                制限時間 7分
               </Text>
             </Flex>
             <Flex align="center" gap={2}>
@@ -238,6 +238,74 @@ export function GroupWaiting({ groupName }: Props) {
               </Text>
             </Flex>
           </Flex>
+        </Box>
+
+        {/* Tips card */}
+        <Box
+          bg="linear-gradient(135deg, rgba(255, 229, 0, 0.15) 0%, rgba(255, 136, 0, 0.1) 100%)"
+          px={{ base: 6, md: 10 }}
+          py={5}
+          borderRadius="2xl"
+          border="3px solid"
+          borderColor="rgba(255, 200, 0, 0.5)"
+          boxShadow="0 4px 20px rgba(255, 180, 0, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.5)"
+          animation={`${fadeInUp} 0.6s ease-out 0.28s both`}
+          position="relative"
+          overflow="hidden"
+          maxW="600px"
+        >
+          {/* Decorative sparkle */}
+          <Box
+            position="absolute"
+            top="-10px"
+            right="-10px"
+            w="60px"
+            h="60px"
+            bg="radial-gradient(circle, rgba(255, 229, 0, 0.4) 0%, transparent 70%)"
+            pointerEvents="none"
+          />
+          <Flex align="center" justify="center" gap={2} mb={3}>
+            <Text fontSize="2xl">💡</Text>
+            <Text
+              fontSize={{ base: "md", md: "lg" }}
+              fontWeight="900"
+              bgImage="linear-gradient(90deg, #E67A00, #CC6600)"
+              bgClip="text"
+              color="transparent"
+              css={{
+                WebkitBackgroundClip: "text",
+                WebkitTextFillColor: "transparent",
+              }}
+            >
+              TIPS
+            </Text>
+          </Flex>
+          <VStack gap={2} align="stretch">
+            <Flex align="flex-start" gap={2}>
+              <Text fontSize="lg" flexShrink={0}>
+                🏆
+              </Text>
+              <Text fontSize={{ base: "sm", md: "md" }} color="#555" fontWeight="medium">
+                7分間の得点が高いチームが優勝！
+              </Text>
+            </Flex>
+            <Flex align="flex-start" gap={2}>
+              <Text fontSize="lg" flexShrink={0}>
+                🔗
+              </Text>
+              <Text fontSize={{ base: "sm", md: "md" }} color="#555" fontWeight="medium">
+                「関連リンク」にヒントが隠されているかも...？
+              </Text>
+            </Flex>
+            <Flex align="flex-start" gap={2}>
+              <Text fontSize="lg" flexShrink={0}>
+                📊
+              </Text>
+              <Text fontSize={{ base: "sm", md: "md" }} color="#555" fontWeight="medium">
+                最初の3分間はスコアが丸見え！（残り2分で非表示に）
+              </Text>
+            </Flex>
+          </VStack>
         </Box>
 
         {/* Info card */}

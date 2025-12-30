@@ -1,93 +1,90 @@
-"use client"
+"use client";
 
-import { useEffect, useMemo, useState } from "react"
-import { Box, Flex, Grid, HStack, Text, VStack } from "@chakra-ui/react"
-import { keyframes } from "@emotion/react"
-import {
-  subscribeAllGroupAnswers,
-  type GroupWithAnswers,
-} from "@/lib/firestore/answer"
-import { finishLobby } from "@/lib/firestore/lobby"
-import type { Group, Lobby } from "@/types/firestore"
+import { Box, Flex, Grid, HStack, Text, VStack } from "@chakra-ui/react";
+import { keyframes } from "@emotion/react";
+import { useEffect, useMemo, useState } from "react";
+import { type GroupWithAnswers, subscribeAllGroupAnswers } from "@/lib/firestore/answer";
+import { finishLobby } from "@/lib/firestore/lobby";
+import type { Group, Lobby } from "@/types/firestore";
 
 // Animations
 const float = keyframes`
   0%, 100% { transform: translateY(0) rotate(0deg); }
   50% { transform: translateY(-15px) rotate(3deg); }
-`
+`;
 
 const fadeInUp = keyframes`
   0% { opacity: 0; transform: translateY(30px); }
   100% { opacity: 1; transform: translateY(0); }
-`
+`;
 
 const timerPulse = keyframes`
   0%, 100% { transform: scale(1); }
   50% { transform: scale(1.03); }
-`
+`;
 
 const shimmer = keyframes`
   0% { background-position: -200% center; }
   100% { background-position: 200% center; }
-`
+`;
 
 const glowPulse = keyframes`
   0%, 100% { box-shadow: 0 0 20px rgba(255, 136, 0, 0.3); }
   50% { box-shadow: 0 0 40px rgba(255, 136, 0, 0.5); }
-`
+`;
 
 const urgentPulse = keyframes`
   0%, 100% { transform: scale(1); color: #FF8800; }
   50% { transform: scale(1.05); color: #FF0000; }
-`
+`;
 
 type Props = {
-  lobbyId: string
-  lobby: Lobby
-  groups: Group[]
-}
+  lobbyId: string;
+  lobby: Lobby;
+  groups: Group[];
+};
 
 type ScoreEntry = {
-  groupId: string
-  name: string
-  score: number
-}
+  groupId: string;
+  name: string;
+  score: number;
+};
 
 export function AdminDuringQuiz({ lobbyId, lobby, groups }: Props) {
-  const [groupsWithAnswers, setGroupsWithAnswers] = useState<GroupWithAnswers[]>([])
-  const [remainingSeconds, setRemainingSeconds] = useState<number>(lobby.durationSeconds)
-  const [hasFinished, setHasFinished] = useState(false)
+  const [groupsWithAnswers, setGroupsWithAnswers] = useState<GroupWithAnswers[]>([]);
+  const [remainingSeconds, setRemainingSeconds] = useState<number>(lobby.durationSeconds);
+  const [hasFinished, setHasFinished] = useState(false);
 
   // Subscribe to all group answers
   useEffect(() => {
-    if (groups.length === 0) return
+    if (groups.length === 0) return;
 
-    const unsubscribe = subscribeAllGroupAnswers(lobbyId, groups, setGroupsWithAnswers)
-    return () => unsubscribe()
-  }, [lobbyId, groups])
+    const unsubscribe = subscribeAllGroupAnswers(lobbyId, groups, setGroupsWithAnswers);
+    return () => unsubscribe();
+  }, [lobbyId, groups]);
 
   // Timer countdown
   useEffect(() => {
-    const startedAt = lobby.startedAt
-    if (!startedAt) return
+    const startedAt = lobby.startedAt;
+    if (!startedAt) return;
 
     const updateTimer = () => {
-      const startTime = startedAt.toMillis()
-      const now = Date.now()
-      const elapsedSeconds = Math.floor((now - startTime) / 1000)
-      const remaining = Math.max(0, lobby.durationSeconds - elapsedSeconds)
-      setRemainingSeconds(remaining)
+      const startTime = startedAt.toMillis();
+      const now = Date.now();
+      const elapsedSeconds = Math.floor((now - startTime) / 1000);
+      const remaining = Math.max(0, lobby.durationSeconds - elapsedSeconds);
+      setRemainingSeconds(remaining);
 
       if (remaining === 0 && !hasFinished) {
-        setHasFinished(true)
-        finishLobby(lobbyId).catch(console.error)
+        setHasFinished(true);
+        finishLobby(lobbyId).catch(console.error);
       }
-    }
+    };
 
-    updateTimer()
-    const interval = setInterval(updateTimer, 1000)
-    return () => clearInterval(interval)
-  }, [lobby.startedAt, lobby.durationSeconds, lobbyId, hasFinished])
+    updateTimer();
+    const interval = setInterval(updateTimer, 1000);
+    return () => clearInterval(interval);
+  }, [lobby.startedAt, lobby.durationSeconds, lobbyId, hasFinished]);
 
   // Calculate scores (fixed order)
   const scores: ScoreEntry[] = useMemo(() => {
@@ -95,14 +92,14 @@ export function AdminDuringQuiz({ lobbyId, lobby, groups }: Props) {
       groupId: group.groupId,
       name: group.groupName,
       score: group.answers.reduce((sum, answer) => sum + answer.scoreChange, 0),
-    }))
-  }, [groupsWithAnswers])
+    }));
+  }, [groupsWithAnswers]);
 
-  const minutes = Math.floor(remainingSeconds / 60)
-  const seconds = remainingSeconds % 60
-  const timeString = `${minutes}:${seconds.toString().padStart(2, "0")}`
-  const isUrgent = remainingSeconds <= 60
-  const isCountdownMode = remainingSeconds <= 180
+  const minutes = Math.floor(remainingSeconds / 60);
+  const seconds = remainingSeconds % 60;
+  const timeString = `${minutes}:${seconds.toString().padStart(2, "0")}`;
+  const isUrgent = remainingSeconds <= 60;
+  const isCountdownMode = remainingSeconds <= 120;
 
   return (
     <Box minH="100vh" bg="#FFFDF7" position="relative" overflow="hidden">
@@ -151,64 +148,48 @@ export function AdminDuringQuiz({ lobbyId, lobby, groups }: Props) {
       />
 
       {/* Header with timer */}
-      <Flex justify="flex-end" align="center" p={8} position="relative" zIndex={1}>
-        <HStack
-          bg="white"
-          px={8}
-          py={4}
-          borderRadius="2xl"
-          border="4px solid"
-          borderColor={isUrgent ? "#FF0000" : "#FF8800"}
-          boxShadow={
-            isUrgent
-              ? "0 8px 30px rgba(255, 0, 0, 0.35)"
-              : "0 8px 30px rgba(255, 136, 0, 0.25)"
-          }
-          animation={`${timerPulse} 1s ease-in-out infinite`}
-        >
-          <Text fontSize="5xl">⏱️</Text>
-          <Text
-            fontSize="7xl"
-            fontWeight="900"
-            bgImage={
-              isUrgent
-                ? "linear-gradient(135deg, #FF0000 0%, #FF8800 100%)"
-                : "linear-gradient(135deg, #FF8800 0%, #E67A00 100%)"
-            }
-            bgClip="text"
-            color="transparent"
-            fontFamily="mono"
-            letterSpacing="0.05em"
-            animation={isUrgent ? `${urgentPulse} 0.5s ease-in-out infinite` : "none"}
-            css={{
-              WebkitBackgroundClip: "text",
-              WebkitTextFillColor: "transparent",
-            }}
+      {!isCountdownMode && (
+        <Flex justify="flex-end" align="center" p={8} position="relative" zIndex={1}>
+          <HStack
+            bg="white"
+            px={8}
+            py={4}
+            borderRadius="2xl"
+            border="4px solid"
+            borderColor={isUrgent ? "#FF0000" : "#FF8800"}
+            boxShadow={isUrgent ? "0 8px 30px rgba(255, 0, 0, 0.35)" : "0 8px 30px rgba(255, 136, 0, 0.25)"}
+            animation={`${timerPulse} 1s ease-in-out infinite`}
           >
-            {timeString}
-          </Text>
-        </HStack>
-      </Flex>
+            <Text fontSize="5xl">⏱️</Text>
+            <Text
+              fontSize="7xl"
+              fontWeight="900"
+              bgImage={
+                isUrgent
+                  ? "linear-gradient(135deg, #FF0000 0%, #FF8800 100%)"
+                  : "linear-gradient(135deg, #FF8800 0%, #E67A00 100%)"
+              }
+              bgClip="text"
+              color="transparent"
+              fontFamily="mono"
+              letterSpacing="0.05em"
+              animation={isUrgent ? `${urgentPulse} 0.5s ease-in-out infinite` : "none"}
+              css={{
+                WebkitBackgroundClip: "text",
+                WebkitTextFillColor: "transparent",
+              }}
+            >
+              {timeString}
+            </Text>
+          </HStack>
+        </Flex>
+      )}
 
       {/* Main content */}
       {isCountdownMode ? (
         /* Countdown mode - Large timer display */
-        <Flex
-          direction="column"
-          align="center"
-          justify="center"
-          flex={1}
-          minH="70vh"
-          position="relative"
-          zIndex={1}
-        >
-          <Text
-            fontSize="3xl"
-            fontWeight="bold"
-            color="#FF8800"
-            mb={4}
-            animation={`${fadeInUp} 0.5s ease-out`}
-          >
+        <Flex direction="column" align="center" justify="center" flex={1} minH="70vh" position="relative" zIndex={1}>
+          <Text fontSize="3xl" fontWeight="bold" color="#FF8800" mb={4} animation={`${fadeInUp} 0.5s ease-out`}>
             まもなく終了！
           </Text>
           <Box
@@ -236,12 +217,7 @@ export function AdminDuringQuiz({ lobbyId, lobby, groups }: Props) {
               {timeString}
             </Text>
           </Box>
-          <Text
-            fontSize="2xl"
-            color="#666"
-            mt={6}
-            animation={`${fadeInUp} 0.5s ease-out 0.2s both`}
-          >
+          <Text fontSize="2xl" color="#666" mt={6} animation={`${fadeInUp} 0.5s ease-out 0.2s both`}>
             結果発表をお楽しみに！
           </Text>
         </Flex>
@@ -267,20 +243,14 @@ export function AdminDuringQuiz({ lobbyId, lobby, groups }: Props) {
               >
                 スコアボード🎯
               </Text>
-              <Text fontSize="md" color="gray.500" fontWeight="medium">
-                ※残り3分以降は非表示
-              </Text>
             </HStack>
+            <Text fontSize="md" color="gray.500" fontWeight="medium">
+              ※残り2分以降は非表示
+            </Text>
           </Box>
 
           {/* Ranking cards - 3 columns grid */}
-          <Grid
-            w="full"
-            maxW="1400px"
-            templateColumns="repeat(3, 1fr)"
-            gap={6}
-            justifyItems="start"
-          >
+          <Grid w="full" maxW="1400px" templateColumns="repeat(3, 1fr)" gap={6} justifyItems="start">
             {scores.length === 0 ? (
               <Text color="gray.500" fontSize="xl" gridColumn="span 3" textAlign="center" w="full">
                 回答を待っています...
@@ -301,23 +271,12 @@ export function AdminDuringQuiz({ lobbyId, lobby, groups }: Props) {
                   overflow="hidden"
                 >
                   {/* Background tint */}
-                  <Box
-                    position="absolute"
-                    inset={0}
-                    bg="rgba(255, 136, 0, 0.05)"
-                    pointerEvents="none"
-                  />
+                  <Box position="absolute" inset={0} bg="rgba(255, 136, 0, 0.05)" pointerEvents="none" />
 
                   {/* Card content - vertical layout */}
                   <VStack position="relative" zIndex={1} gap={3} align="center">
                     {/* Team name */}
-                    <Text
-                      fontSize="2xl"
-                      fontWeight="bold"
-                      color="#333"
-                      textAlign="center"
-                      lineClamp={1}
-                    >
+                    <Text fontSize="2xl" fontWeight="bold" color="#333" textAlign="center" lineClamp={1}>
                       {team.name}
                     </Text>
 
@@ -359,5 +318,5 @@ export function AdminDuringQuiz({ lobbyId, lobby, groups }: Props) {
         pointerEvents="none"
       />
     </Box>
-  )
+  );
 }

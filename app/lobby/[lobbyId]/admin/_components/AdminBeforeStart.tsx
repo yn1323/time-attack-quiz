@@ -1,17 +1,17 @@
-"use client"
+"use client";
 
-import { useEffect, useState } from "react"
-import { Box, Flex, HStack, Text, VStack } from "@chakra-ui/react"
-import { keyframes } from "@emotion/react"
-import { subscribeGroups } from "@/lib/firestore/group"
-import { startLobby } from "@/lib/firestore/lobby"
-import type { Group } from "@/types/firestore"
+import { Box, Flex, HStack, NativeSelectField, NativeSelectRoot, Text, VStack } from "@chakra-ui/react";
+import { keyframes } from "@emotion/react";
+import { useEffect, useState } from "react";
+import { subscribeGroups } from "@/lib/firestore/group";
+import { startLobby, updateQuizFileName } from "@/lib/firestore/lobby";
+import type { Group, Lobby } from "@/types/firestore";
 
 // Animations
 const float = keyframes`
   0%, 100% { transform: translateY(0) rotate(0deg); }
   50% { transform: translateY(-20px) rotate(5deg); }
-`
+`;
 
 const pulse = keyframes`
   0%, 100% {
@@ -22,66 +22,77 @@ const pulse = keyframes`
     box-shadow: 0 0 60px rgba(255, 136, 0, 0.7), 0 0 120px rgba(255, 136, 0, 0.4);
     transform: scale(1.02);
   }
-`
+`;
 
 const fadeInUp = keyframes`
   0% { opacity: 0; transform: translateY(40px); }
   100% { opacity: 1; transform: translateY(0); }
-`
+`;
 
 const shimmer = keyframes`
   0% { background-position: -200% center; }
   100% { background-position: 200% center; }
-`
+`;
 
 const readyPulse = keyframes`
   0%, 100% { opacity: 1; box-shadow: 0 0 10px rgba(34, 197, 94, 0.4); }
   50% { opacity: 0.8; box-shadow: 0 0 20px rgba(34, 197, 94, 0.6); }
-`
+`;
 
 const glowLine = keyframes`
   0% { transform: translateX(-100%); opacity: 0; }
   50% { opacity: 1; }
   100% { transform: translateX(100%); opacity: 0; }
-`
+`;
 
 type Props = {
-  lobbyId: string
-}
+  lobbyId: string;
+  lobby: Lobby;
+};
 
-export function AdminBeforeStart({ lobbyId }: Props) {
-  const [groups, setGroups] = useState<Group[]>([])
-  const [isStarting, setIsStarting] = useState(false)
+export function AdminBeforeStart({ lobbyId, lobby }: Props) {
+  const [groups, setGroups] = useState<Group[]>([]);
+  const [isStarting, setIsStarting] = useState(false);
+  const [quizzes, setQuizzes] = useState<string[]>([]);
+  const [selectedQuiz, setSelectedQuiz] = useState<string>(lobby.quizFileName);
 
   useEffect(() => {
-    const unsubscribe = subscribeGroups(lobbyId, setGroups)
-    return () => unsubscribe()
-  }, [lobbyId])
+    const unsubscribe = subscribeGroups(lobbyId, setGroups);
+    return () => unsubscribe();
+  }, [lobbyId]);
+
+  // クイズ一覧の取得
+  useEffect(() => {
+    const fetchQuizzes = async () => {
+      const res = await fetch("/api/quizzes");
+      const data = await res.json();
+      setQuizzes(data.quizzes);
+    };
+    fetchQuizzes();
+  }, []);
+
+  const handleQuizChange = async (quizFileName: string) => {
+    setSelectedQuiz(quizFileName);
+    await updateQuizFileName(lobbyId, quizFileName);
+  };
 
   const handleStart = async () => {
-    setIsStarting(true)
+    setIsStarting(true);
     try {
-      await startLobby(lobbyId)
+      await startLobby(lobbyId);
     } catch (error) {
-      console.error("Failed to start lobby:", error)
-      setIsStarting(false)
+      console.error("Failed to start lobby:", error);
+      setIsStarting(false);
     }
-  }
+  };
 
   const handleCopyUrl = async () => {
-    const url = `${window.location.origin}/lobby/${lobbyId}`
-    await navigator.clipboard.writeText(url)
-  }
+    const url = `${window.location.origin}/lobby/${lobbyId}`;
+    await navigator.clipboard.writeText(url);
+  };
 
   return (
-    <Box
-      minH="100vh"
-      bg="#FFFDF7"
-      position="relative"
-      overflow="hidden"
-      display="flex"
-      flexDirection="column"
-    >
+    <Box minH="100vh" bg="#FFFDF7" position="relative" overflow="hidden" display="flex" flexDirection="column">
       {/* Dramatic gradient background */}
       <Box
         position="absolute"
@@ -138,15 +149,7 @@ export function AdminBeforeStart({ lobbyId }: Props) {
       />
 
       {/* Main content */}
-      <VStack
-        flex={1}
-        justify="center"
-        gap={10}
-        position="relative"
-        zIndex={1}
-        px={8}
-        py={12}
-      >
+      <VStack flex={1} justify="center" gap={10} position="relative" zIndex={1} px={8} py={12}>
         {/* Title section */}
         <Box textAlign="center" animation={`${fadeInUp} 0.8s ease-out`}>
           <Text
@@ -184,12 +187,42 @@ export function AdminBeforeStart({ lobbyId }: Props) {
           </Box>
         </Box>
 
+        {/* Quiz selection section */}
+        <Box w="full" maxW="600px" animation={`${fadeInUp} 0.8s ease-out 0.15s both`}>
+          <Flex justify="center" align="center" gap={3} mb={2}>
+            <Text fontSize="xl" fontWeight="bold" color="#E67A00">
+              クイズカテゴリー
+            </Text>
+          </Flex>
+          <NativeSelectRoot size="lg">
+            <NativeSelectField
+              value={selectedQuiz}
+              onChange={(e) => handleQuizChange(e.target.value)}
+              bg="white"
+              border="3px solid"
+              borderColor="#FF8800"
+              borderRadius="xl"
+              fontSize="lg"
+              fontWeight="bold"
+              color="#333"
+              h="60px"
+              px={6}
+              _focus={{
+                borderColor: "#E67A00",
+                boxShadow: "0 0 0 3px rgba(255, 136, 0, 0.2)",
+              }}
+            >
+              {quizzes.map((quiz) => (
+                <option key={quiz} value={quiz}>
+                  {quiz}
+                </option>
+              ))}
+            </NativeSelectField>
+          </NativeSelectRoot>
+        </Box>
+
         {/* Groups section */}
-        <Box
-          w="full"
-          maxW="1000px"
-          animation={`${fadeInUp} 0.8s ease-out 0.2s both`}
-        >
+        <Box w="full" maxW="1000px" animation={`${fadeInUp} 0.8s ease-out 0.2s both`}>
           <Flex justify="center" align="center" gap={3} mb={6}>
             <Text fontSize="2xl" fontWeight="bold" color="#E67A00">
               参加グループ
@@ -279,22 +312,14 @@ export function AdminBeforeStart({ lobbyId }: Props) {
             as="button"
             w="350px"
             h="100px"
-            bg={
-              groups.length === 0 || isStarting
-                ? "gray.300"
-                : "linear-gradient(135deg, #FF8800 0%, #E67A00 100%)"
-            }
+            bg={groups.length === 0 || isStarting ? "gray.300" : "linear-gradient(135deg, #FF8800 0%, #E67A00 100%)"}
             color="white"
             fontSize="3xl"
             fontWeight="900"
             borderRadius="full"
             border="none"
             cursor={groups.length === 0 || isStarting ? "not-allowed" : "pointer"}
-            animation={
-              groups.length === 0 || isStarting
-                ? "none"
-                : `${pulse} 2s ease-in-out infinite`
-            }
+            animation={groups.length === 0 || isStarting ? "none" : `${pulse} 2s ease-in-out infinite`}
             position="relative"
             overflow="hidden"
             aria-disabled={groups.length === 0 || isStarting}
@@ -351,15 +376,7 @@ export function AdminBeforeStart({ lobbyId }: Props) {
           <Text fontSize="lg" color="#666" fontWeight="medium">
             ロビーURL:
           </Text>
-          <HStack
-            bg="white"
-            border="2px solid"
-            borderColor="#FF8800"
-            borderRadius="xl"
-            px={5}
-            py={3}
-            gap={3}
-          >
+          <HStack bg="white" border="2px solid" borderColor="#FF8800" borderRadius="xl" px={5} py={3} gap={3}>
             <Text fontSize="lg" fontWeight="bold" color="#333" fontFamily="mono">
               /lobby/{lobbyId}
             </Text>
@@ -396,5 +413,5 @@ export function AdminBeforeStart({ lobbyId }: Props) {
         pointerEvents="none"
       />
     </Box>
-  )
+  );
 }

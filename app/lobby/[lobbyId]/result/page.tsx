@@ -1,26 +1,14 @@
-"use client"
+"use client";
 
-import { useEffect, useMemo, useState } from "react"
-import { useParams } from "next/navigation"
-import { Box, Flex, HStack, Spinner, Text, VStack } from "@chakra-ui/react"
-import { keyframes } from "@emotion/react"
-import {
-  LineChart,
-  Line,
-  XAxis,
-  YAxis,
-  CartesianGrid,
-  Tooltip,
-  ResponsiveContainer,
-  Legend,
-} from "recharts"
-import { subscribeLobby } from "@/lib/firestore/lobby"
-import { subscribeGroups } from "@/lib/firestore/group"
-import {
-  subscribeAllGroupAnswers,
-  type GroupWithAnswers,
-} from "@/lib/firestore/answer"
-import type { Group, Lobby } from "@/types/firestore"
+import { Box, Flex, HStack, Spinner, Text, VStack } from "@chakra-ui/react";
+import { keyframes } from "@emotion/react";
+import { useParams } from "next/navigation";
+import { useEffect, useMemo, useState } from "react";
+import { CartesianGrid, Legend, Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
+import { type GroupWithAnswers, subscribeAllGroupAnswers } from "@/lib/firestore/answer";
+import { subscribeGroups } from "@/lib/firestore/group";
+import { subscribeLobby } from "@/lib/firestore/lobby";
+import type { Group, Lobby, Question } from "@/types/firestore";
 
 // ============================================
 // Animations
@@ -30,75 +18,66 @@ const zoomIn = keyframes`
   0% { opacity: 0; transform: scale(0.3) rotate(-5deg); }
   60% { transform: scale(1.08) rotate(1deg); }
   100% { opacity: 1; transform: scale(1) rotate(0deg); }
-`
+`;
 
 const fadeInUp = keyframes`
   0% { opacity: 0; transform: translateY(50px); }
   100% { opacity: 1; transform: translateY(0); }
-`
+`;
 
 const float = keyframes`
   0%, 100% { transform: translateY(0) rotate(0deg); }
   50% { transform: translateY(-20px) rotate(8deg); }
-`
+`;
 
 const confettiFall = keyframes`
   0% { transform: translateY(-100vh) rotate(0deg); opacity: 1; }
   100% { transform: translateY(100vh) rotate(720deg); opacity: 0.3; }
-`
+`;
 
 const sparkle = keyframes`
   0%, 100% { opacity: 1; transform: scale(1) rotate(0deg); }
   50% { opacity: 0.4; transform: scale(0.7) rotate(180deg); }
-`
+`;
 
 const podiumRise = keyframes`
   0% { transform: translateY(100%); opacity: 0; }
   60% { transform: translateY(-10%); }
   100% { transform: translateY(0); opacity: 1; }
-`
+`;
 
 const revealTeam = keyframes`
   0% { opacity: 0; transform: scale(0.5) translateY(30px); }
   60% { transform: scale(1.1) translateY(-5px); }
   100% { opacity: 1; transform: scale(1) translateY(0); }
-`
+`;
 
 const goldShimmer = keyframes`
   0% { background-position: -200% center; }
   100% { background-position: 200% center; }
-`
+`;
 
 const crownBounce = keyframes`
   0%, 100% { transform: translateY(0) rotate(-3deg); }
   25% { transform: translateY(-8px) rotate(3deg); }
   75% { transform: translateY(-4px) rotate(-2deg); }
-`
+`;
 
 const pulseGlow = keyframes`
   0%, 100% { box-shadow: 0 0 30px rgba(255, 215, 0, 0.4), 0 0 60px rgba(255, 215, 0, 0.2); }
   50% { box-shadow: 0 0 50px rgba(255, 215, 0, 0.6), 0 0 100px rgba(255, 215, 0, 0.4); }
-`
+`;
 
 const slideInLeft = keyframes`
   0% { opacity: 0; transform: translateX(-60px); }
   100% { opacity: 1; transform: translateX(0); }
-`
+`;
 
 // ============================================
 // Constants
 // ============================================
 
-const TEAM_COLORS = [
-  "#FF8800",
-  "#22C55E",
-  "#3B82F6",
-  "#A855F7",
-  "#EC4899",
-  "#14B8A6",
-  "#F59E0B",
-  "#6366F1",
-]
+const TEAM_COLORS = ["#FF8800", "#22C55E", "#3B82F6", "#A855F7", "#EC4899", "#14B8A6", "#F59E0B", "#6366F1"];
 
 // ============================================
 // Helper Functions
@@ -107,15 +86,15 @@ const TEAM_COLORS = [
 const getMedalEmoji = (rank: number) => {
   switch (rank) {
     case 1:
-      return "🥇"
+      return "🥇";
     case 2:
-      return "🥈"
+      return "🥈";
     case 3:
-      return "🥉"
+      return "🥉";
     default:
-      return ""
+      return "";
   }
-}
+};
 
 const getPodiumConfig = (rank: number) => {
   switch (rank) {
@@ -128,7 +107,7 @@ const getPodiumConfig = (rank: number) => {
         teamDelay: "4s",
         glow: "0 0 40px rgba(255, 215, 0, 0.5)",
         zIndex: 3,
-      }
+      };
     case 2:
       return {
         height: "150px",
@@ -138,7 +117,7 @@ const getPodiumConfig = (rank: number) => {
         teamDelay: "3s",
         glow: "0 0 30px rgba(192, 192, 192, 0.4)",
         zIndex: 2,
-      }
+      };
     case 3:
       return {
         height: "110px",
@@ -148,7 +127,7 @@ const getPodiumConfig = (rank: number) => {
         teamDelay: "2s",
         glow: "0 0 25px rgba(205, 127, 50, 0.4)",
         zIndex: 1,
-      }
+      };
     default:
       return {
         height: "80px",
@@ -158,50 +137,60 @@ const getPodiumConfig = (rank: number) => {
         teamDelay: "1.5s",
         glow: "none",
         zIndex: 0,
-      }
+      };
   }
-}
+};
 
 // ============================================
 // Main Component
 // ============================================
 
 export default function ResultPage() {
-  const params = useParams()
-  const lobbyId = params.lobbyId as string
+  const params = useParams();
+  const lobbyId = params.lobbyId as string;
 
-  const [lobby, setLobby] = useState<Lobby | null>(null)
-  const [groups, setGroups] = useState<Group[]>([])
-  const [groupsWithAnswers, setGroupsWithAnswers] = useState<GroupWithAnswers[]>([])
-  const [isLoading, setIsLoading] = useState(true)
+  const [lobby, setLobby] = useState<Lobby | null>(null);
+  const [groups, setGroups] = useState<Group[]>([]);
+  const [groupsWithAnswers, setGroupsWithAnswers] = useState<GroupWithAnswers[]>([]);
+  const [questions, setQuestions] = useState<Question[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
 
   // Subscribe to lobby
   useEffect(() => {
-    const unsubscribe = subscribeLobby(lobbyId, setLobby)
-    return unsubscribe
-  }, [lobbyId])
+    const unsubscribe = subscribeLobby(lobbyId, setLobby);
+    return unsubscribe;
+  }, [lobbyId]);
 
   // Subscribe to groups
   useEffect(() => {
     const unsubscribe = subscribeGroups(lobbyId, (newGroups) => {
-      setGroups(newGroups)
-    })
-    return unsubscribe
-  }, [lobbyId])
+      setGroups(newGroups);
+    });
+    return unsubscribe;
+  }, [lobbyId]);
 
   // Subscribe to all group answers
   useEffect(() => {
     if (groups.length === 0) {
-      setGroupsWithAnswers([])
-      return
+      setGroupsWithAnswers([]);
+      return;
     }
 
     const unsubscribe = subscribeAllGroupAnswers(lobbyId, groups, (data) => {
-      setGroupsWithAnswers(data)
-      setIsLoading(false)
-    })
-    return unsubscribe
-  }, [lobbyId, groups])
+      setGroupsWithAnswers(data);
+      setIsLoading(false);
+    });
+    return unsubscribe;
+  }, [lobbyId, groups]);
+
+  // Fetch quiz questions
+  useEffect(() => {
+    if (!lobby?.quizFileName) return;
+    fetch(`/data/quizzes/${lobby.quizFileName}.json`)
+      .then((res) => res.json())
+      .then(setQuestions)
+      .catch(console.error);
+  }, [lobby?.quizFileName]);
 
   // Calculate ranking
   const ranking = useMemo(() => {
@@ -211,51 +200,51 @@ export default function ResultPage() {
         score: group.answers.reduce((sum, a) => sum + a.scoreChange, 0),
       }))
       .sort((a, b) => b.score - a.score)
-      .map((item, index) => ({ ...item, rank: index + 1 }))
-  }, [groupsWithAnswers])
+      .map((item, index) => ({ ...item, rank: index + 1 }));
+  }, [groupsWithAnswers]);
 
   // Calculate score history (1 minute intervals)
   const scoreHistory = useMemo(() => {
-    if (!lobby?.startedAt || groupsWithAnswers.length === 0) return []
+    if (!lobby?.startedAt || groupsWithAnswers.length === 0) return [];
 
-    const startTime = lobby.startedAt.toMillis()
-    const durationMinutes = Math.ceil(lobby.durationSeconds / 60)
-    const history: Record<string, number | string>[] = []
+    const startTime = lobby.startedAt.toMillis();
+    const durationMinutes = Math.ceil(lobby.durationSeconds / 60);
+    const history: Record<string, number | string>[] = [];
 
     for (let minute = 0; minute <= durationMinutes; minute++) {
-      const timePoint = startTime + minute * 60 * 1000
+      const timePoint = startTime + minute * 60 * 1000;
       const entry: Record<string, number | string> = {
         time: `${minute}:00`,
-      }
+      };
 
       for (const group of groupsWithAnswers) {
         const scoreAtTime = group.answers
           .filter((a) => a.answeredAt.toMillis() <= timePoint)
-          .reduce((sum, a) => sum + a.scoreChange, 0)
-        entry[group.groupName] = scoreAtTime
+          .reduce((sum, a) => sum + a.scoreChange, 0);
+        entry[group.groupName] = scoreAtTime;
       }
 
-      history.push(entry)
+      history.push(entry);
     }
 
-    return history
-  }, [lobby, groupsWithAnswers])
+    return history;
+  }, [lobby, groupsWithAnswers]);
 
   // Calculate awards
   const awards = useMemo(() => {
-    if (!lobby?.startedAt || groupsWithAnswers.length === 0) return []
+    if (!lobby?.startedAt || groupsWithAnswers.length === 0) return [];
 
-    const result: { icon: string; title: string; winner: string; detail: string }[] = []
-    const startTime = lobby.startedAt.toMillis()
-    const durationMs = lobby.durationSeconds * 1000
+    const result: { icon: string; title: string; winner: string; detail: string }[] = [];
+    const startTime = lobby.startedAt.toMillis();
+    const durationMs = lobby.durationSeconds * 1000;
 
     // 1. 最速正解賞 - 単一最速回答
-    let fastestAnswer: { groupName: string; timeMs: number } | null = null
+    let fastestAnswer: { groupName: string; timeMs: number } | null = null;
     for (const group of groupsWithAnswers) {
       for (const answer of group.answers) {
         if (answer.isCorrect) {
           if (!fastestAnswer || answer.answerTimeMs < fastestAnswer.timeMs) {
-            fastestAnswer = { groupName: group.groupName, timeMs: answer.answerTimeMs }
+            fastestAnswer = { groupName: group.groupName, timeMs: answer.answerTimeMs };
           }
         }
       }
@@ -266,44 +255,44 @@ export default function ResultPage() {
         title: "最速正解賞",
         winner: fastestAnswer.groupName,
         detail: `${(fastestAnswer.timeMs / 1000).toFixed(1)}秒`,
-      })
+      });
     }
 
     // 2. ラストスパート賞 - 後半20%での得点増加
-    const lastSpurtStart = startTime + durationMs * 0.8
-    let bestLastSpurt: { groupName: string; score: number } | null = null
+    const lastSpurtStart = startTime + durationMs * 0.8;
+    let bestLastSpurt: { groupName: string; score: number } | null = null;
     for (const group of groupsWithAnswers) {
       const lastSpurtScore = group.answers
         .filter((a) => a.answeredAt.toMillis() >= lastSpurtStart)
-        .reduce((sum, a) => sum + a.scoreChange, 0)
+        .reduce((sum, a) => sum + a.scoreChange, 0);
       if (!bestLastSpurt || lastSpurtScore > bestLastSpurt.score) {
-        bestLastSpurt = { groupName: group.groupName, score: lastSpurtScore }
+        bestLastSpurt = { groupName: group.groupName, score: lastSpurtScore };
       }
     }
     if (bestLastSpurt && bestLastSpurt.score > 0) {
       result.push({
         icon: "🔥",
-        title: "ラストスパート賞",
+        title: "ラストスパート賞（最後の2分間の合計得点）",
         winner: bestLastSpurt.groupName,
         detail: `+${bestLastSpurt.score}点`,
-      })
+      });
     }
 
     // 3. 連続正解記録
-    let bestStreak: { groupName: string; streak: number } | null = null
+    let bestStreak: { groupName: string; streak: number } | null = null;
     for (const group of groupsWithAnswers) {
-      let currentStreak = 0
-      let maxStreak = 0
+      let currentStreak = 0;
+      let maxStreak = 0;
       for (const answer of group.answers) {
         if (answer.isCorrect) {
-          currentStreak++
-          maxStreak = Math.max(maxStreak, currentStreak)
+          currentStreak++;
+          maxStreak = Math.max(maxStreak, currentStreak);
         } else {
-          currentStreak = 0
+          currentStreak = 0;
         }
       }
       if (!bestStreak || maxStreak > bestStreak.streak) {
-        bestStreak = { groupName: group.groupName, streak: maxStreak }
+        bestStreak = { groupName: group.groupName, streak: maxStreak };
       }
     }
     if (bestStreak && bestStreak.streak > 1) {
@@ -312,27 +301,77 @@ export default function ResultPage() {
         title: "連続正解記録",
         winner: bestStreak.groupName,
         detail: `${bestStreak.streak}問連続`,
-      })
+      });
     }
 
-    return result
-  }, [lobby, groupsWithAnswers])
+    return result;
+  }, [lobby, groupsWithAnswers]);
+
+  // Calculate question statistics
+  const questionStats = useMemo(() => {
+    const stats = new Map<number, { correct: number; total: number }>();
+
+    for (const group of groupsWithAnswers) {
+      for (const answer of group.answers) {
+        const current = stats.get(answer.questionIndex) ?? { correct: 0, total: 0 };
+        current.total++;
+        if (answer.isCorrect) current.correct++;
+        stats.set(answer.questionIndex, current);
+      }
+    }
+
+    return Array.from(stats.entries())
+      .map(([index, { correct, total }]) => ({
+        questionIndex: index,
+        correctRate: (correct / total) * 100,
+        total,
+      }))
+      .sort((a, b) => {
+        if (b.correctRate !== a.correctRate) {
+          return b.correctRate - a.correctRate;
+        }
+        return b.total - a.total;
+      });
+  }, [groupsWithAnswers]);
+
+  // Calculate question awards
+  const questionAwards = useMemo(() => {
+    if (questionStats.length === 0 || questions.length === 0) return [];
+
+    const easiest = questionStats[0];
+    const hardest = questionStats[questionStats.length - 1];
+
+    return [
+      {
+        icon: "😊",
+        title: "みんなが得意だった問題",
+        question: questions[easiest.questionIndex]?.question ?? "",
+        detail: `正答率 ${easiest.correctRate.toFixed(0)}%`,
+      },
+      {
+        icon: "😈",
+        title: "難問チャレンジ",
+        question: questions[hardest.questionIndex]?.question ?? "",
+        detail: `正答率 ${hardest.correctRate.toFixed(0)}%`,
+      },
+    ];
+  }, [questionStats, questions]);
 
   // Create color map for groups
   const groupColorMap = useMemo(() => {
-    const map: Record<string, string> = {}
+    const map: Record<string, string> = {};
     groupsWithAnswers.forEach((group, index) => {
-      map[group.groupName] = TEAM_COLORS[index % TEAM_COLORS.length]
-    })
-    return map
-  }, [groupsWithAnswers])
+      map[group.groupName] = TEAM_COLORS[index % TEAM_COLORS.length];
+    });
+    return map;
+  }, [groupsWithAnswers]);
 
   // Max score for Y-axis
   const maxScore = useMemo(() => {
-    if (ranking.length === 0) return 100
-    const max = Math.max(...ranking.map((r) => r.score))
-    return Math.ceil((max + 20) / 10) * 10
-  }, [ranking])
+    if (ranking.length === 0) return 100;
+    const max = Math.max(...ranking.map((r) => r.score));
+    return Math.ceil((max + 20) / 10) * 10;
+  }, [ranking]);
 
   // Loading state
   if (isLoading || !lobby) {
@@ -340,32 +379,31 @@ export default function ResultPage() {
       <Box minH="100vh" bg="#FFFDF7" display="flex" alignItems="center" justifyContent="center">
         <VStack gap={4}>
           <Spinner size="xl" color="orange.500" />
-          <Text fontSize="xl" color="gray.600">結果を読み込み中...</Text>
+          <Text fontSize="xl" color="gray.600">
+            結果を読み込み中...
+          </Text>
         </VStack>
       </Box>
-    )
+    );
   }
 
   // No groups
   if (ranking.length === 0) {
     return (
       <Box minH="100vh" bg="#FFFDF7" display="flex" alignItems="center" justifyContent="center">
-        <Text fontSize="2xl" color="gray.600">参加グループがありません</Text>
+        <Text fontSize="2xl" color="gray.600">
+          参加グループがありません
+        </Text>
       </Box>
-    )
+    );
   }
 
-  const first = ranking.find((t) => t.rank === 1)
-  const second = ranking.find((t) => t.rank === 2)
-  const third = ranking.find((t) => t.rank === 3)
+  const first = ranking.find((t) => t.rank === 1);
+  const second = ranking.find((t) => t.rank === 2);
+  const third = ranking.find((t) => t.rank === 3);
 
   return (
-    <Box
-      minH="100vh"
-      bg="#FFFDF7"
-      position="relative"
-      overflow="hidden"
-    >
+    <Box minH="100vh" bg="#FFFDF7" position="relative" overflow="hidden">
       {/* ========== Background Effects ========== */}
 
       {/* Radial gradient atmosphere */}
@@ -478,14 +516,7 @@ export default function ResultPage() {
       />
 
       {/* ========== Main Content ========== */}
-      <VStack
-        position="relative"
-        zIndex={1}
-        py={8}
-        px={6}
-        gap={10}
-        minH="100vh"
-      >
+      <VStack position="relative" zIndex={1} py={8} px={6} gap={10} minH="100vh">
         {/* Header Banner */}
         <Box
           bg="linear-gradient(135deg, #FF8800 0%, #FFB800 50%, #FF8800 100%)"
@@ -578,8 +609,12 @@ export default function ResultPage() {
                 animation={`${revealTeam} 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) ${getPodiumConfig(2).teamDelay} both`}
                 mb={3}
               >
-                <Text fontSize="4xl" mb={1}>{getMedalEmoji(2)}</Text>
-                <Text fontSize="xl" fontWeight="bold" color="#333">{second.name}</Text>
+                <Text fontSize="4xl" mb={1}>
+                  {getMedalEmoji(2)}
+                </Text>
+                <Text fontSize="xl" fontWeight="bold" color="#333">
+                  {second.name}
+                </Text>
                 <Text
                   fontSize="2xl"
                   fontWeight="900"
@@ -659,8 +694,12 @@ export default function ResultPage() {
                   animation={`${goldShimmer} 2s linear infinite`}
                   pointerEvents="none"
                 />
-                <Text fontSize="5xl" mb={1} position="relative" zIndex={1}>{getMedalEmoji(1)}</Text>
-                <Text fontSize="2xl" fontWeight="bold" color="#333" position="relative" zIndex={1}>{first.name}</Text>
+                <Text fontSize="5xl" mb={1} position="relative" zIndex={1}>
+                  {getMedalEmoji(1)}
+                </Text>
+                <Text fontSize="2xl" fontWeight="bold" color="#333" position="relative" zIndex={1}>
+                  {first.name}
+                </Text>
                 <Text
                   fontSize="3xl"
                   fontWeight="900"
@@ -724,8 +763,12 @@ export default function ResultPage() {
                 animation={`${revealTeam} 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) ${getPodiumConfig(3).teamDelay} both`}
                 mb={3}
               >
-                <Text fontSize="4xl" mb={1}>{getMedalEmoji(3)}</Text>
-                <Text fontSize="xl" fontWeight="bold" color="#333">{third.name}</Text>
+                <Text fontSize="4xl" mb={1}>
+                  {getMedalEmoji(3)}
+                </Text>
+                <Text fontSize="xl" fontWeight="bold" color="#333">
+                  {third.name}
+                </Text>
                 <Text
                   fontSize="2xl"
                   fontWeight="900"
@@ -774,29 +817,15 @@ export default function ResultPage() {
             boxShadow="0 8px 40px rgba(255, 136, 0, 0.15)"
             animation={`${fadeInUp} 0.6s ease-out 5s both`}
           >
-            <Text
-              fontSize="2xl"
-              fontWeight="bold"
-              color="#E67A00"
-              mb={6}
-              textAlign="center"
-            >
+            <Text fontSize="2xl" fontWeight="bold" color="#E67A00" mb={6} textAlign="center">
               📈 スコア変遷グラフ
             </Text>
             <Box h="300px">
               <ResponsiveContainer width="100%" height="100%">
                 <LineChart data={scoreHistory}>
                   <CartesianGrid strokeDasharray="3 3" stroke="#E0E0E0" />
-                  <XAxis
-                    dataKey="time"
-                    tick={{ fill: "#666", fontSize: 12 }}
-                    axisLine={{ stroke: "#CCC" }}
-                  />
-                  <YAxis
-                    tick={{ fill: "#666", fontSize: 12 }}
-                    axisLine={{ stroke: "#CCC" }}
-                    domain={[0, maxScore]}
-                  />
+                  <XAxis dataKey="time" tick={{ fill: "#666", fontSize: 12 }} axisLine={{ stroke: "#CCC" }} />
+                  <YAxis tick={{ fill: "#666", fontSize: 12 }} axisLine={{ stroke: "#CCC" }} domain={[0, maxScore]} />
                   <Tooltip
                     contentStyle={{
                       backgroundColor: "white",
@@ -836,13 +865,7 @@ export default function ResultPage() {
             boxShadow="0 8px 40px rgba(255, 136, 0, 0.15)"
             animation={`${fadeInUp} 0.6s ease-out 5.5s both`}
           >
-            <Text
-              fontSize="2xl"
-              fontWeight="bold"
-              color="#E67A00"
-              mb={6}
-              textAlign="center"
-            >
+            <Text fontSize="2xl" fontWeight="bold" color="#E67A00" mb={6} textAlign="center">
               🏆 大会アワード
             </Text>
             <VStack gap={4} align="stretch">
@@ -864,29 +887,154 @@ export default function ResultPage() {
                   <Flex align="center" gap={5}>
                     <Text fontSize="4xl">{award.icon}</Text>
                     <Box flex={1}>
-                      <Text
-                        fontSize="lg"
-                        fontWeight="bold"
-                        color="#E67A00"
-                        mb={1}
-                      >
+                      <Text fontSize="lg" fontWeight="bold" color="#E67A00" mb={1}>
                         {award.title}
                       </Text>
                       <HStack gap={3}>
                         <Text fontSize="xl" fontWeight="bold" color="#333">
                           {award.winner}
                         </Text>
-                        <Text
-                          fontSize="md"
-                          color="#666"
-                          bg="rgba(255, 136, 0, 0.1)"
-                          px={3}
-                          py={1}
-                          borderRadius="full"
-                        >
+                        <Text fontSize="md" color="#666" bg="rgba(255, 136, 0, 0.1)" px={3} py={1} borderRadius="full">
                           {award.detail}
                         </Text>
                       </HStack>
+                    </Box>
+                  </Flex>
+                </Box>
+              ))}
+            </VStack>
+          </Box>
+        )}
+
+        {/* ========== Question Awards Section ========== */}
+        {questionAwards.length > 0 && (
+          <Box
+            w="full"
+            maxW="900px"
+            mx="auto"
+            bg="white"
+            borderRadius="2xl"
+            border="3px solid #FF8800"
+            p={8}
+            boxShadow="0 8px 40px rgba(255, 136, 0, 0.15)"
+            animation={`${fadeInUp} 0.6s ease-out 6.5s both`}
+            position="relative"
+            overflow="hidden"
+          >
+            {/* Decorative background pattern */}
+            <Box
+              position="absolute"
+              top={0}
+              right={0}
+              w="200px"
+              h="200px"
+              bgImage="radial-gradient(circle at center, rgba(255, 136, 0, 0.08) 0%, transparent 70%)"
+              pointerEvents="none"
+            />
+            <Box
+              position="absolute"
+              bottom={0}
+              left={0}
+              w="150px"
+              h="150px"
+              bgImage="radial-gradient(circle at center, rgba(255, 229, 0, 0.1) 0%, transparent 70%)"
+              pointerEvents="none"
+            />
+
+            <Text fontSize="2xl" fontWeight="bold" color="#E67A00" mb={6} textAlign="center" position="relative">
+              📝 問題アワード
+            </Text>
+            <VStack gap={5} align="stretch" position="relative">
+              {questionAwards.map((award, index) => (
+                <Box
+                  key={award.title}
+                  bg="linear-gradient(135deg, rgba(255, 136, 0, 0.03) 0%, rgba(255, 229, 0, 0.06) 100%)"
+                  borderRadius="xl"
+                  border="2px solid"
+                  borderColor="rgba(255, 136, 0, 0.25)"
+                  p={5}
+                  animation={`${slideInLeft} 0.5s ease-out ${6.8 + index * 0.3}s both`}
+                  _hover={{
+                    borderColor: "rgba(255, 136, 0, 0.5)",
+                    transform: "translateX(8px)",
+                    boxShadow: "0 4px 20px rgba(255, 136, 0, 0.15)",
+                    transition: "all 0.3s",
+                  }}
+                  position="relative"
+                >
+                  <Flex align="flex-start" gap={4}>
+                    {/* Icon with glow effect */}
+                    <Box
+                      flexShrink={0}
+                      w="60px"
+                      h="60px"
+                      bg={
+                        index === 0
+                          ? "linear-gradient(135deg, #22C55E 0%, #16A34A 100%)"
+                          : "linear-gradient(135deg, #EF4444 0%, #DC2626 100%)"
+                      }
+                      borderRadius="xl"
+                      display="flex"
+                      alignItems="center"
+                      justifyContent="center"
+                      boxShadow={
+                        index === 0 ? "0 4px 15px rgba(34, 197, 94, 0.4)" : "0 4px 15px rgba(239, 68, 68, 0.4)"
+                      }
+                    >
+                      <Text fontSize="2xl">{award.icon}</Text>
+                    </Box>
+
+                    <Box flex={1} minW={0}>
+                      {/* Title and detail badge */}
+                      <Flex align="center" gap={3} mb={2} flexWrap="wrap">
+                        <Text fontSize="lg" fontWeight="bold" color="#E67A00">
+                          {award.title}
+                        </Text>
+                        <Text
+                          fontSize="sm"
+                          fontWeight="bold"
+                          color="white"
+                          bg={
+                            index === 0
+                              ? "linear-gradient(135deg, #22C55E 0%, #16A34A 100%)"
+                              : "linear-gradient(135deg, #EF4444 0%, #DC2626 100%)"
+                          }
+                          px={3}
+                          py={1}
+                          borderRadius="full"
+                          boxShadow={
+                            index === 0 ? "0 2px 8px rgba(34, 197, 94, 0.3)" : "0 2px 8px rgba(239, 68, 68, 0.3)"
+                          }
+                        >
+                          {award.detail}
+                        </Text>
+                      </Flex>
+
+                      {/* Question text with quote style */}
+                      <Box
+                        bg="rgba(255, 136, 0, 0.05)"
+                        borderLeft="4px solid"
+                        borderColor={index === 0 ? "#22C55E" : "#EF4444"}
+                        borderRadius="0 8px 8px 0"
+                        p={3}
+                        position="relative"
+                      >
+                        <Text
+                          fontSize="md"
+                          color="#333"
+                          fontWeight="medium"
+                          lineHeight="1.6"
+                          css={{
+                            display: "-webkit-box",
+                            WebkitLineClamp: 2,
+                            WebkitBoxOrient: "vertical",
+                            overflow: "hidden",
+                            textOverflow: "ellipsis",
+                          }}
+                        >
+                          {award.question}
+                        </Text>
+                      </Box>
                     </Box>
                   </Flex>
                 </Box>
@@ -912,5 +1060,5 @@ export default function ResultPage() {
         pointerEvents="none"
       />
     </Box>
-  )
+  );
 }

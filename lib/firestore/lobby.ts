@@ -1,78 +1,76 @@
-import {
-  collection,
-  doc,
-  setDoc,
-  updateDoc,
-  serverTimestamp,
-  onSnapshot,
-  type Unsubscribe,
-} from "firebase/firestore"
-import { db } from "@/lib/firebase"
-import type { Lobby } from "@/types/firestore"
+import { collection, doc, onSnapshot, serverTimestamp, setDoc, type Unsubscribe, updateDoc } from "firebase/firestore";
+import { db } from "@/lib/firebase";
+import type { Lobby } from "@/types/firestore";
 
-export async function createLobby(): Promise<string> {
-  const lobbyRef = doc(collection(db, "quiz-time-attack-lobbies"))
+export async function createLobby(quizFileName: string): Promise<string> {
+  const lobbyRef = doc(collection(db, "quiz-time-attack-lobbies"));
 
   const lobbyData: Omit<Lobby, "id" | "createdAt" | "startedAt" | "finishedAt"> & {
-    createdAt: ReturnType<typeof serverTimestamp>
-    startedAt: null
-    finishedAt: null
+    createdAt: ReturnType<typeof serverTimestamp>;
+    startedAt: null;
+    finishedAt: null;
   } = {
     status: "waiting",
     createdAt: serverTimestamp(),
     startedAt: null,
     finishedAt: null,
-    durationSeconds: 600,
+    durationSeconds: 300,
     pointsCorrect: 5,
     pointsIncorrect: -3,
-  }
+    quizFileName,
+  };
 
-  await setDoc(lobbyRef, lobbyData)
+  await setDoc(lobbyRef, lobbyData);
 
-  return lobbyRef.id
+  return lobbyRef.id;
 }
 
-export function subscribeLobby(
-  lobbyId: string,
-  callback: (lobby: Lobby | null) => void,
-): Unsubscribe {
-  const lobbyRef = doc(db, "quiz-time-attack-lobbies", lobbyId)
+export function subscribeLobby(lobbyId: string, callback: (lobby: Lobby | null) => void): Unsubscribe {
+  const lobbyRef = doc(db, "quiz-time-attack-lobbies", lobbyId);
 
   return onSnapshot(lobbyRef, (snapshot) => {
     if (snapshot.exists()) {
       const lobby: Lobby = {
         id: snapshot.id,
         ...snapshot.data(),
-      } as Lobby
-      callback(lobby)
+      } as Lobby;
+      callback(lobby);
     } else {
-      callback(null)
+      callback(null);
     }
-  })
+  });
 }
 
 export async function startLobby(lobbyId: string): Promise<void> {
-  const lobbyRef = doc(db, "quiz-time-attack-lobbies", lobbyId)
+  const lobbyRef = doc(db, "quiz-time-attack-lobbies", lobbyId);
 
   await updateDoc(lobbyRef, {
     status: "playing",
     startedAt: serverTimestamp(),
-  })
+  });
 }
 
 export async function finishLobby(lobbyId: string): Promise<void> {
-  const lobbyRef = doc(db, "quiz-time-attack-lobbies", lobbyId)
+  const lobbyRef = doc(db, "quiz-time-attack-lobbies", lobbyId);
 
   await updateDoc(lobbyRef, {
     status: "finished",
     finishedAt: serverTimestamp(),
-  })
+  });
 }
 
 export async function showResultLobby(lobbyId: string): Promise<void> {
-  const lobbyRef = doc(db, "quiz-time-attack-lobbies", lobbyId)
+  const lobbyRef = doc(db, "quiz-time-attack-lobbies", lobbyId);
 
   await updateDoc(lobbyRef, {
     status: "result",
-  })
+  });
+}
+
+export async function updateQuizFileName(lobbyId: string, quizFileName: string): Promise<void> {
+  const lobbyRef = doc(db, "quiz-time-attack-lobbies", lobbyId);
+
+  await updateDoc(lobbyRef, {
+    quizFileName,
+  });
 }

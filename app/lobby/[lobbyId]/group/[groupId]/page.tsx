@@ -1,246 +1,276 @@
-"use client"
+"use client";
 
-import { use, useCallback, useEffect, useMemo, useRef, useState } from "react"
-import { useRouter } from "next/navigation"
-import { Box, Text, VStack } from "@chakra-ui/react"
-import { doc, getDoc } from "firebase/firestore"
-import { db } from "@/lib/firebase"
-import { subscribeLobby } from "@/lib/firestore/lobby"
-import { createAnswer, subscribeGroupAnswers } from "@/lib/firestore/answer"
-import type { Answer, Group, Lobby, Question } from "@/types/firestore"
-import { GroupWaiting } from "./_components/GroupWaiting"
-import { GroupQuiz } from "./_components/GroupQuiz"
-import { GroupResult } from "./_components/GroupResult"
-import { GroupFinished } from "./_components/GroupFinished"
+import { Box, Text, VStack } from "@chakra-ui/react";
+import { doc, getDoc } from "firebase/firestore";
+import { useRouter } from "next/navigation";
+import { use, useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { db } from "@/lib/firebase";
+import { createAnswer, subscribeGroupAnswers } from "@/lib/firestore/answer";
+import { subscribeLobby } from "@/lib/firestore/lobby";
+import type { Answer, Group, Lobby, Question } from "@/types/firestore";
+import { GroupFinished } from "./_components/GroupFinished";
+import { GroupQuiz } from "./_components/GroupQuiz";
+import { GroupResult } from "./_components/GroupResult";
+import { GroupWaiting } from "./_components/GroupWaiting";
 
-type PageState = "waiting" | "quiz" | "result" | "finished"
+type PageState = "waiting" | "quiz" | "result" | "finished";
 
 type Props = {
-  params: Promise<{ lobbyId: string; groupId: string }>
-}
+  params: Promise<{ lobbyId: string; groupId: string }>;
+};
 
 export default function GroupPage({ params }: Props) {
-  const { lobbyId, groupId } = use(params)
-  const router = useRouter()
+  const { lobbyId, groupId } = use(params);
+  const router = useRouter();
 
-  const [lobby, setLobby] = useState<Lobby | null>(null)
-  const [group, setGroup] = useState<Group | null>(null)
-  const [questions, setQuestions] = useState<Question[]>([])
-  const [answers, setAnswers] = useState<Answer[]>([])
-  const [isLoading, setIsLoading] = useState(true)
-  const [pageState, setPageState] = useState<PageState>("waiting")
-  const [remainingTime, setRemainingTime] = useState<string>("10:00")
+  const [lobby, setLobby] = useState<Lobby | null>(null);
+  const [group, setGroup] = useState<Group | null>(null);
+  const [questions, setQuestions] = useState<Question[]>([]);
+  const [answers, setAnswers] = useState<Answer[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [pageState, setPageState] = useState<PageState>("waiting");
+  const [remainingTime, setRemainingTime] = useState<string>("10:00");
 
   // クイズ中の状態
-  const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0)
+  const [currentQuestionIndex, setCurrentQuestionIndex] = useState<number | null>(null);
+  const [shuffledData, setShuffledData] = useState<{
+    choices: string[];
+    answerIndex: number;
+    relatedLinks: string[];
+  } | null>(null);
   const [lastResult, setLastResult] = useState<{
-    isCorrect: boolean
-    question: string
-    choices: string[]
-    correctIndex: number
-    selectedIndex: number
-    pointChange: number
-  } | null>(null)
+    isCorrect: boolean;
+    question: string;
+    choices: string[];
+    correctIndex: number;
+    selectedIndex: number;
+    pointChange: number;
+    relatedLinks: string[];
+  } | null>(null);
 
   // 問題表示開始時刻（回答時間計測用）
-  const questionStartTimeRef = useRef<number>(0)
+  const questionStartTimeRef = useRef<number>(0);
+
+  // 選択肢をシャッフルする関数
+  const shuffleChoices = useCallback((question: Question) => {
+    const indices = Array.from({ length: question.choices.length }, (_, i) => i);
+    // Fisher-Yates shuffle
+    for (let i = indices.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [indices[i], indices[j]] = [indices[j], indices[i]];
+    }
+
+    return {
+      choices: indices.map((i) => question.choices[i]),
+      answerIndex: indices.indexOf(question.answer),
+      relatedLinks: question.relatedLinks
+        ? indices.map((i) => question.relatedLinks?.[i]).filter((link): link is string => Boolean(link))
+        : [],
+    };
+  }, []);
 
   // スコア計算
   const score = useMemo(() => {
-    return answers.reduce((sum, a) => sum + a.scoreChange, 0)
-  }, [answers])
+    return answers.reduce((sum, a) => sum + a.scoreChange, 0);
+  }, [answers]);
 
   // 統計計算（終了時用）
   const stats = useMemo(() => {
-    const correctCount = answers.filter((a) => a.isCorrect).length
-    const totalCount = answers.length
-    let maxStreak = 0
-    let currentStreak = 0
+    const correctCount = answers.filter((a) => a.isCorrect).length;
+    const totalCount = answers.length;
+    let maxStreak = 0;
+    let currentStreak = 0;
     for (const a of answers) {
       if (a.isCorrect) {
-        currentStreak++
-        maxStreak = Math.max(maxStreak, currentStreak)
+        currentStreak++;
+        maxStreak = Math.max(maxStreak, currentStreak);
       } else {
-        currentStreak = 0
+        currentStreak = 0;
       }
     }
-    return { correctCount, totalCount, maxStreak }
-  }, [answers])
+    return { correctCount, totalCount, maxStreak };
+  }, [answers]);
 
   // グループ情報の取得
   useEffect(() => {
     const fetchGroup = async () => {
-      const groupRef = doc(db, `quiz-time-attack-lobbies/${lobbyId}/groups/${groupId}`)
-      const snapshot = await getDoc(groupRef)
+      const groupRef = doc(db, `quiz-time-attack-lobbies/${lobbyId}/groups/${groupId}`);
+      const snapshot = await getDoc(groupRef);
       if (snapshot.exists()) {
-        setGroup({ id: snapshot.id, ...snapshot.data() } as Group)
+        setGroup({ id: snapshot.id, ...snapshot.data() } as Group);
       }
-    }
-    fetchGroup()
-  }, [lobbyId, groupId])
+    };
+    fetchGroup();
+  }, [lobbyId, groupId]);
 
   // クイズデータの取得
   useEffect(() => {
+    if (!lobby) return;
+
     const fetchQuestions = async () => {
-      const res = await fetch("/data/questions.json")
-      const data = await res.json()
-      setQuestions(data)
+      const res = await fetch(`/data/quizzes/${lobby.quizFileName}.json`);
+      const data = await res.json();
+      setQuestions(data);
+      // 初回のインデックスをランダムに設定
+      setCurrentQuestionIndex(Math.floor(Math.random() * data.length));
+    };
+    fetchQuestions();
+  }, [lobby]);
+
+  // 問題変更時にシャッフルを実行
+  useEffect(() => {
+    if (currentQuestionIndex === null) return;
+    const question = questions[currentQuestionIndex];
+    if (question) {
+      setShuffledData(shuffleChoices(question));
     }
-    fetchQuestions()
-  }, [])
+  }, [questions, currentQuestionIndex, shuffleChoices]);
 
   // ロビー情報のリアルタイム監視
   useEffect(() => {
     const unsubscribe = subscribeLobby(lobbyId, (lobbyData) => {
-      setLobby(lobbyData)
-      setIsLoading(false)
-    })
-    return () => unsubscribe()
-  }, [lobbyId])
+      setLobby(lobbyData);
+      setIsLoading(false);
+    });
+    return () => unsubscribe();
+  }, [lobbyId]);
 
   // 回答履歴のリアルタイム監視
   useEffect(() => {
-    const unsubscribe = subscribeGroupAnswers(lobbyId, groupId, setAnswers)
-    return () => unsubscribe()
-  }, [lobbyId, groupId])
+    const unsubscribe = subscribeGroupAnswers(lobbyId, groupId, setAnswers);
+    return () => unsubscribe();
+  }, [lobbyId, groupId]);
 
   // ロビーの状態に応じた画面状態の更新
   useEffect(() => {
-    if (!lobby) return
+    if (!lobby) return;
 
     if (lobby.status === "waiting") {
-      setPageState("waiting")
+      setPageState("waiting");
     } else if (lobby.status === "playing") {
       // 結果表示中でなければクイズ画面へ
       setPageState((prev) => {
         if (prev === "waiting") {
-          questionStartTimeRef.current = Date.now()
-          return "quiz"
+          questionStartTimeRef.current = Date.now();
+          return "quiz";
         }
-        return prev
-      })
+        return prev;
+      });
     } else if (lobby.status === "finished") {
-      setPageState("finished")
+      setPageState("finished");
     } else if (lobby.status === "result") {
-      router.push(`/lobby/${lobbyId}/result`)
+      router.push(`/lobby/${lobbyId}/result`);
     }
-  }, [lobby, router, lobbyId])
+  }, [lobby, router, lobbyId]);
 
   // タイマー
   useEffect(() => {
-    if (!lobby || lobby.status !== "playing" || !lobby.startedAt) return
+    if (!lobby || lobby.status !== "playing" || !lobby.startedAt) return;
 
     const updateTimer = () => {
-      if (!lobby.startedAt) return
-      const startedAt = lobby.startedAt.toDate().getTime()
-      const endTime = startedAt + lobby.durationSeconds * 1000
-      const now = Date.now()
-      const remaining = Math.max(0, endTime - now)
+      if (!lobby.startedAt) return;
+      const startedAt = lobby.startedAt.toDate().getTime();
+      const endTime = startedAt + lobby.durationSeconds * 1000;
+      const now = Date.now();
+      const remaining = Math.max(0, endTime - now);
 
-      const minutes = Math.floor(remaining / 60000)
-      const seconds = Math.floor((remaining % 60000) / 1000)
-      setRemainingTime(`${minutes}:${seconds.toString().padStart(2, "0")}`)
+      const minutes = Math.floor(remaining / 60000);
+      const seconds = Math.floor((remaining % 60000) / 1000);
+      setRemainingTime(`${minutes}:${seconds.toString().padStart(2, "0")}`);
 
       if (remaining <= 0) {
-        setPageState("finished")
+        setPageState("finished");
       }
-    }
+    };
 
-    updateTimer()
-    const interval = setInterval(updateTimer, 1000)
-    return () => clearInterval(interval)
-  }, [lobby])
+    updateTimer();
+    const interval = setInterval(updateTimer, 1000);
+    return () => clearInterval(interval);
+  }, [lobby]);
 
   // 回答ハンドラ
   const handleAnswer = useCallback(
     async (selectedIndex: number) => {
-      if (!lobby || !questions[currentQuestionIndex]) return
+      if (!lobby || currentQuestionIndex === null || !questions[currentQuestionIndex] || !shuffledData) return;
 
-      const question = questions[currentQuestionIndex]
-      const answerTimeMs = Date.now() - questionStartTimeRef.current
+      const question = questions[currentQuestionIndex];
+      const answerTimeMs = Date.now() - questionStartTimeRef.current;
+
+      // シャッフル後のインデックスで判定
+      const isCorrect = selectedIndex === shuffledData.answerIndex;
 
       await createAnswer({
         lobbyId,
         groupId,
         questionIndex: currentQuestionIndex,
         selectedAnswer: selectedIndex,
-        correctAnswer: question.answer,
+        correctAnswer: shuffledData.answerIndex,
         answerTimeMs,
         pointsCorrect: lobby.pointsCorrect,
         pointsIncorrect: lobby.pointsIncorrect,
-      })
+      });
 
-      const isCorrect = selectedIndex === question.answer
       setLastResult({
         isCorrect,
         question: question.question,
-        choices: question.choices,
-        correctIndex: question.answer,
+        choices: shuffledData.choices,
+        correctIndex: shuffledData.answerIndex,
         selectedIndex,
         pointChange: isCorrect ? lobby.pointsCorrect : lobby.pointsIncorrect,
-      })
-      setPageState("result")
+        relatedLinks: shuffledData.relatedLinks,
+      });
+      setPageState("result");
     },
-    [lobby, questions, currentQuestionIndex, lobbyId, groupId]
-  )
+    [lobby, questions, currentQuestionIndex, lobbyId, groupId, shuffledData],
+  );
 
   // 次の問題へ
   const handleNext = useCallback(() => {
     // ランダムに次の問題を選択
-    const nextIndex = Math.floor(Math.random() * questions.length)
-    setCurrentQuestionIndex(nextIndex)
-    setLastResult(null)
-    setPageState("quiz")
-    questionStartTimeRef.current = Date.now()
-  }, [questions.length])
+    const nextIndex = Math.floor(Math.random() * questions.length);
+    setCurrentQuestionIndex(nextIndex);
+    setLastResult(null);
+    setPageState("quiz");
+    questionStartTimeRef.current = Date.now();
+  }, [questions.length]);
 
   if (isLoading) {
     return (
-      <Box
-        minH="100vh"
-        bg="#FFFDF7"
-        display="flex"
-        alignItems="center"
-        justifyContent="center"
-      >
+      <Box minH="100vh" bg="#FFFDF7" display="flex" alignItems="center" justifyContent="center">
         <Text fontSize="2xl" color="#FF8800" fontWeight="bold">
           読み込み中...
         </Text>
       </Box>
-    )
+    );
   }
 
   if (!lobby || !group) {
     return (
-      <Box
-        minH="100vh"
-        bg="#FFFDF7"
-        display="flex"
-        alignItems="center"
-        justifyContent="center"
-      >
+      <Box minH="100vh" bg="#FFFDF7" display="flex" alignItems="center" justifyContent="center">
         <VStack gap={4}>
           <Text fontSize="2xl" color="#FF8800" fontWeight="bold">
             データが見つかりません
           </Text>
         </VStack>
       </Box>
-    )
+    );
   }
 
   switch (pageState) {
     case "waiting":
-      return <GroupWaiting groupName={group.name} />
+      return <GroupWaiting groupName={group.name} />;
     case "quiz":
       return (
         <GroupQuiz
           groupName={group.name}
           score={score}
           remainingTime={remainingTime}
-          question={questions[currentQuestionIndex]}
+          question={currentQuestionIndex !== null ? questions[currentQuestionIndex] : undefined}
+          shuffledChoices={shuffledData?.choices}
+          shuffledRelatedLinks={shuffledData?.relatedLinks}
           onAnswer={handleAnswer}
         />
-      )
+      );
     case "result":
       return lastResult ? (
         <GroupResult
@@ -250,7 +280,7 @@ export default function GroupPage({ params }: Props) {
           result={lastResult}
           onNext={handleNext}
         />
-      ) : null
+      ) : null;
     case "finished":
       return (
         <GroupFinished
@@ -260,6 +290,6 @@ export default function GroupPage({ params }: Props) {
           totalCount={stats.totalCount}
           maxStreak={stats.maxStreak}
         />
-      )
+      );
   }
 }

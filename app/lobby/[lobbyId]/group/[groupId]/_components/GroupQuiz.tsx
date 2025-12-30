@@ -31,11 +31,24 @@ type Props = {
   score: number;
   remainingTime: string;
   question: Question | undefined;
+  shuffledChoices?: string[];
+  shuffledRelatedLinks?: string[];
   onAnswer: (selectedIndex: number) => void;
 };
 
-export function GroupQuiz({ groupName, score, remainingTime, question, onAnswer }: Props) {
+export function GroupQuiz({
+  groupName,
+  score,
+  remainingTime,
+  question,
+  shuffledChoices,
+  shuffledRelatedLinks,
+  onAnswer,
+}: Props) {
   const choiceLabels = ["A", "B", "C"];
+  // シャッフル済みデータがあればそれを使用、なければ元のデータを使用
+  const choices = shuffledChoices ?? question?.choices ?? [];
+  const relatedLinks = shuffledRelatedLinks ?? question?.relatedLinks ?? [];
 
   return (
     <Box minH="100vh" bg="#FFFDF7" position="relative" overflow="hidden">
@@ -241,7 +254,7 @@ export function GroupQuiz({ groupName, score, remainingTime, question, onAnswer 
 
         {/* Choices */}
         <VStack w="full" gap={4}>
-          {question?.choices.map((choice, index) => (
+          {choices.map((choice, index) => (
             <Box
               key={index}
               as="button"
@@ -296,7 +309,7 @@ export function GroupQuiz({ groupName, score, remainingTime, question, onAnswer 
         </VStack>
 
         {/* Related Links */}
-        <RelatedLinks links={question?.relatedLinks || []} />
+        <RelatedLinks links={relatedLinks} />
       </VStack>
 
       {/* Bottom decorative gradient */}

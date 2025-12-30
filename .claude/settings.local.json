@@ -8,7 +8,9 @@
       "Bash(pnpm build:*)",
       "Bash(grep:*)",
       "Bash(xargs ls:*)",
-      "Bash(find:*)"
+      "Bash(find:*)",
+      "Bash(cat:*)",
+      "Bash(python3:*)"
     ]
   }
 }

@@ -1,55 +1,55 @@
-"use client"
+"use client";
 
-import { Box, Flex, HStack, Text, VStack } from "@chakra-ui/react"
-import { keyframes } from "@emotion/react"
+import { Box, Flex, HStack, Text, VStack } from "@chakra-ui/react";
+import { keyframes } from "@emotion/react";
 
 // Animations
 const zoomIn = keyframes`
   0% { opacity: 0; transform: scale(0.5); }
   70% { transform: scale(1.05); }
   100% { opacity: 1; transform: scale(1); }
-`
+`;
 
 const fadeInUp = keyframes`
   0% { opacity: 0; transform: translateY(30px); }
   100% { opacity: 1; transform: translateY(0); }
-`
+`;
 
 const float = keyframes`
   0%, 100% { transform: translateY(0) rotate(0deg); }
   50% { transform: translateY(-15px) rotate(3deg); }
-`
+`;
 
 const shimmer = keyframes`
   0% { background-position: -200% center; }
   100% { background-position: 200% center; }
-`
+`;
 
 const pulseGlow = keyframes`
   0%, 100% { box-shadow: 0 0 30px rgba(255, 229, 0, 0.4), 0 8px 40px rgba(255, 136, 0, 0.2); }
   50% { box-shadow: 0 0 50px rgba(255, 229, 0, 0.6), 0 8px 60px rgba(255, 136, 0, 0.3); }
-`
+`;
 
 const confettiFall = keyframes`
   0% { transform: translateY(-100vh) rotate(0deg); opacity: 1; }
   100% { transform: translateY(100vh) rotate(720deg); opacity: 0.3; }
-`
+`;
 
 const sparkle = keyframes`
   0%, 100% { opacity: 1; transform: scale(1); }
   50% { opacity: 0.5; transform: scale(0.8); }
-`
+`;
 
 type Props = {
-  groupName: string
-  finalScore: number
-  correctCount: number
-  totalCount: number
-  maxStreak: number
-}
+  groupName: string;
+  finalScore: number;
+  correctCount: number;
+  totalCount: number;
+  maxStreak: number;
+};
 
 export function GroupFinished({ groupName, finalScore, correctCount, totalCount, maxStreak }: Props) {
-  const accuracyRate = totalCount > 0 ? Math.round((correctCount / totalCount) * 100) : 0
+  const accuracyRate = totalCount > 0 ? Math.round((correctCount / totalCount) * 100) : 0;
 
   return (
     <Box
@@ -220,12 +220,7 @@ export function GroupFinished({ groupName, finalScore, correctCount, totalCount,
           />
 
           <VStack gap={2}>
-            <Text
-              fontSize={{ base: "md", md: "lg" }}
-              color="#888"
-              fontWeight="medium"
-              letterSpacing="0.1em"
-            >
+            <Text fontSize={{ base: "md", md: "lg" }} color="#888" fontWeight="medium" letterSpacing="0.1em">
               最終スコア
             </Text>
             <Text
@@ -243,7 +238,9 @@ export function GroupFinished({ groupName, finalScore, correctCount, totalCount,
               }}
             >
               {finalScore}
-              <Text as="span" fontSize={{ base: "2xl", md: "3xl" }}>点</Text>
+              <Text as="span" fontSize={{ base: "2xl", md: "3xl" }}>
+                点
+              </Text>
             </Text>
           </VStack>
         </Box>
@@ -261,17 +258,24 @@ export function GroupFinished({ groupName, finalScore, correctCount, totalCount,
         >
           <HStack gap={{ base: 6, md: 10 }} flexWrap="wrap" justify="center">
             <VStack gap={1}>
-              <Text fontSize="sm" color="#888" fontWeight="medium">正解数</Text>
+              <Text fontSize="sm" color="#888" fontWeight="medium">
+                正解数
+              </Text>
               <Text fontSize={{ base: "xl", md: "2xl" }} fontWeight="900" color="#333">
                 {correctCount}
-                <Text as="span" fontSize="md" color="#666" fontWeight="medium"> / {totalCount}問</Text>
+                <Text as="span" fontSize="md" color="#666" fontWeight="medium">
+                  {" "}
+                  / {totalCount}問
+                </Text>
               </Text>
             </VStack>
 
             <Box w="1px" h="40px" bg="rgba(255, 136, 0, 0.2)" />
 
             <VStack gap={1}>
-              <Text fontSize="sm" color="#888" fontWeight="medium">正解率</Text>
+              <Text fontSize="sm" color="#888" fontWeight="medium">
+                正解率
+              </Text>
               <Text fontSize={{ base: "xl", md: "2xl" }} fontWeight="900" color="#22C55E">
                 {accuracyRate}%
               </Text>
@@ -280,7 +284,9 @@ export function GroupFinished({ groupName, finalScore, correctCount, totalCount,
             <Box w="1px" h="40px" bg="rgba(255, 136, 0, 0.2)" />
 
             <VStack gap={1}>
-              <Text fontSize="sm" color="#888" fontWeight="medium">連続正解</Text>
+              <Text fontSize="sm" color="#888" fontWeight="medium">
+                連続正解
+              </Text>
               <Text fontSize={{ base: "xl", md: "2xl" }} fontWeight="900" color="#E67A00">
                 {maxStreak}問
               </Text>
@@ -299,11 +305,7 @@ export function GroupFinished({ groupName, finalScore, correctCount, totalCount,
           borderColor="rgba(255, 136, 0, 0.3)"
           animation={`${fadeInUp} 0.6s ease-out 0.7s both`}
         >
-          <Text
-            fontSize={{ base: "md", md: "lg" }}
-            color="#E67A00"
-            fontWeight="medium"
-          >
+          <Text fontSize={{ base: "md", md: "lg" }} color="#E67A00" fontWeight="medium">
             結果発表をお待ちください
           </Text>
         </Box>
@@ -322,5 +324,5 @@ export function GroupFinished({ groupName, finalScore, correctCount, totalCount,
         pointerEvents="none"
       />
     </Box>
-  )
+  );
 }

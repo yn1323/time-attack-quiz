@@ -1,0 +1,1522 @@
+[
+  {
+    "question": "タキシードサムの誕生日は？",
+    "choices": ["5月12日", "5月1日", "5月24日"],
+    "answer": 0,
+    "relatedLinks": ["https://www.sanrio.co.jp/characters/tuxedosam/"]
+  },
+  {
+    "question": "バッドばつ丸の誕生日は？",
+    "choices": ["4月1日", "4月16日", "4月10日"],
+    "answer": 0,
+    "relatedLinks": ["https://www.sanrio.co.jp/characters/badtzmaru/"]
+  },
+  {
+    "question": "けろけろけろっぴの誕生日は？",
+    "choices": ["7月10日", "7月6日", "7月27日"],
+    "answer": 0,
+    "relatedLinks": ["https://www.sanrio.co.jp/characters/keroppi/"]
+  },
+  {
+    "question": "ウィッシュミーメルの誕生日は？",
+    "choices": ["9月20日", "9月2日", "9月14日"],
+    "answer": 0,
+    "relatedLinks": ["https://www.sanrio.co.jp/characters/wishmemell/"]
+  },
+  {
+    "question": "こぎみゅんの誕生日は？",
+    "choices": ["5月7日", "5月12日", "5月1日"],
+    "answer": 0,
+    "relatedLinks": ["https://www.sanrio.co.jp/characters/cogimyun/"]
+  },
+  {
+    "question": "あひるのペックルの誕生日は？",
+    "choices": ["7月27日", "7月10日", "7月6日"],
+    "answer": 0,
+    "relatedLinks": ["https://www.sanrio.co.jp/characters/pekkle/"]
+  },
+  {
+    "question": "マイスウィートピアノの誕生日は？",
+    "choices": ["7月6日", "7月10日", "7月27日"],
+    "answer": 0,
+    "relatedLinks": ["https://www.sanrio.co.jp/characters/mysweetpiano/"]
+  },
+  {
+    "question": "コロコロクリリンの誕生日は？",
+    "choices": ["2月4日", "2月10日", "2月29日"],
+    "answer": 0,
+    "relatedLinks": ["https://www.sanrio.co.jp/characters/kuririn/"]
+  },
+  {
+    "question": "まるもふびよりのモップの誕生日は？",
+    "choices": ["2月10日", "2月4日", "2月29日"],
+    "answer": 0,
+    "relatedLinks": ["https://www.sanrio.co.jp/characters/marumofubiyori/"]
+  },
+  {
+    "question": "はなまるおばけの誕生日は？",
+    "choices": ["8月7日", "8月31日", "8月1日"],
+    "answer": 0,
+    "relatedLinks": ["https://www.sanrio.co.jp/characters/hanamaruobake/"]
+  },
+  {
+    "question": "誕生日が4月1日のキャラクターは？",
+    "choices": ["バッドばつ丸", "ポムポムプリン", "ハンギョドン"],
+    "answer": 0,
+    "relatedLinks": [
+      "https://www.sanrio.co.jp/characters/badtzmaru/",
+      "https://www.sanrio.co.jp/characters/pompompurin/",
+      "https://www.sanrio.co.jp/characters/hangyodon/"
+    ]
+  },
+  {
+    "question": "誕生日が7月10日のキャラクターは？",
+    "choices": ["けろけろけろっぴ", "あひるのペックル", "マイスウィートピアノ"],
+    "answer": 0,
+    "relatedLinks": [
+      "https://www.sanrio.co.jp/characters/keroppi/",
+      "https://www.sanrio.co.jp/characters/pekkle/",
+      "https://www.sanrio.co.jp/characters/mysweetpiano/"
+    ]
+  },
+  {
+    "question": "誕生日が5月12日のキャラクターは？",
+    "choices": ["タキシードサム", "こぎみゅん", "シアン"],
+    "answer": 0,
+    "relatedLinks": [
+      "https://www.sanrio.co.jp/characters/tuxedosam/",
+      "https://www.sanrio.co.jp/characters/cogimyun/",
+      "https://www.sanrio.co.jp/characters/showbyrock/"
+    ]
+  },
+  {
+    "question": "誕生日が9月20日のキャラクターは？",
+    "choices": ["ウィッシュミーメル", "ミュークルドリーミー", "マイメロディ"],
+    "answer": 0,
+    "relatedLinks": [
+      "https://www.sanrio.co.jp/characters/wishmemell/",
+      "https://www.sanrio.co.jp/characters/mewkledreamy/",
+      "https://www.sanrio.co.jp/characters/mymelody/"
+    ]
+  },
+  {
+    "question": "誕生日が8月31日のキャラクターは？",
+    "choices": ["KIRIMIちゃん.", "はなまるおばけ", "ぐでたま"],
+    "answer": 0,
+    "relatedLinks": [
+      "https://www.sanrio.co.jp/characters/kirimichan/",
+      "https://www.sanrio.co.jp/characters/hanamaruobake/",
+      "https://www.sanrio.co.jp/characters/gudetama/"
+    ]
+  },
+  {
+    "question": "誕生日が3月14日のキャラクターは？",
+    "choices": ["ハンギョドン", "シナモロール", "ポチャッコ"],
+    "answer": 0,
+    "relatedLinks": [
+      "https://www.sanrio.co.jp/characters/hangyodon/",
+      "https://www.sanrio.co.jp/characters/cinnamon/",
+      "https://www.sanrio.co.jp/characters/pochacco/"
+    ]
+  },
+  {
+    "question": "誕生日が5月7日のキャラクターは？",
+    "choices": ["こぎみゅん", "タキシードサム", "ほわん"],
+    "answer": 0,
+    "relatedLinks": [
+      "https://www.sanrio.co.jp/characters/cogimyun/",
+      "https://www.sanrio.co.jp/characters/tuxedosam/",
+      "https://www.sanrio.co.jp/characters/showbyrock/"
+    ]
+  },
+  {
+    "question": "誕生日が9月2日のキャラクターは？",
+    "choices": ["ミュークルドリーミー", "ウィッシュミーメル", "マイメロディ"],
+    "answer": 0,
+    "relatedLinks": [
+      "https://www.sanrio.co.jp/characters/mewkledreamy/",
+      "https://www.sanrio.co.jp/characters/wishmemell/",
+      "https://www.sanrio.co.jp/characters/mymelody/"
+    ]
+  },
+  {
+    "question": "誕生日が5月1日のキャラクターは？",
+    "choices": ["ほわん", "こぎみゅん", "タキシードサム"],
+    "answer": 0,
+    "relatedLinks": [
+      "https://www.sanrio.co.jp/characters/showbyrock/",
+      "https://www.sanrio.co.jp/characters/cogimyun/",
+      "https://www.sanrio.co.jp/characters/tuxedosam/"
+    ]
+  },
+  {
+    "question": "誕生日が5月24日のキャラクターは？",
+    "choices": ["シアン", "タキシードサム", "ほわん"],
+    "answer": 0,
+    "relatedLinks": [
+      "https://www.sanrio.co.jp/characters/showbyrock/",
+      "https://www.sanrio.co.jp/characters/tuxedosam/",
+      "https://www.sanrio.co.jp/characters/showbyrock/"
+    ]
+  },
+  {
+    "question": "ウィッシュミーメルの好きな食べ物は？",
+    "choices": ["オムライス", "ホットケーキ", "シナモンロール"],
+    "answer": 0,
+    "relatedLinks": ["https://www.sanrio.co.jp/characters/wishmemell/"]
+  },
+  {
+    "question": "コロコロクリリンの好きな食べ物は？",
+    "choices": ["ヒマワリのタネ", "ドングリ", "クルミ"],
+    "answer": 0,
+    "relatedLinks": ["https://www.sanrio.co.jp/characters/kuririn/"]
+  },
+  {
+    "question": "はなまるおばけの好きな食べ物は？",
+    "choices": ["あまいもの", "すっぱいもの", "からいもの"],
+    "answer": 0,
+    "relatedLinks": ["https://www.sanrio.co.jp/characters/hanamaruobake/"]
+  },
+  {
+    "question": "キキの好きな食べ物は？",
+    "choices": ["ホットケーキ", "シナモンロール", "アップルパイ"],
+    "answer": 0,
+    "relatedLinks": ["https://www.sanrio.co.jp/characters/kikilala/"]
+  },
+  {
+    "question": "ハンギョドンの好きなものは？",
+    "choices": ["温泉", "冷やし中華", "らっきょう"],
+    "answer": 0,
+    "relatedLinks": ["https://www.sanrio.co.jp/characters/hangyodon/"]
+  },
+  {
+    "question": "タキシードサムが好きな魚料理は？",
+    "choices": ["イワシのムニエル", "サーモンのカルパッチョ", "アジのフライ"],
+    "answer": 0,
+    "relatedLinks": ["https://www.sanrio.co.jp/characters/tuxedosam/"]
+  },
+  {
+    "question": "ポムポムプリンが好きな食感は？",
+    "choices": ["ふにゃふにゃしたもの", "カリカリしたもの", "もちもちしたもの"],
+    "answer": 0,
+    "relatedLinks": ["https://www.sanrio.co.jp/characters/pompompurin/"]
+  },
+  {
+    "question": "バッドばつ丸が好きなラーメンは？",
+    "choices": ["ポリパリラーメン", "ガツガツラーメン", "ゴクゴクラーメン"],
+    "answer": 0,
+    "relatedLinks": ["https://www.sanrio.co.jp/characters/badtzmaru/"]
+  },
+  {
+    "question": "まるもふびよりのモップが好きな食べ物は？",
+    "choices": ["もちもちした食べ物", "ふわふわした食べ物", "サクサクした食べ物"],
+    "answer": 0,
+    "relatedLinks": ["https://www.sanrio.co.jp/characters/marumofubiyori/"]
+  },
+  {
+    "question": "ハンギョドンが好きな鍋料理以外の食べ物は？",
+    "choices": ["エビセン", "冷やし中華", "らっきょう"],
+    "answer": 0,
+    "relatedLinks": ["https://www.sanrio.co.jp/characters/hangyodon/"]
+  },
+  {
+    "question": "ヒマワリのタネが好物のキャラクターは？",
+    "choices": ["コロコロクリリン", "ポチャッコ", "シナモロール"],
+    "answer": 0,
+    "relatedLinks": [
+      "https://www.sanrio.co.jp/characters/kuririn/",
+      "https://www.sanrio.co.jp/characters/pochacco/",
+      "https://www.sanrio.co.jp/characters/cinnamon/"
+    ]
+  },
+  {
+    "question": "オムライスが好物のキャラクターは？",
+    "choices": ["ウィッシュミーメル", "マイメロディ", "シナモロール"],
+    "answer": 0,
+    "relatedLinks": [
+      "https://www.sanrio.co.jp/characters/wishmemell/",
+      "https://www.sanrio.co.jp/characters/mymelody/",
+      "https://www.sanrio.co.jp/characters/cinnamon/"
+    ]
+  },
+  {
+    "question": "温泉が好きなキャラクターは？",
+    "choices": ["ハンギョドン", "タキシードサム", "けろけろけろっぴ"],
+    "answer": 0,
+    "relatedLinks": [
+      "https://www.sanrio.co.jp/characters/hangyodon/",
+      "https://www.sanrio.co.jp/characters/tuxedosam/",
+      "https://www.sanrio.co.jp/characters/keroppi/"
+    ]
+  },
+  {
+    "question": "ポリパリラーメンが好物のキャラクターは？",
+    "choices": ["バッドばつ丸", "ハンギョドン", "タキシードサム"],
+    "answer": 0,
+    "relatedLinks": [
+      "https://www.sanrio.co.jp/characters/badtzmaru/",
+      "https://www.sanrio.co.jp/characters/hangyodon/",
+      "https://www.sanrio.co.jp/characters/tuxedosam/"
+    ]
+  },
+  {
+    "question": "イワシのムニエルが好物のキャラクターは？",
+    "choices": ["タキシードサム", "ハンギョドン", "けろけろけろっぴ"],
+    "answer": 0,
+    "relatedLinks": [
+      "https://www.sanrio.co.jp/characters/tuxedosam/",
+      "https://www.sanrio.co.jp/characters/hangyodon/",
+      "https://www.sanrio.co.jp/characters/keroppi/"
+    ]
+  },
+  {
+    "question": "クッキーが好物のキャラクターは？",
+    "choices": ["コロコロクリリン", "ハローキティ", "マイメロディ"],
+    "answer": 0,
+    "relatedLinks": [
+      "https://www.sanrio.co.jp/characters/kuririn/",
+      "https://www.sanrio.co.jp/characters/hellokitty/",
+      "https://www.sanrio.co.jp/characters/mymelody/"
+    ]
+  },
+  {
+    "question": "もちもちした食べ物が好きなキャラクターは？",
+    "choices": ["まるもふびより", "はなまるおばけ", "ぐでたま"],
+    "answer": 0,
+    "relatedLinks": [
+      "https://www.sanrio.co.jp/characters/marumofubiyori/",
+      "https://www.sanrio.co.jp/characters/hanamaruobake/",
+      "https://www.sanrio.co.jp/characters/gudetama/"
+    ]
+  },
+  {
+    "question": "甘いお菓子が好物のキャラクターは？",
+    "choices": ["キキ", "クロミ", "バッドばつ丸"],
+    "answer": 0,
+    "relatedLinks": [
+      "https://www.sanrio.co.jp/characters/kikilala/",
+      "https://www.sanrio.co.jp/characters/kuromi/",
+      "https://www.sanrio.co.jp/characters/badtzmaru/"
+    ]
+  },
+  {
+    "question": "あまいものが好きなキャラクターは？",
+    "choices": ["はなまるおばけ", "クロミ", "バッドばつ丸"],
+    "answer": 0,
+    "relatedLinks": [
+      "https://www.sanrio.co.jp/characters/hanamaruobake/",
+      "https://www.sanrio.co.jp/characters/kuromi/",
+      "https://www.sanrio.co.jp/characters/badtzmaru/"
+    ]
+  },
+  {
+    "question": "ミルクが好物のキャラクターは？",
+    "choices": ["ポムポムプリン", "シナモロール", "コロコロクリリン"],
+    "answer": 0,
+    "relatedLinks": [
+      "https://www.sanrio.co.jp/characters/pompompurin/",
+      "https://www.sanrio.co.jp/characters/cinnamon/",
+      "https://www.sanrio.co.jp/characters/kuririn/"
+    ]
+  },
+  {
+    "question": "ハローキティの趣味でピアノ以外は？",
+    "choices": ["クッキーを作ること", "日記をつけること", "くつ集め"],
+    "answer": 0,
+    "relatedLinks": ["https://www.sanrio.co.jp/characters/hellokitty/"]
+  },
+  {
+    "question": "ポチャッコの趣味は？",
+    "choices": ["より道お散歩", "日記をつけること", "くつ集め"],
+    "answer": 0,
+    "relatedLinks": ["https://www.sanrio.co.jp/characters/pochacco/"]
+  },
+  {
+    "question": "キキの趣味で星釣り以外は？",
+    "choices": ["発明", "絵をかくこと", "日記をつけること"],
+    "answer": 0,
+    "relatedLinks": ["https://www.sanrio.co.jp/characters/kikilala/"]
+  },
+  {
+    "question": "マイメロディの趣味は？",
+    "choices": ["クッキーを焼くこと", "日記をつけること", "お手紙を書くこと"],
+    "answer": 0,
+    "relatedLinks": ["https://www.sanrio.co.jp/characters/mymelody/"]
+  },
+  {
+    "question": "ハンギョドンの趣味は？",
+    "choices": ["自分のグッズを集めること", "悪役ブロマイドを集めること", "通販"],
+    "answer": 0,
+    "relatedLinks": ["https://www.sanrio.co.jp/characters/hangyodon/"]
+  },
+  {
+    "question": "タキシードサムの趣味は？",
+    "choices": ["テニスやホッケー", "くつ集め", "日記をつけること"],
+    "answer": 0,
+    "relatedLinks": ["https://www.sanrio.co.jp/characters/tuxedosam/"]
+  },
+  {
+    "question": "コロコロクリリンの趣味は？",
+    "choices": ["宝もの集め", "通販", "日記をつけること"],
+    "answer": 0,
+    "relatedLinks": ["https://www.sanrio.co.jp/characters/kuririn/"]
+  },
+  {
+    "question": "ミュークルドリーミーの趣味は？",
+    "choices": ["お花畑をおさんぽすること", "日記をつけること", "通販"],
+    "answer": 0,
+    "relatedLinks": ["https://www.sanrio.co.jp/characters/mewkledreamy/"]
+  },
+  {
+    "question": "はなまるおばけの趣味は？",
+    "choices": ["おひるね", "通販", "日記をつけること"],
+    "answer": 0,
+    "relatedLinks": ["https://www.sanrio.co.jp/characters/hanamaruobake/"]
+  },
+  {
+    "question": "シアンの趣味は？",
+    "choices": ["骨董品を集めること", "悪役ブロマイドを集めること", "通販"],
+    "answer": 0,
+    "relatedLinks": ["https://www.sanrio.co.jp/characters/showbyrock/"]
+  },
+  {
+    "question": "より道お散歩が趣味のキャラクターは？",
+    "choices": ["ポチャッコ", "シナモロール", "ポムポムプリン"],
+    "answer": 0,
+    "relatedLinks": [
+      "https://www.sanrio.co.jp/characters/pochacco/",
+      "https://www.sanrio.co.jp/characters/cinnamon/",
+      "https://www.sanrio.co.jp/characters/pompompurin/"
+    ]
+  },
+  {
+    "question": "発明が趣味のキャラクターは？",
+    "choices": ["キキ", "ララ", "シナモロール"],
+    "answer": 0,
+    "relatedLinks": [
+      "https://www.sanrio.co.jp/characters/kikilala/",
+      "https://www.sanrio.co.jp/characters/kikilala/",
+      "https://www.sanrio.co.jp/characters/cinnamon/"
+    ]
+  },
+  {
+    "question": "自分のグッズを集めることが趣味のキャラクターは？",
+    "choices": ["ハンギョドン", "バッドばつ丸", "クロミ"],
+    "answer": 0,
+    "relatedLinks": [
+      "https://www.sanrio.co.jp/characters/hangyodon/",
+      "https://www.sanrio.co.jp/characters/badtzmaru/",
+      "https://www.sanrio.co.jp/characters/kuromi/"
+    ]
+  },
+  {
+    "question": "テニスやホッケーが趣味のキャラクターは？",
+    "choices": ["タキシードサム", "ポチャッコ", "けろけろけろっぴ"],
+    "answer": 0,
+    "relatedLinks": [
+      "https://www.sanrio.co.jp/characters/tuxedosam/",
+      "https://www.sanrio.co.jp/characters/pochacco/",
+      "https://www.sanrio.co.jp/characters/keroppi/"
+    ]
+  },
+  {
+    "question": "宝もの集めが趣味のキャラクターは？",
+    "choices": ["コロコロクリリン", "バッドばつ丸", "シアン"],
+    "answer": 0,
+    "relatedLinks": [
+      "https://www.sanrio.co.jp/characters/kuririn/",
+      "https://www.sanrio.co.jp/characters/badtzmaru/",
+      "https://www.sanrio.co.jp/characters/showbyrock/"
+    ]
+  },
+  {
+    "question": "お花畑をおさんぽすることが趣味のキャラクターは？",
+    "choices": ["ミュークルドリーミー", "マイメロディ", "マイスウィートピアノ"],
+    "answer": 0,
+    "relatedLinks": [
+      "https://www.sanrio.co.jp/characters/mewkledreamy/",
+      "https://www.sanrio.co.jp/characters/mymelody/",
+      "https://www.sanrio.co.jp/characters/mysweetpiano/"
+    ]
+  },
+  {
+    "question": "骨董品を集めることが趣味のキャラクターは？",
+    "choices": ["シアン", "クロミ", "バッドばつ丸"],
+    "answer": 0,
+    "relatedLinks": [
+      "https://www.sanrio.co.jp/characters/showbyrock/",
+      "https://www.sanrio.co.jp/characters/kuromi/",
+      "https://www.sanrio.co.jp/characters/badtzmaru/"
+    ]
+  },
+  {
+    "question": "動画サイトめぐりが趣味のキャラクターは？",
+    "choices": ["まるもふびより", "シアン", "クロミ"],
+    "answer": 0,
+    "relatedLinks": [
+      "https://www.sanrio.co.jp/characters/marumofubiyori/",
+      "https://www.sanrio.co.jp/characters/showbyrock/",
+      "https://www.sanrio.co.jp/characters/kuromi/"
+    ]
+  },
+  {
+    "question": "狩りが趣味のキャラクターは？",
+    "choices": ["ほわん", "シアン", "クロミ"],
+    "answer": 0,
+    "relatedLinks": [
+      "https://www.sanrio.co.jp/characters/showbyrock/",
+      "https://www.sanrio.co.jp/characters/showbyrock/",
+      "https://www.sanrio.co.jp/characters/kuromi/"
+    ]
+  },
+  {
+    "question": "ペックルは何の動物？",
+    "choices": ["あひる", "ペンギン", "カエル"],
+    "answer": 0,
+    "relatedLinks": ["https://www.sanrio.co.jp/characters/pekkle/"]
+  },
+  {
+    "question": "バッドばつ丸は何の動物？",
+    "choices": ["ペンギン", "あひる", "カラス"],
+    "answer": 0,
+    "relatedLinks": ["https://www.sanrio.co.jp/characters/badtzmaru/"]
+  },
+  {
+    "question": "ウィッシュミーメルは何の動物？",
+    "choices": ["ウサギ", "ネコ", "ヒツジ"],
+    "answer": 0,
+    "relatedLinks": ["https://www.sanrio.co.jp/characters/wishmemell/"]
+  },
+  {
+    "question": "シアンは何族？",
+    "choices": ["ネコ族", "イヌ族", "ウサギ族"],
+    "answer": 0,
+    "relatedLinks": ["https://www.sanrio.co.jp/characters/showbyrock/"]
+  },
+  {
+    "question": "ほわんは何族？",
+    "choices": ["きつね族", "ネコ族", "イヌ族"],
+    "answer": 0,
+    "relatedLinks": ["https://www.sanrio.co.jp/characters/showbyrock/"]
+  },
+  {
+    "question": "あひるのキャラクターは？",
+    "choices": ["ペックル", "タキシードサム", "けろけろけろっぴ"],
+    "answer": 0,
+    "relatedLinks": [
+      "https://www.sanrio.co.jp/characters/pekkle/",
+      "https://www.sanrio.co.jp/characters/tuxedosam/",
+      "https://www.sanrio.co.jp/characters/keroppi/"
+    ]
+  },
+  {
+    "question": "ネコ族のキャラクターは？",
+    "choices": ["シアン", "ほわん", "シナモロール"],
+    "answer": 0,
+    "relatedLinks": [
+      "https://www.sanrio.co.jp/characters/showbyrock/",
+      "https://www.sanrio.co.jp/characters/showbyrock/",
+      "https://www.sanrio.co.jp/characters/cinnamon/"
+    ]
+  },
+  {
+    "question": "きつね族のキャラクターは？",
+    "choices": ["ほわん", "シアン", "クロミ"],
+    "answer": 0,
+    "relatedLinks": [
+      "https://www.sanrio.co.jp/characters/showbyrock/",
+      "https://www.sanrio.co.jp/characters/showbyrock/",
+      "https://www.sanrio.co.jp/characters/kuromi/"
+    ]
+  },
+  {
+    "question": "「はなまる」が名前に入っているキャラクターは？",
+    "choices": ["はなまるおばけ", "ぐでたま", "こぎみゅん"],
+    "answer": 0,
+    "relatedLinks": [
+      "https://www.sanrio.co.jp/characters/hanamaruobake/",
+      "https://www.sanrio.co.jp/characters/gudetama/",
+      "https://www.sanrio.co.jp/characters/cogimyun/"
+    ]
+  },
+  {
+    "question": "こねこのぬいぐるみのキャラクターは？",
+    "choices": ["ミュークルドリーミー", "シアン", "シナモロール"],
+    "answer": 0,
+    "relatedLinks": [
+      "https://www.sanrio.co.jp/characters/mewkledreamy/",
+      "https://www.sanrio.co.jp/characters/showbyrock/",
+      "https://www.sanrio.co.jp/characters/cinnamon/"
+    ]
+  },
+  {
+    "question": "ポチャッコの出身地は？",
+    "choices": ["ふわふわタウン", "ドーナツ池", "南極"],
+    "answer": 0,
+    "relatedLinks": ["https://www.sanrio.co.jp/characters/pochacco/"]
+  },
+  {
+    "question": "けろけろけろっぴの出身地は？",
+    "choices": ["ドーナツ池", "ふわふわタウン", "南極"],
+    "answer": 0,
+    "relatedLinks": ["https://www.sanrio.co.jp/characters/keroppi/"]
+  },
+  {
+    "question": "ほわんの出身地は？",
+    "choices": ["北国の小さな村", "南極", "フランス"],
+    "answer": 0,
+    "relatedLinks": ["https://www.sanrio.co.jp/characters/showbyrock/"]
+  },
+  {
+    "question": "キキとララの出身地は？",
+    "choices": ["ゆめ星雲の思いやり星", "遠いお空の雲の上", "南極"],
+    "answer": 0,
+    "relatedLinks": ["https://www.sanrio.co.jp/characters/kikilala/"]
+  },
+  {
+    "question": "タキシードサムの出身地の詳細は？",
+    "choices": ["南極のとある島", "南極のペンギン村", "南極の氷の国"],
+    "answer": 0,
+    "relatedLinks": ["https://www.sanrio.co.jp/characters/tuxedosam/"]
+  },
+  {
+    "question": "ふわふわタウン出身のキャラクターは？",
+    "choices": ["ポチャッコ", "シナモロール", "ポムポムプリン"],
+    "answer": 0,
+    "relatedLinks": [
+      "https://www.sanrio.co.jp/characters/pochacco/",
+      "https://www.sanrio.co.jp/characters/cinnamon/",
+      "https://www.sanrio.co.jp/characters/pompompurin/"
+    ]
+  },
+  {
+    "question": "ドーナツ池出身のキャラクターは？",
+    "choices": ["けろけろけろっぴ", "ポチャッコ", "ハンギョドン"],
+    "answer": 0,
+    "relatedLinks": [
+      "https://www.sanrio.co.jp/characters/keroppi/",
+      "https://www.sanrio.co.jp/characters/pochacco/",
+      "https://www.sanrio.co.jp/characters/hangyodon/"
+    ]
+  },
+  {
+    "question": "北国の小さな村出身のキャラクターは？",
+    "choices": ["ほわん", "シアン", "タキシードサム"],
+    "answer": 0,
+    "relatedLinks": [
+      "https://www.sanrio.co.jp/characters/showbyrock/",
+      "https://www.sanrio.co.jp/characters/showbyrock/",
+      "https://www.sanrio.co.jp/characters/tuxedosam/"
+    ]
+  },
+  {
+    "question": "思いやり星出身のキャラクターは？",
+    "choices": ["キキ＆ララ", "シナモロール", "ミュークルドリーミー"],
+    "answer": 0,
+    "relatedLinks": [
+      "https://www.sanrio.co.jp/characters/kikilala/",
+      "https://www.sanrio.co.jp/characters/cinnamon/",
+      "https://www.sanrio.co.jp/characters/mewkledreamy/"
+    ]
+  },
+  {
+    "question": "あひるのペックルの夢は？",
+    "choices": ["空を飛ぶこと", "タップダンサーになること", "歌手になること"],
+    "answer": 0,
+    "relatedLinks": ["https://www.sanrio.co.jp/characters/pekkle/"]
+  },
+  {
+    "question": "キキとララの夢は？",
+    "choices": ["立派に輝く星になること", "シェフになること", "お菓子屋さんになること"],
+    "answer": 0,
+    "relatedLinks": ["https://www.sanrio.co.jp/characters/kikilala/"]
+  },
+  {
+    "question": "KIRIMIちゃん.の夢は？",
+    "choices": ["おいしく食べてもらうこと", "社長になること", "シェフになること"],
+    "answer": 0,
+    "relatedLinks": ["https://www.sanrio.co.jp/characters/kirimichan/"]
+  },
+  {
+    "question": "はなまるおばけの夢は？",
+    "choices": ["じょうずに絵がかけるようになること", "シェフになること", "お菓子屋さんになること"],
+    "answer": 0,
+    "relatedLinks": ["https://www.sanrio.co.jp/characters/hanamaruobake/"]
+  },
+  {
+    "question": "ミュークルドリーミーの夢は？",
+    "choices": ["夢占いができるようになること", "シェフになること", "お菓子屋さんになること"],
+    "answer": 0,
+    "relatedLinks": ["https://www.sanrio.co.jp/characters/mewkledreamy/"]
+  },
+  {
+    "question": "空を飛ぶことが夢のキャラクターは？",
+    "choices": ["あひるのペックル", "シナモロール", "キキ"],
+    "answer": 0,
+    "relatedLinks": [
+      "https://www.sanrio.co.jp/characters/pekkle/",
+      "https://www.sanrio.co.jp/characters/cinnamon/",
+      "https://www.sanrio.co.jp/characters/kikilala/"
+    ]
+  },
+  {
+    "question": "立派に輝く星になることが夢のキャラクターは？",
+    "choices": ["キキ＆ララ", "シナモロール", "ミュークルドリーミー"],
+    "answer": 0,
+    "relatedLinks": [
+      "https://www.sanrio.co.jp/characters/kikilala/",
+      "https://www.sanrio.co.jp/characters/cinnamon/",
+      "https://www.sanrio.co.jp/characters/mewkledreamy/"
+    ]
+  },
+  {
+    "question": "おいしく食べてもらうことが夢のキャラクターは？",
+    "choices": ["KIRIMIちゃん.", "ぐでたま", "こぎみゅん"],
+    "answer": 0,
+    "relatedLinks": [
+      "https://www.sanrio.co.jp/characters/kirimichan/",
+      "https://www.sanrio.co.jp/characters/gudetama/",
+      "https://www.sanrio.co.jp/characters/cogimyun/"
+    ]
+  },
+  {
+    "question": "夢占いができるようになることが夢のキャラクターは？",
+    "choices": ["ミュークルドリーミー", "キキ＆ララ", "はなまるおばけ"],
+    "answer": 0,
+    "relatedLinks": [
+      "https://www.sanrio.co.jp/characters/mewkledreamy/",
+      "https://www.sanrio.co.jp/characters/kikilala/",
+      "https://www.sanrio.co.jp/characters/hanamaruobake/"
+    ]
+  },
+  {
+    "question": "シナモロールの友達カプチーノの性格は？",
+    "choices": ["のんびり屋さんで食いしん坊", "オシャレでおしゃべり", "いつも元気いっぱい"],
+    "answer": 0,
+    "relatedLinks": ["https://www.sanrio.co.jp/characters/cinnamon/"]
+  },
+  {
+    "question": "シナモロールの友達モカの性格は？",
+    "choices": ["オシャレでおしゃべり", "のんびり屋さんで食いしん坊", "いつも元気いっぱい"],
+    "answer": 0,
+    "relatedLinks": ["https://www.sanrio.co.jp/characters/cinnamon/"]
+  },
+  {
+    "question": "シナモロールの友達シフォンの性格は？",
+    "choices": ["いつも元気いっぱい", "のんびり屋さんで食いしん坊", "オシャレでおしゃべり"],
+    "answer": 0,
+    "relatedLinks": ["https://www.sanrio.co.jp/characters/cinnamon/"]
+  },
+  {
+    "question": "シナモロールの友達エスプレッソの特徴は？",
+    "choices": ["コンテスト優勝経験あり", "のんびり屋さん", "いつも元気いっぱい"],
+    "answer": 0,
+    "relatedLinks": ["https://www.sanrio.co.jp/characters/cinnamon/"]
+  },
+  {
+    "question": "シナモロールの友達みるくの夢は？",
+    "choices": ["いつか空を飛びたい", "シェフになりたい", "お菓子屋さんになりたい"],
+    "answer": 0,
+    "relatedLinks": ["https://www.sanrio.co.jp/characters/cinnamon/"]
+  },
+  {
+    "question": "ポチャッコのいちばんの親友チョッピの誕生日は？",
+    "choices": ["3月22日", "2月29日", "6月27日"],
+    "answer": 0,
+    "relatedLinks": ["https://www.sanrio.co.jp/characters/pochacco/"]
+  },
+  {
+    "question": "クロミの子分バクの誕生日は？",
+    "choices": ["2月29日", "10月31日", "3月22日"],
+    "answer": 0,
+    "relatedLinks": ["https://www.sanrio.co.jp/characters/kuromi/"]
+  },
+  {
+    "question": "ハンギョドンの親友さゆりの誕生日は？",
+    "choices": ["5月9日", "3月14日", "7月27日"],
+    "answer": 0,
+    "relatedLinks": ["https://www.sanrio.co.jp/characters/hangyodon/"]
+  },
+  {
+    "question": "シナモロールの友達カプチーノの誕生日は？",
+    "choices": ["6月27日", "3月6日", "2月20日"],
+    "answer": 0,
+    "relatedLinks": ["https://www.sanrio.co.jp/characters/cinnamon/"]
+  },
+  {
+    "question": "シナモロールの友達モカの誕生日は？",
+    "choices": ["2月20日", "6月27日", "1月14日"],
+    "answer": 0,
+    "relatedLinks": ["https://www.sanrio.co.jp/characters/cinnamon/"]
+  },
+  {
+    "question": "シナモロールの友達シフォンの誕生日は？",
+    "choices": ["1月14日", "6月27日", "2月20日"],
+    "answer": 0,
+    "relatedLinks": ["https://www.sanrio.co.jp/characters/cinnamon/"]
+  },
+  {
+    "question": "シナモロールの友達エスプレッソの誕生日は？",
+    "choices": ["12月4日", "6月27日", "2月20日"],
+    "answer": 0,
+    "relatedLinks": ["https://www.sanrio.co.jp/characters/cinnamon/"]
+  },
+  {
+    "question": "シナモロールの友達ココとナッツの誕生日は？",
+    "choices": ["7月25日", "6月27日", "12月4日"],
+    "answer": 0,
+    "relatedLinks": ["https://www.sanrio.co.jp/characters/cinnamon/"]
+  },
+  {
+    "question": "ハンギョドンの友達おたまろの特徴は？",
+    "choices": ["食いしん坊で好き嫌いがない", "明るく元気な楽天家", "几帳面な性格"],
+    "answer": 0,
+    "relatedLinks": ["https://www.sanrio.co.jp/characters/hangyodon/"]
+  },
+  {
+    "question": "シナモロールの友達でのんびり屋さんなのは？",
+    "choices": ["カプチーノ", "モカ", "シフォン"],
+    "answer": 0,
+    "relatedLinks": ["https://www.sanrio.co.jp/characters/cinnamon/"]
+  },
+  {
+    "question": "シナモロールの友達でオシャレでおしゃべりなのは？",
+    "choices": ["モカ", "カプチーノ", "シフォン"],
+    "answer": 0,
+    "relatedLinks": ["https://www.sanrio.co.jp/characters/cinnamon/"]
+  },
+  {
+    "question": "シナモロールの友達でムードメーカーなのは？",
+    "choices": ["シフォン", "カプチーノ", "モカ"],
+    "answer": 0,
+    "relatedLinks": ["https://www.sanrio.co.jp/characters/cinnamon/"]
+  },
+  {
+    "question": "シナモロールの友達でワンちゃんコンテスト優勝経験があるのは？",
+    "choices": ["エスプレッソ", "カプチーノ", "モカ"],
+    "answer": 0,
+    "relatedLinks": ["https://www.sanrio.co.jp/characters/cinnamon/"]
+  },
+  {
+    "question": "シナモロールの友達でいつか空を飛びたいと思っているのは？",
+    "choices": ["みるく", "シフォン", "カプチーノ"],
+    "answer": 0,
+    "relatedLinks": ["https://www.sanrio.co.jp/characters/cinnamon/"]
+  },
+  {
+    "question": "シナモロールの友達でカプチーノの双子の弟は？",
+    "choices": ["ココとナッツ", "シフォンとモカ", "エスプレッソとみるく"],
+    "answer": 0,
+    "relatedLinks": ["https://www.sanrio.co.jp/characters/cinnamon/"]
+  },
+  {
+    "question": "ハンギョドンの友達でタコの女のコは？",
+    "choices": ["さゆり", "おたまろ", "イタロー"],
+    "answer": 0,
+    "relatedLinks": ["https://www.sanrio.co.jp/characters/hangyodon/"]
+  },
+  {
+    "question": "ハンギョドンの友達でオタマジャクシの男のコは？",
+    "choices": ["おたまろ", "さゆり", "イタロー"],
+    "answer": 0,
+    "relatedLinks": ["https://www.sanrio.co.jp/characters/hangyodon/"]
+  },
+  {
+    "question": "バッドばつ丸の友達でIQ200なのは？",
+    "choices": ["蘇我イルカ", "伊集院パンダバ", "グッドはな丸"],
+    "answer": 0,
+    "relatedLinks": ["https://www.sanrio.co.jp/characters/badtzmaru/"]
+  },
+  {
+    "question": "けろけろけろっぴのデビュー年は？",
+    "choices": ["1988年", "1989年", "1985年"],
+    "answer": 0,
+    "relatedLinks": ["https://www.sanrio.co.jp/characters/keroppi/"]
+  },
+  {
+    "question": "ウィッシュミーメルのデビュー年は？",
+    "choices": ["2010年", "2005年", "2002年"],
+    "answer": 0,
+    "relatedLinks": ["https://www.sanrio.co.jp/characters/wishmemell/"]
+  },
+  {
+    "question": "タキシードサムのデビュー年は？",
+    "choices": ["1979年", "1974年", "1985年"],
+    "answer": 0,
+    "relatedLinks": ["https://www.sanrio.co.jp/characters/tuxedosam/"]
+  },
+  {
+    "question": "ハンギョドンのデビュー年は？",
+    "choices": ["1985年", "1988年", "1979年"],
+    "answer": 0,
+    "relatedLinks": ["https://www.sanrio.co.jp/characters/hangyodon/"]
+  },
+  {
+    "question": "あひるのペックルのデビュー年は？",
+    "choices": ["1989年", "1988年", "1985年"],
+    "answer": 0,
+    "relatedLinks": ["https://www.sanrio.co.jp/characters/pekkle/"]
+  },
+  {
+    "question": "1988年にデビューしたキャラクターは？",
+    "choices": ["けろけろけろっぴ", "ポチャッコ", "あひるのペックル"],
+    "answer": 0,
+    "relatedLinks": [
+      "https://www.sanrio.co.jp/characters/keroppi/",
+      "https://www.sanrio.co.jp/characters/pochacco/",
+      "https://www.sanrio.co.jp/characters/pekkle/"
+    ]
+  },
+  {
+    "question": "1979年にデビューしたキャラクターは？",
+    "choices": ["タキシードサム", "ハンギョドン", "マイメロディ"],
+    "answer": 0,
+    "relatedLinks": [
+      "https://www.sanrio.co.jp/characters/tuxedosam/",
+      "https://www.sanrio.co.jp/characters/hangyodon/",
+      "https://www.sanrio.co.jp/characters/mymelody/"
+    ]
+  },
+  {
+    "question": "1985年にデビューしたキャラクターは？",
+    "choices": ["ハンギョドン", "タキシードサム", "けろけろけろっぴ"],
+    "answer": 0,
+    "relatedLinks": [
+      "https://www.sanrio.co.jp/characters/hangyodon/",
+      "https://www.sanrio.co.jp/characters/tuxedosam/",
+      "https://www.sanrio.co.jp/characters/keroppi/"
+    ]
+  },
+  {
+    "question": "2010年にデビューしたキャラクターは？",
+    "choices": ["ウィッシュミーメル", "クロミ", "シナモロール"],
+    "answer": 0,
+    "relatedLinks": [
+      "https://www.sanrio.co.jp/characters/wishmemell/",
+      "https://www.sanrio.co.jp/characters/kuromi/",
+      "https://www.sanrio.co.jp/characters/cinnamon/"
+    ]
+  },
+  {
+    "question": "2017年にデビューしたキャラクターは？",
+    "choices": ["まるもふびより", "ぐでたま", "クロミ"],
+    "answer": 0,
+    "relatedLinks": [
+      "https://www.sanrio.co.jp/characters/marumofubiyori/",
+      "https://www.sanrio.co.jp/characters/gudetama/",
+      "https://www.sanrio.co.jp/characters/kuromi/"
+    ]
+  },
+  {
+    "question": "ハローキティのトレードマークは？",
+    "choices": ["左耳のリボン", "右耳のリボン", "ベレー帽"],
+    "answer": 0,
+    "relatedLinks": ["https://www.sanrio.co.jp/characters/hellokitty/"]
+  },
+  {
+    "question": "ミミィ（キティの妹）のトレードマークは？",
+    "choices": ["右耳のリボン", "左耳のリボン", "ベレー帽"],
+    "answer": 0,
+    "relatedLinks": ["https://www.sanrio.co.jp/characters/hellokitty/"]
+  },
+  {
+    "question": "マイスウィートピアノのチャームポイントは？",
+    "choices": ["ベビーピンクのフワフワの髪の毛", "虹色のしっぽ", "星のもよう"],
+    "answer": 0,
+    "relatedLinks": ["https://www.sanrio.co.jp/characters/mysweetpiano/"]
+  },
+  {
+    "question": "あひるのペックルがよく持ち歩いているものは？",
+    "choices": ["バケツ", "ブランケット", "帽子"],
+    "answer": 0,
+    "relatedLinks": ["https://www.sanrio.co.jp/characters/pekkle/"]
+  },
+  {
+    "question": "ミュークルドリーミーの宝物は？",
+    "choices": ["星形のクッション", "ブランケット", "あかえんぴつ"],
+    "answer": 0,
+    "relatedLinks": ["https://www.sanrio.co.jp/characters/mewkledreamy/"]
+  },
+  {
+    "question": "ウィッシュミーメルの宝物は？",
+    "choices": ["お手紙", "ブランケット", "星のステッキ"],
+    "answer": 0,
+    "relatedLinks": ["https://www.sanrio.co.jp/characters/wishmemell/"]
+  },
+  {
+    "question": "KIRIMIちゃん.の宝物は？",
+    "choices": ["自分の形の貯金箱", "ブランケット", "あかえんぴつ"],
+    "answer": 0,
+    "relatedLinks": ["https://www.sanrio.co.jp/characters/kirimichan/"]
+  },
+  {
+    "question": "ハローキティが森で見つけた宝物は？",
+    "choices": ["カギ", "星のステッキ", "ブランケット"],
+    "answer": 0,
+    "relatedLinks": ["https://www.sanrio.co.jp/characters/hellokitty/"]
+  },
+  {
+    "question": "ハローキティが大切にしている本は？",
+    "choices": ["フェアリーテイルブック", "恋愛小説", "日記帳"],
+    "answer": 0,
+    "relatedLinks": ["https://www.sanrio.co.jp/characters/hellokitty/"]
+  },
+  {
+    "question": "クロミがはまっている本は？",
+    "choices": ["恋愛小説", "フェアリーテイルブック", "冒険小説"],
+    "answer": 0,
+    "relatedLinks": ["https://www.sanrio.co.jp/characters/kuromi/"]
+  },
+  {
+    "question": "左耳にリボンをつけているのは？",
+    "choices": ["ハローキティ", "ミミィ", "マイメロディ"],
+    "answer": 0,
+    "relatedLinks": [
+      "https://www.sanrio.co.jp/characters/hellokitty/",
+      "https://www.sanrio.co.jp/characters/hellokitty/",
+      "https://www.sanrio.co.jp/characters/mymelody/"
+    ]
+  },
+  {
+    "question": "右耳にリボンをつけているのは？",
+    "choices": ["ミミィ", "ハローキティ", "マイメロディ"],
+    "answer": 0,
+    "relatedLinks": [
+      "https://www.sanrio.co.jp/characters/hellokitty/",
+      "https://www.sanrio.co.jp/characters/hellokitty/",
+      "https://www.sanrio.co.jp/characters/mymelody/"
+    ]
+  },
+  {
+    "question": "ベビーピンクのフワフワの髪の毛がチャームポイントのキャラクターは？",
+    "choices": ["マイスウィートピアノ", "マイメロディ", "クロミ"],
+    "answer": 0,
+    "relatedLinks": [
+      "https://www.sanrio.co.jp/characters/mysweetpiano/",
+      "https://www.sanrio.co.jp/characters/mymelody/",
+      "https://www.sanrio.co.jp/characters/kuromi/"
+    ]
+  },
+  {
+    "question": "バケツをよく持ち歩いているキャラクターは？",
+    "choices": ["あひるのペックル", "けろけろけろっぴ", "タキシードサム"],
+    "answer": 0,
+    "relatedLinks": [
+      "https://www.sanrio.co.jp/characters/pekkle/",
+      "https://www.sanrio.co.jp/characters/keroppi/",
+      "https://www.sanrio.co.jp/characters/tuxedosam/"
+    ]
+  },
+  {
+    "question": "星形のクッションが宝物のキャラクターは？",
+    "choices": ["ミュークルドリーミー", "キキ", "ララ"],
+    "answer": 0,
+    "relatedLinks": [
+      "https://www.sanrio.co.jp/characters/mewkledreamy/",
+      "https://www.sanrio.co.jp/characters/kikilala/",
+      "https://www.sanrio.co.jp/characters/kikilala/"
+    ]
+  },
+  {
+    "question": "恋愛小説にはまっているキャラクターは？",
+    "choices": ["クロミ", "マイメロディ", "ハローキティ"],
+    "answer": 0,
+    "relatedLinks": [
+      "https://www.sanrio.co.jp/characters/kuromi/",
+      "https://www.sanrio.co.jp/characters/mymelody/",
+      "https://www.sanrio.co.jp/characters/hellokitty/"
+    ]
+  },
+  {
+    "question": "フェアリーテイルブックを大切にしているキャラクターは？",
+    "choices": ["ハローキティ", "マイメロディ", "クロミ"],
+    "answer": 0,
+    "relatedLinks": [
+      "https://www.sanrio.co.jp/characters/hellokitty/",
+      "https://www.sanrio.co.jp/characters/mymelody/",
+      "https://www.sanrio.co.jp/characters/kuromi/"
+    ]
+  },
+  {
+    "question": "お手紙が宝物のキャラクターは？",
+    "choices": ["ウィッシュミーメル", "マイメロディ", "ハローキティ"],
+    "answer": 0,
+    "relatedLinks": [
+      "https://www.sanrio.co.jp/characters/wishmemell/",
+      "https://www.sanrio.co.jp/characters/mymelody/",
+      "https://www.sanrio.co.jp/characters/hellokitty/"
+    ]
+  },
+  {
+    "question": "シナモロールの性格は？",
+    "choices": ["おとなしくて人なつっこい", "いたずら好きであまのじゃく", "好奇心旺盛でおっちょこちょい"],
+    "answer": 0,
+    "relatedLinks": ["https://www.sanrio.co.jp/characters/cinnamon/"]
+  },
+  {
+    "question": "ミュークルドリーミーの性格は？",
+    "choices": ["ほんわかやさしい", "いたずら好き", "ぐーたら"],
+    "answer": 0,
+    "relatedLinks": ["https://www.sanrio.co.jp/characters/mewkledreamy/"]
+  },
+  {
+    "question": "ウィッシュミーメルの性格は？",
+    "choices": ["ちょっぴりとぼけていて素直", "いたずら好きであまのじゃく", "ぐーたらでマイペース"],
+    "answer": 0,
+    "relatedLinks": ["https://www.sanrio.co.jp/characters/wishmemell/"]
+  },
+  {
+    "question": "マイメロディの性格は？",
+    "choices": ["すなおで明るく弟思い", "乙女チック", "好奇心旺盛でおっちょこちょい"],
+    "answer": 0,
+    "relatedLinks": ["https://www.sanrio.co.jp/characters/mymelody/"]
+  },
+  {
+    "question": "けろけろけろっぴの性格は？",
+    "choices": ["元気いっぱいで冒険好き", "のんびりマイペース", "ぐーたらでインドア派"],
+    "answer": 0,
+    "relatedLinks": ["https://www.sanrio.co.jp/characters/keroppi/"]
+  },
+  {
+    "question": "キキの性格は？",
+    "choices": ["好奇心旺盛でいたずら好き", "怖がりで泣き虫", "のんびりマイペース"],
+    "answer": 0,
+    "relatedLinks": ["https://www.sanrio.co.jp/characters/kikilala/"]
+  },
+  {
+    "question": "マイスウィートピアノの性格は？",
+    "choices": ["やさしくて甘えん坊", "いたずら好き", "元気いっぱい"],
+    "answer": 0,
+    "relatedLinks": ["https://www.sanrio.co.jp/characters/mysweetpiano/"]
+  },
+  {
+    "question": "コロコロクリリンの性格は？",
+    "choices": ["ちょっぴり気が小さいけど好奇心旺盛", "いたずら好きであまのじゃく", "ぐーたらでマイペース"],
+    "answer": 0,
+    "relatedLinks": ["https://www.sanrio.co.jp/characters/kuririn/"]
+  },
+  {
+    "question": "ほわんの性格は？",
+    "choices": ["好奇心旺盛で負けず嫌い", "おとなしくて人なつっこい", "ぐーたらでインドア派"],
+    "answer": 0,
+    "relatedLinks": ["https://www.sanrio.co.jp/characters/showbyrock/"]
+  },
+  {
+    "question": "シアンの性格は？",
+    "choices": ["素直で穏やか", "いたずら好きであまのじゃく", "負けず嫌い"],
+    "answer": 0,
+    "relatedLinks": ["https://www.sanrio.co.jp/characters/showbyrock/"]
+  },
+  {
+    "question": "おとなしくて人なつっこいキャラクターは？",
+    "choices": ["シナモロール", "バッドばつ丸", "クロミ"],
+    "answer": 0,
+    "relatedLinks": [
+      "https://www.sanrio.co.jp/characters/cinnamon/",
+      "https://www.sanrio.co.jp/characters/badtzmaru/",
+      "https://www.sanrio.co.jp/characters/kuromi/"
+    ]
+  },
+  {
+    "question": "ほんわかやさしい性格のキャラクターは？",
+    "choices": ["ミュークルドリーミー", "クロミ", "バッドばつ丸"],
+    "answer": 0,
+    "relatedLinks": [
+      "https://www.sanrio.co.jp/characters/mewkledreamy/",
+      "https://www.sanrio.co.jp/characters/kuromi/",
+      "https://www.sanrio.co.jp/characters/badtzmaru/"
+    ]
+  },
+  {
+    "question": "すなおで明るい性格のキャラクターは？",
+    "choices": ["マイメロディ", "クロミ", "バッドばつ丸"],
+    "answer": 0,
+    "relatedLinks": [
+      "https://www.sanrio.co.jp/characters/mymelody/",
+      "https://www.sanrio.co.jp/characters/kuromi/",
+      "https://www.sanrio.co.jp/characters/badtzmaru/"
+    ]
+  },
+  {
+    "question": "やさしくて甘えん坊なキャラクターは？",
+    "choices": ["マイスウィートピアノ", "クロミ", "バッドばつ丸"],
+    "answer": 0,
+    "relatedLinks": [
+      "https://www.sanrio.co.jp/characters/mysweetpiano/",
+      "https://www.sanrio.co.jp/characters/kuromi/",
+      "https://www.sanrio.co.jp/characters/badtzmaru/"
+    ]
+  },
+  {
+    "question": "元気いっぱいで冒険好きなキャラクターは？",
+    "choices": ["けろけろけろっぴ", "まるもふびより", "ぐでたま"],
+    "answer": 0,
+    "relatedLinks": [
+      "https://www.sanrio.co.jp/characters/keroppi/",
+      "https://www.sanrio.co.jp/characters/marumofubiyori/",
+      "https://www.sanrio.co.jp/characters/gudetama/"
+    ]
+  },
+  {
+    "question": "素直で穏やかなキャラクターは？",
+    "choices": ["シアン", "クロミ", "バッドばつ丸"],
+    "answer": 0,
+    "relatedLinks": [
+      "https://www.sanrio.co.jp/characters/showbyrock/",
+      "https://www.sanrio.co.jp/characters/kuromi/",
+      "https://www.sanrio.co.jp/characters/badtzmaru/"
+    ]
+  },
+  {
+    "question": "好奇心旺盛で負けず嫌いなキャラクターは？",
+    "choices": ["ほわん", "シナモロール", "ぐでたま"],
+    "answer": 0,
+    "relatedLinks": [
+      "https://www.sanrio.co.jp/characters/showbyrock/",
+      "https://www.sanrio.co.jp/characters/cinnamon/",
+      "https://www.sanrio.co.jp/characters/gudetama/"
+    ]
+  },
+  {
+    "question": "ちょっぴり気が小さいけど好奇心旺盛なキャラクターは？",
+    "choices": ["コロコロクリリン", "バッドばつ丸", "クロミ"],
+    "answer": 0,
+    "relatedLinks": [
+      "https://www.sanrio.co.jp/characters/kuririn/",
+      "https://www.sanrio.co.jp/characters/badtzmaru/",
+      "https://www.sanrio.co.jp/characters/kuromi/"
+    ]
+  },
+  {
+    "question": "ちょっぴりとぼけていて素直なキャラクターは？",
+    "choices": ["ウィッシュミーメル", "バッドばつ丸", "クロミ"],
+    "answer": 0,
+    "relatedLinks": [
+      "https://www.sanrio.co.jp/characters/wishmemell/",
+      "https://www.sanrio.co.jp/characters/badtzmaru/",
+      "https://www.sanrio.co.jp/characters/kuromi/"
+    ]
+  },
+  {
+    "question": "ハローキティの本名は？",
+    "choices": ["キティ・ホワイト", "キティ・ブラック", "キティ・ピンク"],
+    "answer": 0,
+    "relatedLinks": ["https://www.sanrio.co.jp/characters/hellokitty/"]
+  },
+  {
+    "question": "シアンの本名は？",
+    "choices": ["聖川詩杏", "白川詩杏", "清川詩杏"],
+    "answer": 0,
+    "relatedLinks": ["https://www.sanrio.co.jp/characters/showbyrock/"]
+  },
+  {
+    "question": "シアンの本名の読み方は？",
+    "choices": ["ひじりかわ しあん", "せいかわ しあん", "きよかわ しあん"],
+    "answer": 0,
+    "relatedLinks": ["https://www.sanrio.co.jp/characters/showbyrock/"]
+  },
+  {
+    "question": "本名が「キティ・ホワイト」のキャラクターは？",
+    "choices": ["ハローキティ", "ミミィ", "マイメロディ"],
+    "answer": 0,
+    "relatedLinks": [
+      "https://www.sanrio.co.jp/characters/hellokitty/",
+      "https://www.sanrio.co.jp/characters/hellokitty/",
+      "https://www.sanrio.co.jp/characters/mymelody/"
+    ]
+  },
+  {
+    "question": "本名が「聖川詩杏」のキャラクターは？",
+    "choices": ["シアン", "ほわん", "マイメロディ"],
+    "answer": 0,
+    "relatedLinks": [
+      "https://www.sanrio.co.jp/characters/showbyrock/",
+      "https://www.sanrio.co.jp/characters/showbyrock/",
+      "https://www.sanrio.co.jp/characters/mymelody/"
+    ]
+  },
+  {
+    "question": "ポムポムプリンの好きな言葉は？",
+    "choices": ["おでかけ", "おやつ", "おひるね"],
+    "answer": 0,
+    "relatedLinks": ["https://www.sanrio.co.jp/characters/pompompurin/"]
+  },
+  {
+    "question": "ポムポムプリンの嫌いな言葉は？",
+    "choices": ["おるすばん", "おでかけ", "おやつ"],
+    "answer": 0,
+    "relatedLinks": ["https://www.sanrio.co.jp/characters/pompompurin/"]
+  },
+  {
+    "question": "ミュークルドリーミーの好きな飲み物は？",
+    "choices": ["ホットミルク", "コーヒー", "紅茶"],
+    "answer": 0,
+    "relatedLinks": ["https://www.sanrio.co.jp/characters/mewkledreamy/"]
+  },
+  {
+    "question": "「おでかけ」が好きな言葉のキャラクターは？",
+    "choices": ["ポムポムプリン", "シナモロール", "まるもふびより"],
+    "answer": 0,
+    "relatedLinks": [
+      "https://www.sanrio.co.jp/characters/pompompurin/",
+      "https://www.sanrio.co.jp/characters/cinnamon/",
+      "https://www.sanrio.co.jp/characters/marumofubiyori/"
+    ]
+  },
+  {
+    "question": "「おるすばん」が嫌いな言葉のキャラクターは？",
+    "choices": ["ポムポムプリン", "シナモロール", "まるもふびより"],
+    "answer": 0,
+    "relatedLinks": [
+      "https://www.sanrio.co.jp/characters/pompompurin/",
+      "https://www.sanrio.co.jp/characters/cinnamon/",
+      "https://www.sanrio.co.jp/characters/marumofubiyori/"
+    ]
+  },
+  {
+    "question": "ハンギョドンの血液型は？",
+    "choices": ["B型", "A型", "O型"],
+    "answer": 0,
+    "relatedLinks": ["https://www.sanrio.co.jp/characters/hangyodon/"]
+  },
+  {
+    "question": "ハンギョドンの星座は？",
+    "choices": ["魚座", "蟹座", "水瓶座"],
+    "answer": 0,
+    "relatedLinks": ["https://www.sanrio.co.jp/characters/hangyodon/"]
+  },
+  {
+    "question": "B型のキャラクターは？",
+    "choices": ["ハンギョドン", "シナモロール", "ポムポムプリン"],
+    "answer": 0,
+    "relatedLinks": [
+      "https://www.sanrio.co.jp/characters/hangyodon/",
+      "https://www.sanrio.co.jp/characters/cinnamon/",
+      "https://www.sanrio.co.jp/characters/pompompurin/"
+    ]
+  },
+  {
+    "question": "魚座のキャラクターは？",
+    "choices": ["ハンギョドン", "シナモロール", "ポムポムプリン"],
+    "answer": 0,
+    "relatedLinks": [
+      "https://www.sanrio.co.jp/characters/hangyodon/",
+      "https://www.sanrio.co.jp/characters/cinnamon/",
+      "https://www.sanrio.co.jp/characters/pompompurin/"
+    ]
+  },
+  {
+    "question": "シアンの身長は？",
+    "choices": ["154cm", "152cm", "160cm"],
+    "answer": 0,
+    "relatedLinks": ["https://www.sanrio.co.jp/characters/showbyrock/"]
+  },
+  {
+    "question": "ほわんの身長は？",
+    "choices": ["152cm", "154cm", "160cm"],
+    "answer": 0,
+    "relatedLinks": ["https://www.sanrio.co.jp/characters/showbyrock/"]
+  },
+  {
+    "question": "身長が154cmのキャラクターは？",
+    "choices": ["シアン", "ほわん", "マイメロディ"],
+    "answer": 0,
+    "relatedLinks": [
+      "https://www.sanrio.co.jp/characters/showbyrock/",
+      "https://www.sanrio.co.jp/characters/showbyrock/",
+      "https://www.sanrio.co.jp/characters/mymelody/"
+    ]
+  },
+  {
+    "question": "身長が152cmのキャラクターは？",
+    "choices": ["ほわん", "シアン", "マイメロディ"],
+    "answer": 0,
+    "relatedLinks": [
+      "https://www.sanrio.co.jp/characters/showbyrock/",
+      "https://www.sanrio.co.jp/characters/showbyrock/",
+      "https://www.sanrio.co.jp/characters/mymelody/"
+    ]
+  },
+  {
+    "question": "KIRIMIちゃん.の誕生日「8月31日」の由来は？",
+    "choices": ["初めて切り身になった日", "いくらが孵った日", "初めて食べられた日"],
+    "answer": 0,
+    "relatedLinks": ["https://www.sanrio.co.jp/characters/kirimichan/"]
+  },
+  {
+    "question": "コロコロクリリンの誕生日の由来は？",
+    "choices": ["飼い主の家に来た日", "生まれた日", "名前をもらった日"],
+    "answer": 0,
+    "relatedLinks": ["https://www.sanrio.co.jp/characters/kuririn/"]
+  },
+  {
+    "question": "ぐでたまの誕生日は？",
+    "choices": ["毎日", "8月31日", "決まっていない"],
+    "answer": 0,
+    "relatedLinks": ["https://www.sanrio.co.jp/characters/gudetama/"]
+  },
+  {
+    "question": "誕生日が「毎日」のキャラクターは？",
+    "choices": ["ぐでたま", "KIRIMIちゃん.", "こぎみゅん"],
+    "answer": 0,
+    "relatedLinks": [
+      "https://www.sanrio.co.jp/characters/gudetama/",
+      "https://www.sanrio.co.jp/characters/kirimichan/",
+      "https://www.sanrio.co.jp/characters/cogimyun/"
+    ]
+  },
+  {
+    "question": "誕生日の由来が「初めて切り身になった日」のキャラクターは？",
+    "choices": ["KIRIMIちゃん.", "ぐでたま", "こぎみゅん"],
+    "answer": 0,
+    "relatedLinks": [
+      "https://www.sanrio.co.jp/characters/kirimichan/",
+      "https://www.sanrio.co.jp/characters/gudetama/",
+      "https://www.sanrio.co.jp/characters/cogimyun/"
+    ]
+  },
+  {
+    "question": "バッドばつ丸が飼っているペットのワニの名前は？",
+    "choices": ["ポチ", "タマ", "チップ"],
+    "answer": 0,
+    "relatedLinks": ["https://www.sanrio.co.jp/characters/badtzmaru/"]
+  },
+  {
+    "question": "バッドばつ丸が飼っているワニの名前は？",
+    "choices": ["ポチ", "タマ", "チビ"],
+    "answer": 0,
+    "relatedLinks": ["https://www.sanrio.co.jp/characters/badtzmaru/"]
+  },
+  {
+    "question": "誕生日が2月29日で、かつクロミの子分でもあるキャラクターは？",
+    "choices": ["バク", "ポチャッコ", "シナモロール"],
+    "answer": 0,
+    "relatedLinks": [
+      "https://www.sanrio.co.jp/characters/kuromi/",
+      "https://www.sanrio.co.jp/characters/pochacco/",
+      "https://www.sanrio.co.jp/characters/cinnamon/"
+    ]
+  },
+  {
+    "question": "ペンギンのキャラクターで、南極出身なのは？",
+    "choices": ["タキシードサム", "バッドばつ丸", "どちらも南極出身ではない"],
+    "answer": 0,
+    "relatedLinks": ["https://www.sanrio.co.jp/characters/tuxedosam/", "https://www.sanrio.co.jp/characters/badtzmaru/"]
+  },
+  {
+    "question": "イギリスに留学経験があるキャラクターは？",
+    "choices": ["タキシードサム", "ハローキティ", "シナモロール"],
+    "answer": 0,
+    "relatedLinks": [
+      "https://www.sanrio.co.jp/characters/tuxedosam/",
+      "https://www.sanrio.co.jp/characters/hellokitty/",
+      "https://www.sanrio.co.jp/characters/cinnamon/"
+    ]
+  },
+  {
+    "question": "1975年デビューで、うさぎのキャラクターは？",
+    "choices": ["マイメロディ", "ウィッシュミーメル", "シナモロール"],
+    "answer": 0,
+    "relatedLinks": [
+      "https://www.sanrio.co.jp/characters/mymelody/",
+      "https://www.sanrio.co.jp/characters/wishmemell/",
+      "https://www.sanrio.co.jp/characters/cinnamon/"
+    ]
+  },
+  {
+    "question": "2012年デビューで、SHOW BY ROCK!!のキャラクターは？",
+    "choices": ["シアンとほわん", "クロミ", "ぐでたま"],
+    "answer": 0,
+    "relatedLinks": [
+      "https://www.sanrio.co.jp/characters/showbyrock/",
+      "https://www.sanrio.co.jp/characters/kuromi/",
+      "https://www.sanrio.co.jp/characters/gudetama/"
+    ]
+  },
+  {
+    "question": "三つ子のキャラクターは？",
+    "choices": ["けろけろけろっぴ", "コロコロクリリン", "キキ＆ララ"],
+    "answer": 0,
+    "relatedLinks": [
+      "https://www.sanrio.co.jp/characters/keroppi/",
+      "https://www.sanrio.co.jp/characters/kuririn/",
+      "https://www.sanrio.co.jp/characters/kikilala/"
+    ]
+  },
+  {
+    "question": "オリジナル体操ができるキャラクターは？",
+    "choices": ["ポムポムプリン", "シナモロール", "ぐでたま"],
+    "answer": 0,
+    "relatedLinks": [
+      "https://www.sanrio.co.jp/characters/pompompurin/",
+      "https://www.sanrio.co.jp/characters/cinnamon/",
+      "https://www.sanrio.co.jp/characters/gudetama/"
+    ]
+  },
+  {
+    "question": "ハローキティの得意科目は？",
+    "choices": ["音楽と英語", "国語と算数", "体育と図工"],
+    "answer": 0,
+    "relatedLinks": ["https://www.sanrio.co.jp/characters/hellokitty/"]
+  },
+  {
+    "question": "ゴスロリと猫じゃらしが大好きなキャラクターは？",
+    "choices": ["シアン", "クロミ", "ほわん"],
+    "answer": 0,
+    "relatedLinks": [
+      "https://www.sanrio.co.jp/characters/showbyrock/",
+      "https://www.sanrio.co.jp/characters/kuromi/",
+      "https://www.sanrio.co.jp/characters/showbyrock/"
+    ]
+  },
+  {
+    "question": "80匹以上のハムスター仲間がいるキャラクターは？",
+    "choices": ["コロコロクリリン", "ポチャッコ", "シナモロール"],
+    "answer": 0,
+    "relatedLinks": [
+      "https://www.sanrio.co.jp/characters/kuririn/",
+      "https://www.sanrio.co.jp/characters/pochacco/",
+      "https://www.sanrio.co.jp/characters/cinnamon/"
+    ]
+  },
+  {
+    "question": "由緒ある家柄でイギリス留学経験があるキャラクターは？",
+    "choices": ["タキシードサム", "ハローキティ", "ウィッシュミーメル"],
+    "answer": 0,
+    "relatedLinks": [
+      "https://www.sanrio.co.jp/characters/tuxedosam/",
+      "https://www.sanrio.co.jp/characters/hellokitty/",
+      "https://www.sanrio.co.jp/characters/wishmemell/"
+    ]
+  },
+  {
+    "question": "ピアノを弾くことが趣味のキャラクターは？",
+    "choices": ["マイスウィートピアノ", "クロミ", "マイメロディ"],
+    "answer": 0,
+    "relatedLinks": [
+      "https://www.sanrio.co.jp/characters/mysweetpiano/",
+      "https://www.sanrio.co.jp/characters/kuromi/",
+      "https://www.sanrio.co.jp/characters/mymelody/"
+    ]
+  },
+  {
+    "question": "歌とダンスが大好きなアヒルのキャラクターは？",
+    "choices": ["あひるのペックル", "タキシードサム", "けろけろけろっぴ"],
+    "answer": 0,
+    "relatedLinks": [
+      "https://www.sanrio.co.jp/characters/pekkle/",
+      "https://www.sanrio.co.jp/characters/tuxedosam/",
+      "https://www.sanrio.co.jp/characters/keroppi/"
+    ]
+  },
+  {
+    "question": "くじけてもすぐに立ち直るキャラクターは？",
+    "choices": ["けろけろけろっぴ", "ぐでたま", "まるもふびより"],
+    "answer": 0,
+    "relatedLinks": [
+      "https://www.sanrio.co.jp/characters/keroppi/",
+      "https://www.sanrio.co.jp/characters/gudetama/",
+      "https://www.sanrio.co.jp/characters/marumofubiyori/"
+    ]
+  }
+]
