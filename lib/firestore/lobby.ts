@@ -17,7 +17,7 @@ export async function createLobby(): Promise<string> {
     durationSeconds: 420,
     pointsCorrect: 5,
     pointsIncorrect: -3,
-    quizFileName: "雑学",
+    quizFileName: "サンリオキャラクター",
   };
 
   await setDoc(lobbyRef, lobbyData);

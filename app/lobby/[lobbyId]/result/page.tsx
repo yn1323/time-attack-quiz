@@ -186,7 +186,7 @@ export default function ResultPage() {
   // Fetch quiz questions
   useEffect(() => {
     if (!lobby?.quizFileName) return;
-    fetch(`/data/quizzes/${lobby.quizFileName}`)
+    fetch(`/data/quizzes/${lobby.quizFileName}.json`)
       .then((res) => res.json())
       .then(setQuestions)
       .catch(console.error);

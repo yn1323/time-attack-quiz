@@ -148,40 +148,42 @@ export function AdminDuringQuiz({ lobbyId, lobby, groups }: Props) {
       />
 
       {/* Header with timer */}
-      <Flex justify="flex-end" align="center" p={8} position="relative" zIndex={1}>
-        <HStack
-          bg="white"
-          px={8}
-          py={4}
-          borderRadius="2xl"
-          border="4px solid"
-          borderColor={isUrgent ? "#FF0000" : "#FF8800"}
-          boxShadow={isUrgent ? "0 8px 30px rgba(255, 0, 0, 0.35)" : "0 8px 30px rgba(255, 136, 0, 0.25)"}
-          animation={`${timerPulse} 1s ease-in-out infinite`}
-        >
-          <Text fontSize="5xl">⏱️</Text>
-          <Text
-            fontSize="7xl"
-            fontWeight="900"
-            bgImage={
-              isUrgent
-                ? "linear-gradient(135deg, #FF0000 0%, #FF8800 100%)"
-                : "linear-gradient(135deg, #FF8800 0%, #E67A00 100%)"
-            }
-            bgClip="text"
-            color="transparent"
-            fontFamily="mono"
-            letterSpacing="0.05em"
-            animation={isUrgent ? `${urgentPulse} 0.5s ease-in-out infinite` : "none"}
-            css={{
-              WebkitBackgroundClip: "text",
-              WebkitTextFillColor: "transparent",
-            }}
+      {!isCountdownMode && (
+        <Flex justify="flex-end" align="center" p={8} position="relative" zIndex={1}>
+          <HStack
+            bg="white"
+            px={8}
+            py={4}
+            borderRadius="2xl"
+            border="4px solid"
+            borderColor={isUrgent ? "#FF0000" : "#FF8800"}
+            boxShadow={isUrgent ? "0 8px 30px rgba(255, 0, 0, 0.35)" : "0 8px 30px rgba(255, 136, 0, 0.25)"}
+            animation={`${timerPulse} 1s ease-in-out infinite`}
           >
-            {timeString}
-          </Text>
-        </HStack>
-      </Flex>
+            <Text fontSize="5xl">⏱️</Text>
+            <Text
+              fontSize="7xl"
+              fontWeight="900"
+              bgImage={
+                isUrgent
+                  ? "linear-gradient(135deg, #FF0000 0%, #FF8800 100%)"
+                  : "linear-gradient(135deg, #FF8800 0%, #E67A00 100%)"
+              }
+              bgClip="text"
+              color="transparent"
+              fontFamily="mono"
+              letterSpacing="0.05em"
+              animation={isUrgent ? `${urgentPulse} 0.5s ease-in-out infinite` : "none"}
+              css={{
+                WebkitBackgroundClip: "text",
+                WebkitTextFillColor: "transparent",
+              }}
+            >
+              {timeString}
+            </Text>
+          </HStack>
+        </Flex>
+      )}
 
       {/* Main content */}
       {isCountdownMode ? (
@@ -241,10 +243,10 @@ export function AdminDuringQuiz({ lobbyId, lobby, groups }: Props) {
               >
                 スコアボード🎯
               </Text>
-              <Text fontSize="md" color="gray.500" fontWeight="medium">
-                ※残り2分以降は非表示
-              </Text>
             </HStack>
+            <Text fontSize="md" color="gray.500" fontWeight="medium">
+              ※残り2分以降は非表示
+            </Text>
           </Box>
 
           {/* Ranking cards - 3 columns grid */}

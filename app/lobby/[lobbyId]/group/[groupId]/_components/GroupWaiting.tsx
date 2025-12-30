@@ -286,7 +286,7 @@ export function GroupWaiting({ groupName }: Props) {
                 🏆
               </Text>
               <Text fontSize={{ base: "sm", md: "md" }} color="#555" fontWeight="medium">
-                時間切れまでに一番得点したチームが勝ち。
+                7分間の得点が高いチームが優勝！
               </Text>
             </Flex>
             <Flex align="flex-start" gap={2}>
@@ -294,7 +294,7 @@ export function GroupWaiting({ groupName }: Props) {
                 🔗
               </Text>
               <Text fontSize={{ base: "sm", md: "md" }} color="#555" fontWeight="medium">
-                問題に関連するリンクに答えがあるかも・・・？
+                「関連リンク」にヒントが隠されているかも...？
               </Text>
             </Flex>
             <Flex align="flex-start" gap={2}>
@@ -302,7 +302,7 @@ export function GroupWaiting({ groupName }: Props) {
                 📊
               </Text>
               <Text fontSize={{ base: "sm", md: "md" }} color="#555" fontWeight="medium">
-                開始5分までは管理画面でスコアが見れます。（もしかすると管理者がプロジェクターで映しているかも）ただし最後2分はみれません
+                最初の5分間はスコアが丸見え！（残り2分で非表示に）
               </Text>
             </Flex>
           </VStack>
