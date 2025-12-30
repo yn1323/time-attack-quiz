@@ -51,6 +51,9 @@ export default function GroupPage({ params }: Props) {
   // 問題表示開始時刻（回答時間計測用）
   const questionStartTimeRef = useRef<number>(0);
 
+  // 重複クリック防止フラグ
+  const isSubmittingRef = useRef(false);
+
   // 選択肢をシャッフルする関数
   const shuffleChoices = useCallback((question: Question) => {
     const indices = Array.from({ length: question.choices.length }, (_, i) => i);
@@ -191,7 +194,9 @@ export default function GroupPage({ params }: Props) {
   // 回答ハンドラ
   const handleAnswer = useCallback(
     async (selectedIndex: number) => {
+      if (isSubmittingRef.current) return;
       if (!lobby || currentQuestionIndex === null || !questions[currentQuestionIndex] || !shuffledData) return;
+      isSubmittingRef.current = true;
 
       const question = questions[currentQuestionIndex];
       const answerTimeMs = Date.now() - questionStartTimeRef.current;
@@ -232,6 +237,7 @@ export default function GroupPage({ params }: Props) {
     setLastResult(null);
     setPageState("quiz");
     questionStartTimeRef.current = Date.now();
+    isSubmittingRef.current = false;
   }, [questions.length]);
 
   if (isLoading) {
