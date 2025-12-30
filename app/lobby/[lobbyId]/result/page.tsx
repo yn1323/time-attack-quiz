@@ -272,7 +272,7 @@ export default function ResultPage() {
     if (bestLastSpurt && bestLastSpurt.score > 0) {
       result.push({
         icon: "🔥",
-        title: "ラストスパート賞",
+        title: "ラストスパート賞（最後の2分間の合計得点）",
         winner: bestLastSpurt.groupName,
         detail: `+${bestLastSpurt.score}点`,
       });
@@ -326,7 +326,12 @@ export default function ResultPage() {
         correctRate: (correct / total) * 100,
         total,
       }))
-      .sort((a, b) => b.correctRate - a.correctRate);
+      .sort((a, b) => {
+        if (b.correctRate !== a.correctRate) {
+          return b.correctRate - a.correctRate;
+        }
+        return b.total - a.total;
+      });
   }, [groupsWithAnswers]);
 
   // Calculate question awards
@@ -963,12 +968,18 @@ export default function ResultPage() {
                       flexShrink={0}
                       w="60px"
                       h="60px"
-                      bg={index === 0 ? "linear-gradient(135deg, #22C55E 0%, #16A34A 100%)" : "linear-gradient(135deg, #EF4444 0%, #DC2626 100%)"}
+                      bg={
+                        index === 0
+                          ? "linear-gradient(135deg, #22C55E 0%, #16A34A 100%)"
+                          : "linear-gradient(135deg, #EF4444 0%, #DC2626 100%)"
+                      }
                       borderRadius="xl"
                       display="flex"
                       alignItems="center"
                       justifyContent="center"
-                      boxShadow={index === 0 ? "0 4px 15px rgba(34, 197, 94, 0.4)" : "0 4px 15px rgba(239, 68, 68, 0.4)"}
+                      boxShadow={
+                        index === 0 ? "0 4px 15px rgba(34, 197, 94, 0.4)" : "0 4px 15px rgba(239, 68, 68, 0.4)"
+                      }
                     >
                       <Text fontSize="2xl">{award.icon}</Text>
                     </Box>
@@ -983,11 +994,17 @@ export default function ResultPage() {
                           fontSize="sm"
                           fontWeight="bold"
                           color="white"
-                          bg={index === 0 ? "linear-gradient(135deg, #22C55E 0%, #16A34A 100%)" : "linear-gradient(135deg, #EF4444 0%, #DC2626 100%)"}
+                          bg={
+                            index === 0
+                              ? "linear-gradient(135deg, #22C55E 0%, #16A34A 100%)"
+                              : "linear-gradient(135deg, #EF4444 0%, #DC2626 100%)"
+                          }
                           px={3}
                           py={1}
                           borderRadius="full"
-                          boxShadow={index === 0 ? "0 2px 8px rgba(34, 197, 94, 0.3)" : "0 2px 8px rgba(239, 68, 68, 0.3)"}
+                          boxShadow={
+                            index === 0 ? "0 2px 8px rgba(34, 197, 94, 0.3)" : "0 2px 8px rgba(239, 68, 68, 0.3)"
+                          }
                         >
                           {award.detail}
                         </Text>

@@ -53,6 +53,7 @@ type Props = {
     correctIndex: number;
     selectedIndex: number;
     pointChange: number;
+    relatedLinks: string[];
   };
   onNext: () => void;
 };

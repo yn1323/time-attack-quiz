@@ -32,7 +32,12 @@ export default function GroupPage({ params }: Props) {
   const [remainingTime, setRemainingTime] = useState<string>("10:00");
 
   // クイズ中の状態
-  const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
+  const [currentQuestionIndex, setCurrentQuestionIndex] = useState<number | null>(null);
+  const [shuffledData, setShuffledData] = useState<{
+    choices: string[];
+    answerIndex: number;
+    relatedLinks: string[];
+  } | null>(null);
   const [lastResult, setLastResult] = useState<{
     isCorrect: boolean;
     question: string;
@@ -40,14 +45,33 @@ export default function GroupPage({ params }: Props) {
     correctIndex: number;
     selectedIndex: number;
     pointChange: number;
+    relatedLinks: string[];
   } | null>(null);
 
   // 問題表示開始時刻（回答時間計測用）
   const questionStartTimeRef = useRef<number>(0);
 
-  // スコア計算（マイナスにならないようにする）
+  // 選択肢をシャッフルする関数
+  const shuffleChoices = useCallback((question: Question) => {
+    const indices = Array.from({ length: question.choices.length }, (_, i) => i);
+    // Fisher-Yates shuffle
+    for (let i = indices.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [indices[i], indices[j]] = [indices[j], indices[i]];
+    }
+
+    return {
+      choices: indices.map((i) => question.choices[i]),
+      answerIndex: indices.indexOf(question.answer),
+      relatedLinks: question.relatedLinks
+        ? indices.map((i) => question.relatedLinks?.[i]).filter((link): link is string => Boolean(link))
+        : [],
+    };
+  }, []);
+
+  // スコア計算
   const score = useMemo(() => {
-    return Math.max(0, answers.reduce((sum, a) => sum + a.scoreChange, 0));
+    return answers.reduce((sum, a) => sum + a.scoreChange, 0);
   }, [answers]);
 
   // 統計計算（終了時用）
@@ -87,9 +111,20 @@ export default function GroupPage({ params }: Props) {
       const res = await fetch(`/data/quizzes/${lobby.quizFileName}.json`);
       const data = await res.json();
       setQuestions(data);
+      // 初回のインデックスをランダムに設定
+      setCurrentQuestionIndex(Math.floor(Math.random() * data.length));
     };
     fetchQuestions();
   }, [lobby]);
+
+  // 問題変更時にシャッフルを実行
+  useEffect(() => {
+    if (currentQuestionIndex === null) return;
+    const question = questions[currentQuestionIndex];
+    if (question) {
+      setShuffledData(shuffleChoices(question));
+    }
+  }, [questions, currentQuestionIndex, shuffleChoices]);
 
   // ロビー情報のリアルタイム監視
   useEffect(() => {
@@ -156,34 +191,37 @@ export default function GroupPage({ params }: Props) {
   // 回答ハンドラ
   const handleAnswer = useCallback(
     async (selectedIndex: number) => {
-      if (!lobby || !questions[currentQuestionIndex]) return;
+      if (!lobby || currentQuestionIndex === null || !questions[currentQuestionIndex] || !shuffledData) return;
 
       const question = questions[currentQuestionIndex];
       const answerTimeMs = Date.now() - questionStartTimeRef.current;
+
+      // シャッフル後のインデックスで判定
+      const isCorrect = selectedIndex === shuffledData.answerIndex;
 
       await createAnswer({
         lobbyId,
         groupId,
         questionIndex: currentQuestionIndex,
         selectedAnswer: selectedIndex,
-        correctAnswer: question.answer,
+        correctAnswer: shuffledData.answerIndex,
         answerTimeMs,
         pointsCorrect: lobby.pointsCorrect,
         pointsIncorrect: lobby.pointsIncorrect,
       });
 
-      const isCorrect = selectedIndex === question.answer;
       setLastResult({
         isCorrect,
         question: question.question,
-        choices: question.choices,
-        correctIndex: question.answer,
+        choices: shuffledData.choices,
+        correctIndex: shuffledData.answerIndex,
         selectedIndex,
         pointChange: isCorrect ? lobby.pointsCorrect : lobby.pointsIncorrect,
+        relatedLinks: shuffledData.relatedLinks,
       });
       setPageState("result");
     },
-    [lobby, questions, currentQuestionIndex, lobbyId, groupId],
+    [lobby, questions, currentQuestionIndex, lobbyId, groupId, shuffledData],
   );
 
   // 次の問題へ
@@ -227,7 +265,9 @@ export default function GroupPage({ params }: Props) {
           groupName={group.name}
           score={score}
           remainingTime={remainingTime}
-          question={questions[currentQuestionIndex]}
+          question={currentQuestionIndex !== null ? questions[currentQuestionIndex] : undefined}
+          shuffledChoices={shuffledData?.choices}
+          shuffledRelatedLinks={shuffledData?.relatedLinks}
           onAnswer={handleAnswer}
         />
       );

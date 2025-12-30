@@ -42,7 +42,10 @@ export default function HomePage() {
   const handleCreateLobby = async () => {
     setIsCreating(true);
     try {
-      const lobbyId = await createLobby();
+      const res = await fetch("/api/quizzes");
+      const { quizzes } = await res.json();
+      const defaultQuiz = quizzes[0] || "";
+      const lobbyId = await createLobby(defaultQuiz);
       router.push(`/lobby/${lobbyId}`);
     } catch (error) {
       console.error("Failed to create lobby:", error);

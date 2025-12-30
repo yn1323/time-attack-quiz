@@ -2,7 +2,7 @@ import { collection, doc, onSnapshot, serverTimestamp, setDoc, type Unsubscribe,
 import { db } from "@/lib/firebase";
 import type { Lobby } from "@/types/firestore";
 
-export async function createLobby(): Promise<string> {
+export async function createLobby(quizFileName: string): Promise<string> {
   const lobbyRef = doc(collection(db, "quiz-time-attack-lobbies"));
 
   const lobbyData: Omit<Lobby, "id" | "createdAt" | "startedAt" | "finishedAt"> & {
@@ -14,10 +14,10 @@ export async function createLobby(): Promise<string> {
     createdAt: serverTimestamp(),
     startedAt: null,
     finishedAt: null,
-    durationSeconds: 420,
+    durationSeconds: 300,
     pointsCorrect: 5,
     pointsIncorrect: -3,
-    quizFileName: "サンリオキャラクター",
+    quizFileName,
   };
 
   await setDoc(lobbyRef, lobbyData);

@@ -302,7 +302,7 @@ export function GroupWaiting({ groupName }: Props) {
                 📊
               </Text>
               <Text fontSize={{ base: "sm", md: "md" }} color="#555" fontWeight="medium">
-                最初の5分間はスコアが丸見え！（残り2分で非表示に）
+                最初の3分間はスコアが丸見え！（残り2分で非表示に）
               </Text>
             </Flex>
           </VStack>
