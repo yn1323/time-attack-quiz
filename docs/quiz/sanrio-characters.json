@@ -1,0 +1,1478 @@
+[
+  {
+    "id": "hellokitty",
+    "name": "ハローキティ",
+    "englishName": "HELLO KITTY",
+    "url": "https://www.sanrio.co.jp/characters/hellokitty/",
+    "profile": {
+      "fullName": "キティ・ホワイト",
+      "birthday": "11月1日",
+      "debutYear": 1974,
+      "birthplace": "イギリス ロンドンの郊外",
+      "height": "りんご5個分",
+      "weight": "りんご3個分",
+      "species": "ネコ",
+      "bloodType": "",
+      "constellation": ""
+    },
+    "personality": "明るくてやさしい",
+    "specialSkills": ["音楽", "英語"],
+    "hobbies": ["クッキーを作ること", "ピアノをひくこと"],
+    "dream": "ピアニストか、詩人になること",
+    "treasure": "フェアリーテイルブック、思い出のつまったアルバム、森でみつけたカギ",
+    "favoriteFoods": ["ママが作ったアップルパイ"],
+    "description": "",
+    "family": [
+      {
+        "name": "ミミィ",
+        "relation": "双子の妹",
+        "birthday": "11月1日",
+        "note": "ちょっぴり内気ではずかしがり屋、右耳にリボン"
+      },
+      {
+        "name": "ジョージ・ホワイト",
+        "relation": "パパ",
+        "birthday": "6月3日",
+        "note": "ユーモアセンスバツグン"
+      },
+      {
+        "name": "メアリー・ホワイト",
+        "relation": "ママ",
+        "birthday": "9月14日",
+        "note": "アップルパイ作りの名人"
+      },
+      {
+        "name": "アンソニー・ホワイト",
+        "relation": "おじいちゃん",
+        "birthday": "10月25日",
+        "note": "絵をかくことが趣味"
+      },
+      {
+        "name": "マーガレット・ホワイト",
+        "relation": "おばあちゃん",
+        "birthday": "3月31日",
+        "note": "プディング作りが得意"
+      }
+    ],
+    "friends": [
+      "タイニーチャム",
+      "モーリー",
+      "ジュディ",
+      "ジョーイ",
+      "ロッティ",
+      "ローリー",
+      "ティム＆タミー",
+      "フィーフィー",
+      "ティッピー",
+      "トレーシー",
+      "ジョディ",
+      "トーマス"
+    ],
+    "boyfriend": {
+      "name": "ダニエル スター",
+      "birthday": "5月3日",
+      "description": "キティの幼なじみ。ダンスとピアノが得意。将来の夢はカメラマンか芸能界デビュー"
+    },
+    "girlfriend": {},
+    "mates": []
+  },
+  {
+    "id": "pochacco",
+    "name": "ポチャッコ",
+    "englishName": "POCHACCO",
+    "url": "https://www.sanrio.co.jp/characters/pochacco/",
+    "profile": {
+      "fullName": "",
+      "birthday": "2月29日",
+      "debutYear": 1989,
+      "birthplace": "ふわふわタウンのはずれ、うぐいす横丁",
+      "height": "大好きなバナナアイスのラージサイズのカップ4個分",
+      "weight": "ふわふわタウンのにんじん畑でたま〜にとれる、おばけニンジン3本分",
+      "species": "イヌ",
+      "bloodType": "",
+      "constellation": ""
+    },
+    "personality": "好奇心旺盛で、おっちょこちょいで、ちょっぴりおせっかい",
+    "specialSkills": [],
+    "hobbies": ["より道お散歩"],
+    "dream": "",
+    "treasure": "",
+    "favoriteFoods": ["バナナアイス"],
+    "description": "名前の由来: ぽちゃぽちゃしているから。うるう年生まれ。",
+    "family": [],
+    "friends": [
+      {
+        "name": "チョッピ",
+        "birthday": "3月22日",
+        "note": "いちばんの親友、ちょっぴり甘えん坊でお茶目"
+      },
+      {
+        "name": "ピーちゃんズ",
+        "birthday": "8月1日",
+        "note": "ピヨ・ピコ・ピープの3姉妹"
+      },
+      {
+        "name": "ポップル",
+        "birthday": "12月18日",
+        "note": "やさしく真面目な優等生"
+      },
+      {
+        "name": "モンモン",
+        "birthday": "6月14日",
+        "note": "好奇心旺盛、どんぐりや木の実を集める"
+      },
+      {
+        "name": "サミュ",
+        "birthday": "9月9日",
+        "note": "甘えん坊"
+      },
+      {
+        "name": "ピルル",
+        "birthday": "1月28日",
+        "note": "いたずら好き、早口言葉が得意"
+      }
+    ],
+    "boyfriend": {},
+    "girlfriend": {},
+    "mates": []
+  },
+  {
+    "id": "kikilala",
+    "name": "リトルツインスターズ",
+    "englishName": "Little Twin Stars",
+    "url": "https://www.sanrio.co.jp/characters/kikilala/",
+    "profile": {
+      "fullName": "",
+      "birthday": "12月24日",
+      "debutYear": 1975,
+      "birthplace": "ゆめ星雲の思いやり星",
+      "height": "",
+      "weight": "",
+      "species": "ふたごのきょうだい星",
+      "bloodType": "",
+      "constellation": ""
+    },
+    "personality": "キキ: 好奇心旺盛、ちょっぴりあわてんぼうでいたずら好き / ララ: 怖がりでちょっぴり泣き虫",
+    "specialSkills": ["キキ: 背中の星で空を飛ぶこと", "ララ: お料理"],
+    "hobbies": ["キキ: 星釣りと物を作ること（発明）", "ララ: 絵や詩をかくこと"],
+    "dream": "お父さま星とお母さま星みたいな立派に輝く星になること",
+    "treasure": "キキ: 背中の星 / ララ: 星のステッキ",
+    "favoriteFoods": ["甘いお菓子", "キキはララの作ったホットケーキが特に好き"],
+    "description": "立派に輝く星になるために遠い星の国からやってきた",
+    "family": [],
+    "friends": [
+      {
+        "name": "パフ＆ポフ",
+        "birthday": "",
+        "note": "くまのぬいぐるみ（水色くま=パフ、ピンクくま=ポフ）"
+      },
+      {
+        "name": "ネムリン",
+        "birthday": "",
+        "note": "スヤスヤランドの王子さま"
+      }
+    ],
+    "boyfriend": {},
+    "girlfriend": {},
+    "mates": []
+  },
+  {
+    "id": "cinnamoroll",
+    "name": "シナモロール",
+    "englishName": "Cinnamoroll",
+    "url": "https://www.sanrio.co.jp/characters/cinnamon/",
+    "profile": {
+      "fullName": "シナモン",
+      "birthday": "3月6日",
+      "debutYear": 2002,
+      "birthplace": "遠いお空の雲の上",
+      "height": "",
+      "weight": "",
+      "species": "白いこいぬ",
+      "bloodType": "",
+      "constellation": ""
+    },
+    "personality": "おとなしいけれど、とても人なつっこい",
+    "specialSkills": ["大きな耳をパタパタさせて、空を飛ぶこと"],
+    "hobbies": ["カフェのテラスでお昼寝"],
+    "dream": "レストランのシェフになってみんなを幸せにすること",
+    "treasure": "",
+    "favoriteFoods": ["「カフェ・シナモン」名物のシナモンロール"],
+    "description": "シッポがシナモンロールのようにくるくる巻いているから「シナモン」と名付けられた。ある日、空からフワフワ飛んできたところを「カフェ・シナモン」のお姉さんに見つけられ、一緒に住むことに。今はカフェの看板犬として活躍中。",
+    "family": [],
+    "friends": [
+      {
+        "name": "カプチーノ",
+        "birthday": "6月27日",
+        "note": "のんびり屋さんで食いしん坊"
+      },
+      {
+        "name": "モカ",
+        "birthday": "2月20日",
+        "note": "オシャレでおしゃべり、みんなのお姉さん的存在"
+      },
+      {
+        "name": "シフォン",
+        "birthday": "1月14日",
+        "note": "いつも元気いっぱい、ムードメーカー"
+      },
+      {
+        "name": "エスプレッソ",
+        "birthday": "12月4日",
+        "note": "ワンちゃんコンテスト優勝のおぼっちゃま"
+      },
+      {
+        "name": "みるく",
+        "birthday": "2月4日",
+        "note": "いつか空を飛びたいと思っている"
+      },
+      {
+        "name": "ココとナッツ",
+        "birthday": "7月25日",
+        "note": "カプチーノの双子の弟"
+      },
+      {
+        "name": "コルネ",
+        "birthday": "",
+        "note": "ユニコーンの男のコ"
+      },
+      {
+        "name": "ポロン",
+        "birthday": "",
+        "note": "謎のこいぬの女のコ"
+      },
+      {
+        "name": "シロ太郎",
+        "birthday": "",
+        "note": "白猫堂書店の看板ネコ"
+      }
+    ],
+    "boyfriend": {},
+    "girlfriend": {},
+    "mates": []
+  },
+  {
+    "id": "mymelody",
+    "name": "マイメロディ",
+    "englishName": "My Melody",
+    "url": "https://www.sanrio.co.jp/characters/mymelody/",
+    "profile": {
+      "fullName": "メロディ",
+      "birthday": "1月18日",
+      "debutYear": 1975,
+      "birthplace": "",
+      "height": "",
+      "weight": "",
+      "species": "うさぎ",
+      "bloodType": "",
+      "constellation": ""
+    },
+    "personality": "すなおで明るい、弟思い",
+    "specialSkills": [],
+    "hobbies": ["お母さんといっしょにクッキーを焼くこと"],
+    "dream": "お菓子屋さんになること",
+    "treasure": "おばあちゃんが作ってくれた、かわいいずきん",
+    "favoriteFoods": ["アーモンドパウンドケーキ"],
+    "description": "",
+    "family": [
+      {
+        "name": "おとうさん",
+        "relation": "父",
+        "birthday": "",
+        "note": "いつもやさしくて、ちからもち"
+      },
+      {
+        "name": "おかあさん",
+        "relation": "母",
+        "birthday": "",
+        "note": "しゅげいやおかしづくりがだいすき"
+      },
+      {
+        "name": "リズムくん",
+        "relation": "弟",
+        "birthday": "",
+        "note": "ちょっぴりやんちゃ"
+      },
+      {
+        "name": "おじいちゃん",
+        "relation": "祖父",
+        "birthday": "",
+        "note": "ぼうけんがだいすき"
+      },
+      {
+        "name": "おばあちゃん",
+        "relation": "祖母",
+        "birthday": "",
+        "note": "とってもものしり"
+      }
+    ],
+    "friends": [
+      {
+        "name": "フラットくん",
+        "birthday": "",
+        "note": "いちばんのなかよし、ちょっぴりはにかみやさん"
+      },
+      {
+        "name": "りすくん",
+        "birthday": "",
+        "note": "フラットくんとなかよし"
+      },
+      {
+        "name": "ピアノちゃん",
+        "birthday": "",
+        "note": "やさしくてあまえんぼ"
+      },
+      {
+        "name": "くまくん",
+        "birthday": "",
+        "note": "ちからもちでくいしんぼ"
+      },
+      {
+        "name": "きつねくん",
+        "birthday": "",
+        "note": "おもしろいあそびがだいすき"
+      }
+    ],
+    "boyfriend": {},
+    "girlfriend": {},
+    "mates": []
+  },
+  {
+    "id": "hangyodon",
+    "name": "ハンギョドン",
+    "englishName": "HANGYODON",
+    "url": "https://www.sanrio.co.jp/characters/hangyodon/",
+    "profile": {
+      "fullName": "",
+      "birthday": "3月14日",
+      "debutYear": 1985,
+      "birthplace": "中国",
+      "height": "",
+      "weight": "",
+      "species": "半魚人",
+      "bloodType": "B型",
+      "constellation": "魚座"
+    },
+    "personality": "さびしがり屋のロマンチスト",
+    "specialSkills": ["人を笑わせること"],
+    "hobbies": ["ハンギョドングッズを集めること", "温泉"],
+    "dream": "",
+    "treasure": "",
+    "favoriteFoods": ["冷やし中華", "エビセン", "鍋物"],
+    "description": "いつもヒーローになりたがっているけど、なぜかうまくいかない",
+    "family": [],
+    "friends": [
+      {
+        "name": "さゆり",
+        "birthday": "5月9日",
+        "note": "タコの女のコ。ハンギョドンの親友。いつも明るく元気な楽天家、好奇心いっぱい"
+      },
+      {
+        "name": "おたまろ",
+        "birthday": "12月10日",
+        "note": "オタマジャクシの男のコ。食いしん坊で好き嫌いがなく、おかわりが得意"
+      },
+      {
+        "name": "イタロー",
+        "birthday": "1月2日",
+        "note": "几帳面な性格でコンピューターのように頭が固い"
+      }
+    ],
+    "boyfriend": {},
+    "girlfriend": {},
+    "mates": []
+  },
+  {
+    "id": "pompompurin",
+    "name": "ポムポムプリン",
+    "englishName": "Pompompurin",
+    "url": "https://www.sanrio.co.jp/characters/pompompurin/",
+    "profile": {
+      "fullName": "",
+      "birthday": "4月16日のお天気いい日",
+      "debutYear": 1996,
+      "birthplace": "",
+      "height": "",
+      "weight": "",
+      "species": "ゴールデンレトリバー",
+      "bloodType": "",
+      "constellation": ""
+    },
+    "personality": "のんびりマイペース",
+    "specialSkills": ["お昼寝", "プリン体操", "だれとでもなかよくなれちゃうこと"],
+    "hobbies": ["くつ集め"],
+    "dream": "もっともっとおっきくなること",
+    "treasure": "",
+    "favoriteFoods": ["ママが作ったプリン", "ミルク", "ふにゃふにゃしたもの"],
+    "description": "こげ茶色のベレー帽がトレードマーク。好きな言葉は「おでかけ」、嫌いな言葉は「おるすばん」。飼い主のお姉さんの家の玄関にあるプリン用バスケットがお家。",
+    "family": [
+      {
+        "name": "パパ",
+        "relation": "父",
+        "birthday": "",
+        "note": "探偵"
+      },
+      {
+        "name": "ママ",
+        "relation": "母",
+        "birthday": "",
+        "note": "ケーキ屋勤務"
+      },
+      {
+        "name": "おじいちゃん",
+        "relation": "祖父",
+        "birthday": "",
+        "note": ""
+      },
+      {
+        "name": "おばあちゃん",
+        "relation": "祖母",
+        "birthday": "",
+        "note": ""
+      }
+    ],
+    "friends": [
+      "マフィン",
+      "スコーン",
+      "ベーグル",
+      "パウダー",
+      "ホイップ",
+      "タルト",
+      "カスタード",
+      "ミント",
+      "マカロン",
+      "バニラ",
+      "ココナッツ",
+      "シロップ",
+      "クッキー",
+      "ビスケ",
+      "ひつじさん"
+    ],
+    "boyfriend": {},
+    "girlfriend": {},
+    "mates": []
+  },
+  {
+    "id": "kuromi",
+    "name": "クロミ",
+    "englishName": "Kuromi",
+    "url": "https://www.sanrio.co.jp/characters/kuromi/",
+    "profile": {
+      "fullName": "",
+      "birthday": "10月31日",
+      "debutYear": 2005,
+      "birthplace": "",
+      "height": "",
+      "weight": "",
+      "species": "うさぎ",
+      "bloodType": "",
+      "constellation": ""
+    },
+    "personality": "実はとっても乙女チック",
+    "specialSkills": [],
+    "hobbies": ["日記をつけること"],
+    "dream": "",
+    "treasure": "",
+    "favoriteFoods": ["らっきょう"],
+    "description": "自称マイメロディのライバル。乱暴者に見えるけれど、実はとっても乙女チック。イケメンがだ〜い好き。黒いずきんとピンクのどくろがチャームポイント。恋愛小説にはまっている。好きな色は黒。世界中をクロミ化するため奮闘中。",
+    "family": [],
+    "friends": [],
+    "boyfriend": {},
+    "girlfriend": {},
+    "mates": [
+      {
+        "name": "バク",
+        "birthday": "2月29日",
+        "note": "子分"
+      },
+      {
+        "name": "バコ",
+        "birthday": "",
+        "note": "バクの妹"
+      },
+      {
+        "name": "ニャンミ",
+        "birthday": "",
+        "note": "KUROMI'S5"
+      },
+      {
+        "name": "ワンミ",
+        "birthday": "",
+        "note": "KUROMI'S5"
+      },
+      {
+        "name": "コンミ",
+        "birthday": "",
+        "note": "KUROMI'S5"
+      },
+      {
+        "name": "チュウミ",
+        "birthday": "",
+        "note": "KUROMI'S5"
+      }
+    ]
+  },
+  {
+    "id": "cogimyun",
+    "name": "こぎみゅん",
+    "englishName": "Cogimyun",
+    "url": "https://www.sanrio.co.jp/characters/cogimyun/",
+    "profile": {
+      "fullName": "",
+      "birthday": "5月7日",
+      "debutYear": 2015,
+      "birthplace": "",
+      "height": "",
+      "weight": "",
+      "species": "コギムーナ（小麦粉の精）",
+      "bloodType": "",
+      "constellation": ""
+    },
+    "personality": "ちょっとしたことで散ってしまう、とてもとても儚い性格",
+    "specialSkills": [],
+    "hobbies": [],
+    "dream": "おにぎりになること",
+    "treasure": "",
+    "favoriteFoods": [],
+    "description": "本当はおにぎりになりたいと思っているけれど、おにぎりがどんなものかは分かっていない。おじいちゃんはコギムコーポの管理人で、今は旅をしているのでこぎみゅんが管理人代行中。",
+    "family": [],
+    "friends": [],
+    "boyfriend": {},
+    "girlfriend": {},
+    "mates": [
+      {
+        "name": "ぎょうざくん",
+        "birthday": "",
+        "note": ""
+      },
+      {
+        "name": "エビフライ（エビちゃん）",
+        "birthday": "",
+        "note": ""
+      },
+      {
+        "name": "たこやきシスターズ",
+        "birthday": "",
+        "note": ""
+      },
+      {
+        "name": "ピッツァン",
+        "birthday": "",
+        "note": ""
+      },
+      {
+        "name": "うどんさん",
+        "birthday": "",
+        "note": ""
+      },
+      {
+        "name": "チョココロネェ",
+        "birthday": "",
+        "note": ""
+      },
+      {
+        "name": "ケーキちゃん",
+        "birthday": "",
+        "note": ""
+      },
+      {
+        "name": "パスタン",
+        "birthday": "",
+        "note": ""
+      },
+      {
+        "name": "からあげ兄弟",
+        "birthday": "",
+        "note": ""
+      },
+      {
+        "name": "うさぎさん",
+        "birthday": "",
+        "note": ""
+      },
+      {
+        "name": "こぎみょん",
+        "birthday": "",
+        "note": ""
+      }
+    ]
+  },
+  {
+    "id": "tuxedosam",
+    "name": "タキシードサム",
+    "englishName": "Tuxedosam",
+    "url": "https://www.sanrio.co.jp/characters/tuxedosam/",
+    "profile": {
+      "fullName": "",
+      "birthday": "5月12日",
+      "debutYear": 1979,
+      "birthplace": "南極のタキシードアイランド",
+      "height": "",
+      "weight": "",
+      "species": "ペンギン",
+      "bloodType": "",
+      "constellation": ""
+    },
+    "personality": "食いしん坊で、ちょっぴりドジくん",
+    "specialSkills": ["英語がペラペラ"],
+    "hobbies": ["テニス", "ホッケー", "ボートなどのスポーツ"],
+    "dream": "",
+    "treasure": "",
+    "favoriteFoods": ["エビのコキール", "イワシのムニエル"],
+    "description": "おしゃれなペンギンの男のコ。蝶ネクタイを365本も持ってる。由緒ある家柄で、イギリス留学もしたことがある。バスト、ウエスト、ヒップ、すべて100cmの体形。",
+    "family": [
+      {
+        "name": "パム",
+        "relation": "弟",
+        "birthday": "",
+        "note": "しっかり者"
+      },
+      {
+        "name": "タム",
+        "relation": "弟",
+        "birthday": "",
+        "note": "甘えん坊"
+      }
+    ],
+    "friends": [
+      {
+        "name": "チップ",
+        "birthday": "",
+        "note": "アザラシ・大親友"
+      },
+      {
+        "name": "ロブスタン",
+        "birthday": "",
+        "note": ""
+      },
+      {
+        "name": "カニヤン",
+        "birthday": "",
+        "note": ""
+      }
+    ],
+    "boyfriend": {},
+    "girlfriend": {},
+    "mates": []
+  },
+  {
+    "id": "wishmemell",
+    "name": "ウィッシュミーメル",
+    "englishName": "Wish me mell",
+    "url": "https://www.sanrio.co.jp/characters/wishmemell/",
+    "profile": {
+      "fullName": "",
+      "birthday": "9月20日",
+      "debutYear": 2010,
+      "birthplace": "フランス",
+      "height": "",
+      "weight": "",
+      "species": "ウサギ",
+      "bloodType": "",
+      "constellation": ""
+    },
+    "personality": "ちょっぴりとぼけているけど素直でやさしい心の持ち主",
+    "specialSkills": [],
+    "hobbies": ["切手を集めること", "お手紙を書くこと"],
+    "dream": "",
+    "treasure": "お手紙、ルッツからもらったキーホルダー",
+    "favoriteFoods": ["ホットケーキ", "オムライス"],
+    "description": "虹色のしっぽがチャームポイント。大切な手紙を届けてくれたルッツに憧れて、メルシーヒルズで郵便配達のお手伝いをしている。",
+    "family": [],
+    "friends": [
+      {
+        "name": "チーコ",
+        "birthday": "",
+        "note": "ネコ・メルシーヒルズ留学生"
+      },
+      {
+        "name": "アロ",
+        "birthday": "",
+        "note": "クマ・メルシーヒルズ留学生"
+      },
+      {
+        "name": "マリン",
+        "birthday": "",
+        "note": "カメ・メルシーヒルズ留学生"
+      },
+      {
+        "name": "ポコ",
+        "birthday": "",
+        "note": "パンダ・メルシーヒルズ留学生"
+      },
+      {
+        "name": "ルウ",
+        "birthday": "",
+        "note": "コアラ・メルシーヒルズ留学生"
+      },
+      {
+        "name": "ニィナ",
+        "birthday": "",
+        "note": "ドラゴン・メルシーヒルズ留学生"
+      },
+      {
+        "name": "ロザンヌ",
+        "birthday": "",
+        "note": "卒業生"
+      },
+      {
+        "name": "マイマイ",
+        "birthday": "",
+        "note": "卒業生"
+      },
+      {
+        "name": "ルッツ",
+        "birthday": "",
+        "note": "卒業生"
+      },
+      {
+        "name": "サンディ",
+        "birthday": "",
+        "note": "小鳥さん"
+      },
+      {
+        "name": "マンディ",
+        "birthday": "",
+        "note": "小鳥さん"
+      },
+      {
+        "name": "チューズディ",
+        "birthday": "",
+        "note": "小鳥さん"
+      },
+      {
+        "name": "ウェンズディ",
+        "birthday": "",
+        "note": "小鳥さん"
+      },
+      {
+        "name": "サーズディ",
+        "birthday": "",
+        "note": "小鳥さん"
+      },
+      {
+        "name": "フライディ",
+        "birthday": "",
+        "note": "小鳥さん"
+      },
+      {
+        "name": "サタディ",
+        "birthday": "",
+        "note": "小鳥さん"
+      },
+      {
+        "name": "シエル",
+        "birthday": "",
+        "note": "虹の妖精"
+      }
+    ],
+    "boyfriend": {},
+    "girlfriend": {},
+    "mates": []
+  },
+  {
+    "id": "pekkle",
+    "name": "あひるのペックル",
+    "englishName": "Pekkle",
+    "url": "https://www.sanrio.co.jp/characters/pekkle/",
+    "profile": {
+      "fullName": "",
+      "birthday": "7月27日",
+      "debutYear": 1989,
+      "birthplace": "",
+      "height": "",
+      "weight": "",
+      "species": "あひる",
+      "bloodType": "",
+      "constellation": ""
+    },
+    "personality": "おひとよしでやさしい",
+    "specialSkills": ["タップダンス"],
+    "hobbies": ["歌とダンス"],
+    "dream": "空を飛ぶこと",
+    "treasure": "よく持ち歩いているバケツ（青、赤、グレーなど様々な色）",
+    "favoriteFoods": [],
+    "description": "泳ぎが苦手で、歌とダンスが大好き。ピッチが手拍子をすると、つい踊ってしまう。ただ今、タップダンスのレッスン中。",
+    "family": [],
+    "friends": [],
+    "boyfriend": {},
+    "girlfriend": {},
+    "mates": [
+      {
+        "name": "ピッチ",
+        "birthday": "",
+        "note": "魚・泳ぎの先生"
+      },
+      {
+        "name": "チャップ",
+        "birthday": "",
+        "note": ""
+      },
+      {
+        "name": "ラン",
+        "birthday": "",
+        "note": ""
+      },
+      {
+        "name": "ルビー",
+        "birthday": "",
+        "note": "ガールフレンド"
+      },
+      {
+        "name": "ブート",
+        "birthday": "",
+        "note": ""
+      },
+      {
+        "name": "チャラ",
+        "birthday": "",
+        "note": ""
+      },
+      {
+        "name": "カール",
+        "birthday": "",
+        "note": ""
+      },
+      {
+        "name": "フリル",
+        "birthday": "",
+        "note": ""
+      }
+    ]
+  },
+  {
+    "id": "badtzmaru",
+    "name": "バッドばつ丸",
+    "englishName": "Bad Badtz-Maru",
+    "url": "https://www.sanrio.co.jp/characters/badtzmaru/",
+    "profile": {
+      "fullName": "",
+      "birthday": "4月1日",
+      "debutYear": 1993,
+      "birthplace": "",
+      "height": "",
+      "weight": "",
+      "species": "ペンギン",
+      "bloodType": "",
+      "constellation": ""
+    },
+    "personality": "いたずら好きで、あまのじゃく",
+    "specialSkills": [],
+    "hobbies": ["悪役スターのブロマイドを集めること"],
+    "dream": "社長になること",
+    "treasure": "",
+    "favoriteFoods": ["銀座の高級お寿司", "ポリパリラーメン"],
+    "description": "ひねくれ者に見えるけど本当はイイヤツ？誕生日はエイプリルフール。",
+    "family": [
+      {
+        "name": "パパ",
+        "relation": "父",
+        "birthday": "",
+        "note": "コワモテだけど超楽天家"
+      },
+      {
+        "name": "ママ",
+        "relation": "母",
+        "birthday": "",
+        "note": "超教育ママ"
+      },
+      {
+        "name": "バッドつん子",
+        "relation": "妹",
+        "birthday": "",
+        "note": ""
+      },
+      {
+        "name": "バッドツインズ",
+        "relation": "双子の弟妹",
+        "birthday": "",
+        "note": ""
+      }
+    ],
+    "friends": [
+      "グッドはな丸",
+      "伊集院パンダバ",
+      "はなたれカメ",
+      {
+        "name": "蘇我イルカ",
+        "birthday": "",
+        "note": "IQ200"
+      },
+      "小川サメオ",
+      "野垣ゴロー"
+    ],
+    "boyfriend": {},
+    "girlfriend": {},
+    "mates": [
+      {
+        "name": "ポチ",
+        "birthday": "",
+        "note": "飼いワニ"
+      }
+    ]
+  },
+  {
+    "id": "showbyrock",
+    "name": "SHOW BY ROCK!!",
+    "englishName": "SHOW BY ROCK!!",
+    "url": "https://www.sanrio.co.jp/characters/showbyrock/",
+    "profile": {
+      "fullName": "",
+      "birthday": "シアン：5月24日 / ほわん：5月1日",
+      "debutYear": 2012,
+      "birthplace": "",
+      "height": "",
+      "weight": "",
+      "species": "",
+      "bloodType": "",
+      "constellation": ""
+    },
+    "personality": "",
+    "specialSkills": [],
+    "hobbies": [],
+    "dream": "",
+    "treasure": "",
+    "favoriteFoods": [],
+    "description": "音楽を制する者が王として君臨する都市MIDICITY。この物語は、トップスターを夢見る少年少女達の音楽伝説である。全宇宙のロッカーさん達の応援のおかげで2022年に10周年を迎えた。",
+    "family": [],
+    "friends": [],
+    "boyfriend": {},
+    "girlfriend": {},
+    "mates": []
+  },
+  {
+    "id": "mysweetpiano",
+    "name": "マイスウィートピアノ",
+    "englishName": "My Sweet Piano",
+    "url": "https://www.sanrio.co.jp/characters/mysweetpiano/",
+    "profile": {
+      "fullName": "ピアノちゃん",
+      "birthday": "7月6日",
+      "debutYear": 1980,
+      "birthplace": "",
+      "height": "",
+      "weight": "",
+      "species": "ヒツジ",
+      "bloodType": "",
+      "constellation": ""
+    },
+    "personality": "やさしくて甘えん坊",
+    "specialSkills": ["お花のかんむりや首飾りをつくること"],
+    "hobbies": ["ピアノを弾くこと"],
+    "dream": "",
+    "treasure": "",
+    "favoriteFoods": ["メレンゲクッキー"],
+    "description": "マイメロディの友だち。チャームポイントはベビーピンクのフワフワの髪の毛。野原でメロディとお花を摘んだり、おしゃべりしたりすることが大好き。",
+    "family": [],
+    "friends": [],
+    "boyfriend": {},
+    "girlfriend": {},
+    "mates": []
+  },
+  {
+    "id": "keroppi",
+    "name": "けろけろけろっぴ",
+    "englishName": "Keroppi",
+    "url": "https://www.sanrio.co.jp/characters/keroppi/",
+    "profile": {
+      "fullName": "けろっぴ",
+      "birthday": "7月10日",
+      "debutYear": 1988,
+      "birthplace": "",
+      "height": "",
+      "weight": "",
+      "species": "カエル",
+      "bloodType": "",
+      "constellation": ""
+    },
+    "personality": "元気いっぱい。おっちょこちょい。くじけたりするけど、すぐに立ち直る。",
+    "specialSkills": ["水泳", "歌をうたうこと"],
+    "hobbies": ["ピクニックに行ったり、冒険したりすること"],
+    "dream": "",
+    "treasure": "",
+    "favoriteFoods": [],
+    "description": "冒険好きで、元気いっぱい。ドーナツ池の人気者。ころっぴ、ぴっきと、三つ子のきょうだい。カエル泳ぎは苦手で、クロールが得意。歌が上手なカエルの男のコ。",
+    "family": [
+      {
+        "name": "お父さん",
+        "relation": "父",
+        "birthday": "",
+        "note": "はすの上医院のお医者さん"
+      },
+      {
+        "name": "お母さん",
+        "relation": "母",
+        "birthday": "",
+        "note": "料理が得意でレストランを経営"
+      },
+      {
+        "name": "ぴっき",
+        "relation": "姉",
+        "birthday": "",
+        "note": ""
+      },
+      {
+        "name": "ころっぴ",
+        "relation": "弟",
+        "birthday": "",
+        "note": ""
+      }
+    ],
+    "friends": [
+      "けろりーぬ",
+      "けろっぺ",
+      "ガンタ",
+      "ノーベルン",
+      "キョロスケ",
+      "てるてる",
+      "でんでん",
+      "ちっぴ"
+    ],
+    "boyfriend": {},
+    "girlfriend": {},
+    "mates": []
+  },
+  {
+    "id": "gudetama",
+    "name": "ぐでたま",
+    "englishName": "Gudetama",
+    "url": "https://www.sanrio.co.jp/characters/gudetama/",
+    "profile": {
+      "fullName": "",
+      "birthday": "毎日",
+      "debutYear": 2013,
+      "birthplace": "",
+      "height": "",
+      "weight": "",
+      "species": "たまご",
+      "bloodType": "",
+      "constellation": ""
+    },
+    "personality": "ぐでぐでしてやる気がない",
+    "specialSkills": [],
+    "hobbies": [],
+    "dream": "",
+    "treasure": "",
+    "favoriteFoods": [],
+    "description": "ゆでるもよし　焼くもよし　生のままでもよし。いろんな調理法があるけれど、ぐでぐでやる気のないたまごなのだ。あなたの食べようとしているそのたまごも、ぐでぐでしているかも!?",
+    "family": [],
+    "friends": [],
+    "boyfriend": {},
+    "girlfriend": {},
+    "mates": [
+      {
+        "name": "ぎゅでちゃま",
+        "birthday": "",
+        "note": ""
+      },
+      {
+        "name": "ロック",
+        "birthday": "",
+        "note": ""
+      },
+      {
+        "name": "ハードボイルド",
+        "birthday": "",
+        "note": ""
+      },
+      {
+        "name": "うずら",
+        "birthday": "",
+        "note": ""
+      },
+      {
+        "name": "ゆでたまご",
+        "birthday": "",
+        "note": ""
+      },
+      {
+        "name": "グレたま",
+        "birthday": "",
+        "note": ""
+      },
+      {
+        "name": "明太子",
+        "birthday": "",
+        "note": ""
+      },
+      {
+        "name": "たまごどうふ",
+        "birthday": "",
+        "note": ""
+      },
+      {
+        "name": "クロックマダム",
+        "birthday": "",
+        "note": ""
+      },
+      {
+        "name": "DJぐでたま",
+        "birthday": "",
+        "note": ""
+      },
+      {
+        "name": "ニセたま",
+        "birthday": "",
+        "note": "たまご以外の仲間"
+      },
+      {
+        "name": "しゃきぴよ",
+        "birthday": "",
+        "note": "たまご以外の仲間"
+      }
+    ]
+  },
+  {
+    "id": "kirimichan",
+    "name": "KIRIMIちゃん.",
+    "englishName": "KIRIMIchan.",
+    "url": "https://www.sanrio.co.jp/characters/kirimichan/",
+    "profile": {
+      "fullName": "",
+      "birthday": "8月31日",
+      "debutYear": 2013,
+      "birthplace": "",
+      "height": "",
+      "weight": "",
+      "species": "切り身",
+      "bloodType": "",
+      "constellation": ""
+    },
+    "personality": "色々なことを考えている",
+    "specialSkills": [],
+    "hobbies": ["絵を描くこと", "ゲームをすること"],
+    "dream": "おいしく食べてもらうこと",
+    "treasure": "きりみ形の貯金箱",
+    "favoriteFoods": [],
+    "description": "切り身にされた瞬間、おいしく食べてもらいたい…という想いで産まれてきたきりみちゃん。沢山のなかまたちと共に今日も食卓に寄り添うパートナーとしておいしく食べてもらうのを待っている。お友だちのかまぼこちゃんとはとってもなかよし。誕生日は初めて切り身になった日（野菜の日なのに…）。",
+    "family": [],
+    "friends": [],
+    "boyfriend": {},
+    "girlfriend": {},
+    "mates": [
+      {
+        "name": "かまぼこちゃん",
+        "birthday": "",
+        "note": ""
+      },
+      {
+        "name": "たくわんわん",
+        "birthday": "",
+        "note": ""
+      },
+      {
+        "name": "なるとちゃん",
+        "birthday": "",
+        "note": ""
+      },
+      {
+        "name": "タイくん",
+        "birthday": "",
+        "note": ""
+      },
+      {
+        "name": "ブリくん",
+        "birthday": "",
+        "note": ""
+      },
+      {
+        "name": "サメせんぱい",
+        "birthday": "",
+        "note": ""
+      },
+      {
+        "name": "さばくん",
+        "birthday": "",
+        "note": ""
+      },
+      {
+        "name": "ロースちゃん",
+        "birthday": "",
+        "note": ""
+      },
+      {
+        "name": "さわらくん",
+        "birthday": "",
+        "note": ""
+      },
+      {
+        "name": "ぎんだらさん",
+        "birthday": "",
+        "note": ""
+      },
+      {
+        "name": "シャトーブリアン",
+        "birthday": "",
+        "note": ""
+      },
+      {
+        "name": "カルビくん",
+        "birthday": "",
+        "note": ""
+      },
+      {
+        "name": "ささみん",
+        "birthday": "",
+        "note": ""
+      },
+      {
+        "name": "ラムチョップ",
+        "birthday": "",
+        "note": ""
+      },
+      {
+        "name": "ぎゅうたんくん",
+        "birthday": "",
+        "note": ""
+      },
+      {
+        "name": "練乳がけいちごちゃん",
+        "birthday": "",
+        "note": ""
+      },
+      {
+        "name": "マグロくん",
+        "birthday": "",
+        "note": ""
+      }
+    ]
+  },
+  {
+    "id": "kuririn",
+    "name": "コロコロクリリン",
+    "englishName": "Corocorokuririn",
+    "url": "https://www.sanrio.co.jp/characters/kuririn/",
+    "profile": {
+      "fullName": "クリリン",
+      "birthday": "2月4日",
+      "debutYear": 1997,
+      "birthplace": "",
+      "height": "",
+      "weight": "",
+      "species": "ゴールデンハムスター",
+      "bloodType": "",
+      "constellation": ""
+    },
+    "personality": "ちょっぴり気が小さいけれど、好奇心旺盛",
+    "specialSkills": ["すきまもぐり", "何でもカジカジかじること"],
+    "hobbies": ["宝もの集め（家の中に落ちているものを拾い集めること）"],
+    "dream": "",
+    "treasure": "",
+    "favoriteFoods": ["クッキー", "ヒマワリのタネ"],
+    "description": "お花の帽子がトレードマーク。サクラとの間には七つ子がいる（チビクリ、コマチ、クルミ、チェリー、シンゴ、ミルク、チャチャ）。誕生日は飼い主の女の子のお家に来た日を、誕生日に決めた。",
+    "family": [
+      {
+        "name": "サクラ",
+        "relation": "奥さん",
+        "birthday": "",
+        "note": ""
+      },
+      {
+        "name": "チビクリ",
+        "relation": "子ども",
+        "birthday": "",
+        "note": "七つ子"
+      },
+      {
+        "name": "コマチ",
+        "relation": "子ども",
+        "birthday": "",
+        "note": "七つ子"
+      },
+      {
+        "name": "クルミ",
+        "relation": "子ども",
+        "birthday": "",
+        "note": "七つ子"
+      },
+      {
+        "name": "チェリー",
+        "relation": "子ども",
+        "birthday": "",
+        "note": "七つ子"
+      },
+      {
+        "name": "シンゴ",
+        "relation": "子ども",
+        "birthday": "",
+        "note": "七つ子"
+      },
+      {
+        "name": "ミルク",
+        "relation": "子ども",
+        "birthday": "",
+        "note": "七つ子"
+      },
+      {
+        "name": "チャチャ",
+        "relation": "子ども",
+        "birthday": "",
+        "note": "七つ子"
+      }
+    ],
+    "friends": [],
+    "boyfriend": {},
+    "girlfriend": {},
+    "mates": []
+  },
+  {
+    "id": "hanamaruobake",
+    "name": "はなまるおばけ",
+    "englishName": "Hanamaru Obake",
+    "url": "https://www.sanrio.co.jp/characters/hanamaruobake/",
+    "profile": {
+      "fullName": "まるまる",
+      "birthday": "8月7日",
+      "debutYear": 2023,
+      "birthplace": "",
+      "height": "",
+      "weight": "",
+      "species": "おばけ",
+      "bloodType": "",
+      "constellation": ""
+    },
+    "personality": "はずかしがりや",
+    "specialSkills": ["かくれんぼ"],
+    "hobbies": ["おひるね"],
+    "dream": "じょうずなはなまるがかけるようになること",
+    "treasure": "あかえんぴつ",
+    "favoriteFoods": ["あまいもの"],
+    "description": "今日もがんばった"あなた"にハナマルをくれる、不思議なおばけ。おばけたちはみんなの近くに潜んでいて、人それぞれ違ったコがついているらしい。あなたが知らない間に現れて、日々のがんばりや努力をそっと褒めてくれる。正体は、夜空で輝くお星様になった大切な人や遠い昔の大切な思い出なのかもしれない…。",
+    "family": [],
+    "friends": [
+      {
+        "name": "ここまる",
+        "birthday": "",
+        "note": "クールで不器用な男のコ"
+      },
+      {
+        "name": "まるん",
+        "birthday": "",
+        "note": "元気でポジティブな女のコ"
+      }
+    ],
+    "boyfriend": {},
+    "girlfriend": {},
+    "mates": []
+  },
+  {
+    "id": "marumofubiyori",
+    "name": "まるもふびより",
+    "englishName": "Maru Mofu Biyori",
+    "url": "https://www.sanrio.co.jp/characters/marumofubiyori/",
+    "profile": {
+      "fullName": "モップ",
+      "birthday": "2月10日",
+      "debutYear": 2017,
+      "birthplace": "",
+      "height": "",
+      "weight": "",
+      "species": "しろくま",
+      "bloodType": "",
+      "constellation": ""
+    },
+    "personality": "ぐーたらでマイペース",
+    "specialSkills": ["いつまでも寝られること"],
+    "hobbies": ["通販", "動画サイトめぐり"],
+    "dream": "",
+    "treasure": "お気に入りのブランケット",
+    "favoriteFoods": ["だいふく（もちもちした食べ物が好き）"],
+    "description": "いつもお気に入りのブランケットにくるまっているしろくまの男のコ。水族館で働くおねえさんの家に住むインドア派の家くま。ブランケットをひきずる姿がモップでおそうじしてるみたいだから、おねえさんがモップという名前をつけてくれた。",
+    "family": [],
+    "friends": [
+      {
+        "name": "カニカマ",
+        "birthday": "",
+        "note": "ぬいぐるみのかに"
+      },
+      {
+        "name": "ギョニク",
+        "birthday": "",
+        "note": "ぬいぐるみのさかな"
+      },
+      {
+        "name": "あじまる",
+        "birthday": "",
+        "note": "あざらし"
+      },
+      {
+        "name": "マシュ",
+        "birthday": "",
+        "note": "ペンギンのあかちゃん"
+      }
+    ],
+    "boyfriend": {},
+    "girlfriend": {},
+    "mates": []
+  },
+  {
+    "id": "mewkledreamy",
+    "name": "ミュークルドリーミー",
+    "englishName": "Mewkledreamy",
+    "url": "https://www.sanrio.co.jp/characters/mewkledreamy/",
+    "profile": {
+      "fullName": "みゅー",
+      "birthday": "9月2日",
+      "debutYear": 2017,
+      "birthplace": "",
+      "height": "",
+      "weight": "",
+      "species": "こねこのぬいぐるみ",
+      "bloodType": "",
+      "constellation": ""
+    },
+    "personality": "ほんわかやさしい性格",
+    "specialSkills": ["キラキラしたものを見つけること"],
+    "hobbies": ["のんびりお花畑をおさんぽすること", "ひみつのおしゃべり"],
+    "dream": "夢占いができるようになること",
+    "treasure": "星形のクッション",
+    "favoriteFoods": ["あなたと一緒に飲むホットミルク"],
+    "description": "あわいすみれ色のこねこのぬいぐるみ。お月さまの光にてらされて、耳の星もようがきらめいた不思議な夜からおしゃべりができるようになった。一緒に眠ると、あなたと同じ夢を見る。夢の中でないしょのお話をするのが大好き。",
+    "family": [],
+    "friends": [
+      {
+        "name": "ぺこ",
+        "birthday": "",
+        "note": "ドリーミーメイト"
+      },
+      {
+        "name": "すう",
+        "birthday": "",
+        "note": "ドリーミーメイト"
+      },
+      {
+        "name": "ねね",
+        "birthday": "",
+        "note": "ドリーミーメイト"
+      },
+      {
+        "name": "れい",
+        "birthday": "",
+        "note": "ドリーミーメイト"
+      },
+      {
+        "name": "ちあ",
+        "birthday": "",
+        "note": "ドリーミーメイト"
+      },
+      {
+        "name": "ゆに",
+        "birthday": "",
+        "note": "ゆにとなかまたち"
+      },
+      {
+        "name": "つぎ",
+        "birthday": "",
+        "note": "ゆにとなかまたち"
+      },
+      {
+        "name": "はぎ",
+        "birthday": "",
+        "note": "ゆにとなかまたち"
+      }
+    ],
+    "boyfriend": {},
+    "girlfriend": {},
+    "mates": []
+  }
+]
