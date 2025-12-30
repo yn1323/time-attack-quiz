@@ -45,9 +45,9 @@ export default function GroupPage({ params }: Props) {
   // 問題表示開始時刻（回答時間計測用）
   const questionStartTimeRef = useRef<number>(0);
 
-  // スコア計算
+  // スコア計算（マイナスにならないようにする）
   const score = useMemo(() => {
-    return answers.reduce((sum, a) => sum + a.scoreChange, 0);
+    return Math.max(0, answers.reduce((sum, a) => sum + a.scoreChange, 0));
   }, [answers]);
 
   // 統計計算（終了時用）

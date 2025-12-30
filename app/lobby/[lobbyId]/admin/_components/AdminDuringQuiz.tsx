@@ -99,7 +99,7 @@ export function AdminDuringQuiz({ lobbyId, lobby, groups }: Props) {
   const seconds = remainingSeconds % 60;
   const timeString = `${minutes}:${seconds.toString().padStart(2, "0")}`;
   const isUrgent = remainingSeconds <= 60;
-  const isCountdownMode = remainingSeconds <= 180;
+  const isCountdownMode = remainingSeconds <= 120;
 
   return (
     <Box minH="100vh" bg="#FFFDF7" position="relative" overflow="hidden">
@@ -242,7 +242,7 @@ export function AdminDuringQuiz({ lobbyId, lobby, groups }: Props) {
                 スコアボード🎯
               </Text>
               <Text fontSize="md" color="gray.500" fontWeight="medium">
-                ※残り3分以降は非表示
+                ※残り2分以降は非表示
               </Text>
             </HStack>
           </Box>

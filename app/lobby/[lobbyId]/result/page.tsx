@@ -8,7 +8,7 @@ import { CartesianGrid, Legend, Line, LineChart, ResponsiveContainer, Tooltip, X
 import { type GroupWithAnswers, subscribeAllGroupAnswers } from "@/lib/firestore/answer";
 import { subscribeGroups } from "@/lib/firestore/group";
 import { subscribeLobby } from "@/lib/firestore/lobby";
-import type { Group, Lobby } from "@/types/firestore";
+import type { Group, Lobby, Question } from "@/types/firestore";
 
 // ============================================
 // Animations
@@ -152,6 +152,7 @@ export default function ResultPage() {
   const [lobby, setLobby] = useState<Lobby | null>(null);
   const [groups, setGroups] = useState<Group[]>([]);
   const [groupsWithAnswers, setGroupsWithAnswers] = useState<GroupWithAnswers[]>([]);
+  const [questions, setQuestions] = useState<Question[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
   // Subscribe to lobby
@@ -181,6 +182,15 @@ export default function ResultPage() {
     });
     return unsubscribe;
   }, [lobbyId, groups]);
+
+  // Fetch quiz questions
+  useEffect(() => {
+    if (!lobby?.quizFileName) return;
+    fetch(`/data/quizzes/${lobby.quizFileName}`)
+      .then((res) => res.json())
+      .then(setQuestions)
+      .catch(console.error);
+  }, [lobby?.quizFileName]);
 
   // Calculate ranking
   const ranking = useMemo(() => {
@@ -296,6 +306,51 @@ export default function ResultPage() {
 
     return result;
   }, [lobby, groupsWithAnswers]);
+
+  // Calculate question statistics
+  const questionStats = useMemo(() => {
+    const stats = new Map<number, { correct: number; total: number }>();
+
+    for (const group of groupsWithAnswers) {
+      for (const answer of group.answers) {
+        const current = stats.get(answer.questionIndex) ?? { correct: 0, total: 0 };
+        current.total++;
+        if (answer.isCorrect) current.correct++;
+        stats.set(answer.questionIndex, current);
+      }
+    }
+
+    return Array.from(stats.entries())
+      .map(([index, { correct, total }]) => ({
+        questionIndex: index,
+        correctRate: (correct / total) * 100,
+        total,
+      }))
+      .sort((a, b) => b.correctRate - a.correctRate);
+  }, [groupsWithAnswers]);
+
+  // Calculate question awards
+  const questionAwards = useMemo(() => {
+    if (questionStats.length === 0 || questions.length === 0) return [];
+
+    const easiest = questionStats[0];
+    const hardest = questionStats[questionStats.length - 1];
+
+    return [
+      {
+        icon: "😊",
+        title: "みんなが得意だった問題",
+        question: questions[easiest.questionIndex]?.question ?? "",
+        detail: `正答率 ${easiest.correctRate.toFixed(0)}%`,
+      },
+      {
+        icon: "😈",
+        title: "難問チャレンジ",
+        question: questions[hardest.questionIndex]?.question ?? "",
+        detail: `正答率 ${hardest.correctRate.toFixed(0)}%`,
+      },
+    ];
+  }, [questionStats, questions]);
 
   // Create color map for groups
   const groupColorMap = useMemo(() => {
@@ -838,6 +893,131 @@ export default function ResultPage() {
                           {award.detail}
                         </Text>
                       </HStack>
+                    </Box>
+                  </Flex>
+                </Box>
+              ))}
+            </VStack>
+          </Box>
+        )}
+
+        {/* ========== Question Awards Section ========== */}
+        {questionAwards.length > 0 && (
+          <Box
+            w="full"
+            maxW="900px"
+            mx="auto"
+            bg="white"
+            borderRadius="2xl"
+            border="3px solid #FF8800"
+            p={8}
+            boxShadow="0 8px 40px rgba(255, 136, 0, 0.15)"
+            animation={`${fadeInUp} 0.6s ease-out 6.5s both`}
+            position="relative"
+            overflow="hidden"
+          >
+            {/* Decorative background pattern */}
+            <Box
+              position="absolute"
+              top={0}
+              right={0}
+              w="200px"
+              h="200px"
+              bgImage="radial-gradient(circle at center, rgba(255, 136, 0, 0.08) 0%, transparent 70%)"
+              pointerEvents="none"
+            />
+            <Box
+              position="absolute"
+              bottom={0}
+              left={0}
+              w="150px"
+              h="150px"
+              bgImage="radial-gradient(circle at center, rgba(255, 229, 0, 0.1) 0%, transparent 70%)"
+              pointerEvents="none"
+            />
+
+            <Text fontSize="2xl" fontWeight="bold" color="#E67A00" mb={6} textAlign="center" position="relative">
+              📝 問題アワード
+            </Text>
+            <VStack gap={5} align="stretch" position="relative">
+              {questionAwards.map((award, index) => (
+                <Box
+                  key={award.title}
+                  bg="linear-gradient(135deg, rgba(255, 136, 0, 0.03) 0%, rgba(255, 229, 0, 0.06) 100%)"
+                  borderRadius="xl"
+                  border="2px solid"
+                  borderColor="rgba(255, 136, 0, 0.25)"
+                  p={5}
+                  animation={`${slideInLeft} 0.5s ease-out ${6.8 + index * 0.3}s both`}
+                  _hover={{
+                    borderColor: "rgba(255, 136, 0, 0.5)",
+                    transform: "translateX(8px)",
+                    boxShadow: "0 4px 20px rgba(255, 136, 0, 0.15)",
+                    transition: "all 0.3s",
+                  }}
+                  position="relative"
+                >
+                  <Flex align="flex-start" gap={4}>
+                    {/* Icon with glow effect */}
+                    <Box
+                      flexShrink={0}
+                      w="60px"
+                      h="60px"
+                      bg={index === 0 ? "linear-gradient(135deg, #22C55E 0%, #16A34A 100%)" : "linear-gradient(135deg, #EF4444 0%, #DC2626 100%)"}
+                      borderRadius="xl"
+                      display="flex"
+                      alignItems="center"
+                      justifyContent="center"
+                      boxShadow={index === 0 ? "0 4px 15px rgba(34, 197, 94, 0.4)" : "0 4px 15px rgba(239, 68, 68, 0.4)"}
+                    >
+                      <Text fontSize="2xl">{award.icon}</Text>
+                    </Box>
+
+                    <Box flex={1} minW={0}>
+                      {/* Title and detail badge */}
+                      <Flex align="center" gap={3} mb={2} flexWrap="wrap">
+                        <Text fontSize="lg" fontWeight="bold" color="#E67A00">
+                          {award.title}
+                        </Text>
+                        <Text
+                          fontSize="sm"
+                          fontWeight="bold"
+                          color="white"
+                          bg={index === 0 ? "linear-gradient(135deg, #22C55E 0%, #16A34A 100%)" : "linear-gradient(135deg, #EF4444 0%, #DC2626 100%)"}
+                          px={3}
+                          py={1}
+                          borderRadius="full"
+                          boxShadow={index === 0 ? "0 2px 8px rgba(34, 197, 94, 0.3)" : "0 2px 8px rgba(239, 68, 68, 0.3)"}
+                        >
+                          {award.detail}
+                        </Text>
+                      </Flex>
+
+                      {/* Question text with quote style */}
+                      <Box
+                        bg="rgba(255, 136, 0, 0.05)"
+                        borderLeft="4px solid"
+                        borderColor={index === 0 ? "#22C55E" : "#EF4444"}
+                        borderRadius="0 8px 8px 0"
+                        p={3}
+                        position="relative"
+                      >
+                        <Text
+                          fontSize="md"
+                          color="#333"
+                          fontWeight="medium"
+                          lineHeight="1.6"
+                          css={{
+                            display: "-webkit-box",
+                            WebkitLineClamp: 2,
+                            WebkitBoxOrient: "vertical",
+                            overflow: "hidden",
+                            textOverflow: "ellipsis",
+                          }}
+                        >
+                          {award.question}
+                        </Text>
+                      </Box>
                     </Box>
                   </Flex>
                 </Box>

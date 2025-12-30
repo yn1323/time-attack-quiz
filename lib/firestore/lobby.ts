@@ -14,7 +14,7 @@ export async function createLobby(): Promise<string> {
     createdAt: serverTimestamp(),
     startedAt: null,
     finishedAt: null,
-    durationSeconds: 600,
+    durationSeconds: 420,
     pointsCorrect: 5,
     pointsIncorrect: -3,
     quizFileName: "雑学",

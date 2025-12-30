@@ -1,6 +1,6 @@
 "use client";
 
-import { Box, Flex, HStack, Text, VStack } from "@chakra-ui/react";
+import { Box, Text, VStack } from "@chakra-ui/react";
 import { keyframes } from "@emotion/react";
 import { useRouter } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
@@ -250,78 +250,6 @@ export function AdminAfterQuiz({ lobbyId, groups }: Props) {
             TIME UP!
           </Text>
         </Box>
-
-        {/* Section title */}
-        <Text fontSize="3xl" fontWeight="bold" color="#E67A00" animation={`${fadeInUp} 0.6s ease-out 0.3s both`}>
-          最終ランキング
-        </Text>
-
-        {/* Final ranking list */}
-        <VStack w="full" maxW="700px" gap={4}>
-          {ranking.length === 0 ? (
-            <Text color="gray.500" fontSize="xl">
-              結果を読み込んでいます...
-            </Text>
-          ) : (
-            ranking.map((team, index) => {
-              const style = getRankStyle(team.rank);
-
-              return (
-                <Box
-                  key={team.groupId}
-                  w="full"
-                  bg="white"
-                  borderRadius="xl"
-                  border="3px solid"
-                  borderColor={style.border}
-                  p={5}
-                  boxShadow="0 4px 20px rgba(0,0,0,0.08)"
-                  animation={`${rankReveal} 0.5s ease-out ${0.4 + index * 0.15}s both`}
-                  position="relative"
-                  overflow="hidden"
-                >
-                  {/* Background tint */}
-                  <Box position="absolute" inset={0} bg={style.bg} pointerEvents="none" />
-
-                  <Flex justify="space-between" align="center" position="relative" zIndex={1}>
-                    <HStack gap={4}>
-                      {/* Rank with medal */}
-                      <HStack gap={2}>
-                        <Text fontSize="2xl" fontWeight="900" color={style.text} minW="60px">
-                          {team.rank}位
-                        </Text>
-                        {team.rank <= 3 && <Text fontSize="2xl">{getMedalEmoji(team.rank)}</Text>}
-                      </HStack>
-
-                      {/* Team name */}
-                      <Text fontSize="2xl" fontWeight="bold" color="#333">
-                        {team.name}
-                      </Text>
-                    </HStack>
-
-                    {/* Score */}
-                    <Text
-                      fontSize="3xl"
-                      fontWeight="900"
-                      bgImage="linear-gradient(135deg, #FF8800 0%, #FFE500 100%)"
-                      bgClip="text"
-                      color="transparent"
-                      css={{
-                        WebkitBackgroundClip: "text",
-                        WebkitTextFillColor: "transparent",
-                      }}
-                    >
-                      {team.score}
-                      <Text as="span" fontSize="xl">
-                        点
-                      </Text>
-                    </Text>
-                  </Flex>
-                </Box>
-              );
-            })
-          )}
-        </VStack>
 
         {/* Results button */}
         <Box mt={4} animation={`${fadeInUp} 0.6s ease-out 1s both`}>

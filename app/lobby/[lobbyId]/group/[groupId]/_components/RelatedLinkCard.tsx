@@ -2,6 +2,7 @@
 
 import { Box, Flex, Image, Skeleton, Text } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
+import { LuExternalLink } from "react-icons/lu";
 
 type OGPData = {
   url: string;
@@ -44,16 +45,16 @@ export function RelatedLinkCard({ url }: Props) {
     return (
       <Box
         w="full"
-        bg="white"
-        border="3px solid"
-        borderColor="rgba(255, 136, 0, 0.3)"
-        borderRadius="lg"
+        bg="#F8F9FA"
+        border="2px solid"
+        borderColor="gray.200"
+        borderRadius="md"
         overflow="hidden"
       >
-        <Skeleton h="120px" />
-        <Box p={3}>
-          <Skeleton h="20px" mb={2} />
-          <Skeleton h="16px" />
+        <Skeleton h="80px" />
+        <Box p={2}>
+          <Skeleton h="16px" mb={1} />
+          <Skeleton h="12px" />
         </Box>
       </Box>
     );
@@ -63,34 +64,47 @@ export function RelatedLinkCard({ url }: Props) {
     <a href={ogpData?.url} target="_blank" rel="noopener noreferrer" style={{ textDecoration: "none", width: "100%" }}>
       <Box
         w="full"
-        bg="white"
-        border="3px solid"
-        borderColor="rgba(255, 136, 0, 0.3)"
-        borderRadius="lg"
+        bg="#F8F9FA"
+        border="2px solid"
+        borderColor="gray.200"
+        borderRadius="md"
         overflow="hidden"
         cursor="pointer"
         transition="all 0.2s ease"
+        position="relative"
         _hover={{
-          borderColor: "#FF8800",
+          borderColor: "#4A90D9",
           transform: "translateY(-2px)",
-          boxShadow: "0 4px 15px rgba(255, 136, 0, 0.2)",
+          boxShadow: "0 4px 12px rgba(74, 144, 217, 0.15)",
         }}
       >
+        {/* External Link Icon Badge */}
+        <Flex
+          position="absolute"
+          top={2}
+          right={2}
+          zIndex={1}
+          w="24px"
+          h="24px"
+          bg="white"
+          borderRadius="full"
+          align="center"
+          justify="center"
+          boxShadow="0 1px 3px rgba(0,0,0,0.15)"
+        >
+          <LuExternalLink size={12} color="#4A90D9" />
+        </Flex>
+
         {/* Image */}
-        <Box position="relative" w="full" h="120px" bg="#FFF8F0">
+        <Box position="relative" w="full" h="80px" bg="#E8ECF0">
           <Image src={ogpData?.image} alt={ogpData?.title} w="full" h="full" objectFit="cover" />
         </Box>
 
         {/* Content */}
-        <Box p={3}>
-          <Text fontSize="sm" fontWeight="bold" color="#333" lineClamp={2} lineHeight="1.3" mb={1}>
+        <Box p={2}>
+          <Text fontSize="xs" fontWeight="semibold" color="#444" lineClamp={2} lineHeight="1.3">
             {ogpData?.title}
           </Text>
-          {ogpData?.description && (
-            <Text fontSize="xs" color="#666" lineClamp={2} lineHeight="1.3">
-              {ogpData.description}
-            </Text>
-          )}
         </Box>
       </Box>
     </a>
