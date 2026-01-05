@@ -203,18 +203,22 @@ export default function ResultPage() {
       .map((item, index) => ({ ...item, rank: index + 1 }));
   }, [groupsWithAnswers]);
 
-  // Calculate score history (1 minute intervals)
+  // Calculate score history (30 second intervals)
   const scoreHistory = useMemo(() => {
     if (!lobby?.startedAt || groupsWithAnswers.length === 0) return [];
 
     const startTime = lobby.startedAt.toMillis();
-    const durationMinutes = Math.ceil(lobby.durationSeconds / 60);
+    const durationSeconds = lobby.durationSeconds;
+    const intervals = Math.ceil(durationSeconds / 30);
     const history: Record<string, number | string>[] = [];
 
-    for (let minute = 0; minute <= durationMinutes; minute++) {
-      const timePoint = startTime + minute * 60 * 1000;
+    for (let i = 0; i <= intervals; i++) {
+      const timePoint = startTime + i * 30 * 1000;
+      const totalSeconds = i * 30;
+      const minutes = Math.floor(totalSeconds / 60);
+      const seconds = totalSeconds % 60;
       const entry: Record<string, number | string> = {
-        time: `${minute}:00`,
+        time: `${minutes}:${seconds.toString().padStart(2, "0")}`,
       };
 
       for (const group of groupsWithAnswers) {
