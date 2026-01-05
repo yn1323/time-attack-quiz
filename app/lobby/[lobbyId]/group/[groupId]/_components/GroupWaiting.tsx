@@ -216,7 +216,7 @@ export function GroupWaiting({ groupName }: Props) {
             <Flex align="center" gap={2}>
               <Text fontSize="xl">⏱️</Text>
               <Text fontSize={{ base: "sm", md: "md" }} color="#555" fontWeight="medium">
-                制限時間 7分
+                制限時間 5分
               </Text>
             </Flex>
             <Flex align="center" gap={2}>
@@ -286,7 +286,7 @@ export function GroupWaiting({ groupName }: Props) {
                 🏆
               </Text>
               <Text fontSize={{ base: "sm", md: "md" }} color="#555" fontWeight="medium">
-                7分間の得点が高いチームが優勝！
+                5分間の得点が高いチームが優勝！
               </Text>
             </Flex>
             <Flex align="flex-start" gap={2}>
